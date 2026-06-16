@@ -1,5 +1,25 @@
-<div class="pn-root">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilot Network — Jobs Board</title>
 <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  min-height: 100%;
+  width: 100%;
+  background: #02040a;
+  background-image:
+    radial-gradient(circle at 50% -8%, rgba(98,151,255,.38), transparent 38%),
+    radial-gradient(circle at 88% 18%, rgba(181,108,255,.18), transparent 32%),
+    radial-gradient(circle at 8% 38%, rgba(125,227,255,.13), transparent 30%),
+    linear-gradient(180deg, #02040a 0%, #060b18 45%, #02040a 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
+
 
 
 
@@ -183,29 +203,60 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
 
 
 
-/* ── LOADING & ERROR STATES ── */
+/* Overrides for standalone page */
+.jobs-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  background: transparent !important;
+  min-height: 100vh;
+}
+.jobs-section::before, .jobs-section::after { display: none !important; }
+
+/* Loading */
 .pn-loading {
-  grid-column: 1/-1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 18px; padding: 80px 20px;
+  grid-column: 1/-1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px; padding: 80px 20px;
   color: var(--jobs-muted);
 }
 .pn-spinner {
-  width: 42px; height: 42px; border: 3px solid rgba(110,168,255,.15);
-  border-top-color: var(--jobs-blue); border-radius: 50%;
+  width: 42px; height: 42px;
+  border: 3px solid rgba(110,168,255,.15);
+  border-top-color: var(--jobs-blue);
+  border-radius: 50%;
   animation: pnSpin .8s linear infinite;
 }
 @keyframes pnSpin { to { transform: rotate(360deg); } }
 .pn-error {
-  grid-column: 1/-1; text-align: center; padding: 60px 20px;
-  color: #ff6b6b; font-size: 15px;
+  grid-column: 1/-1;
+  text-align: center; padding: 60px 20px;
+  color: #ff6b6b; font-size: 15px; line-height: 1.7;
 }
+.pn-no-results {
+  grid-column: 1/-1;
+  text-align: center; padding: 60px 20px;
+  color: var(--jobs-muted); font-size: 16px;
+}
+.pn-chip.is-hidden { display: none !important; }
+.lang-en { display: none; }
+.lang-es { display: inline; }
+.pn-lang-en .lang-en { display: inline; }
+.pn-lang-en .lang-es { display: none; }
 </style>
+</head>
+<body>
 
 <section class="jobs-section">
   <div class="jobs-inner">
 
     <div class="jobs-hero">
-      <div class="jobs-kicker"><span class="lang-es">Ofertas de pilotos</span><span class="lang-en">Pilot jobs board</span></div>
+      <div class="jobs-kicker">
+        <span class="lang-es">Ofertas de pilotos</span>
+        <span class="lang-en">Pilot jobs board</span>
+      </div>
       <h1 class="jobs-title-main">
         <span class="lang-es">Oportunidades de aviaci&#243;n</span><span class="lang-en">Aviation opportunities</span><br>
         <span class="lang-es">para pilotos en Europa y m&#225;s all&#225;</span><span class="lang-en">for pilots across Europe &amp; beyond</span>
@@ -241,28 +292,28 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
             data-ph-en="Search airline, country, aircraft, role..."
             placeholder="Buscar aerol&#237;nea, pa&#237;s, avi&#243;n, puesto...">
         </div>
-        <div class="pn-lang-island" role="tablist">
+        <div class="pn-lang-island">
           <button class="pn-flag-btn active" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Espa&#241;ol">
             <span class="pn-flag"><svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg></span>
             <span class="pn-flag-label">ES</span>
           </button>
           <button class="pn-flag-btn" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
-            <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc2"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc2)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5" transform="translate(1.5,-.8)"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5" transform="translate(-1.5,-.8)"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
+            <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5" transform="translate(1.5,-.8)"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5" transform="translate(-1.5,-.8)"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
             <span class="pn-flag-label">EN</span>
           </button>
         </div>
       </div>
 
       <div class="pn-search-row">
-        <div class="pn-filters-row" id="pnRoleFilters">
+        <div class="pn-filters-row">
           <button class="pn-chip active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')"><span class="lang-es">Todos</span><span class="lang-en">All</span></button>
           <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnSetRole('fo')">First Officer</button>
           <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnSetRole('captain')"><span class="lang-es">Comandante</span><span class="lang-en">Captain</span></button>
           <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnSetRole('cadet')"><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span></button>
-          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Flight Instructor</span></button>
+          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span></button>
         </div>
         <div class="pn-hours-box">
-          <span class="pn-hours-label"><span class="lang-es">Horas m&#225;x.</span><span class="lang-en">Max hours req.</span></span>
+          <span class="pn-hours-label"><span class="lang-es">Horas m&#225;x.</span><span class="lang-en">Max hours</span></span>
           <input type="range" class="pn-hours-slider" id="pnHours" min="0" max="5500" step="100" value="5500" oninput="pnRender()">
           <span class="pn-hours-value" id="pnHoursVal">5500+</span>
         </div>
@@ -274,7 +325,7 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
     <div class="jobs-grid" id="pnGrid">
       <div class="pn-loading" id="pnLoading">
         <div class="pn-spinner"></div>
-        <span class="lang-es">Cargando ofertas...</span><span class="lang-en">Loading jobs...</span>
+        <span><span class="lang-es">Cargando ofertas...</span><span class="lang-en">Loading jobs...</span></span>
       </div>
     </div>
 
@@ -282,201 +333,196 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
 </section>
 
 <script>
-(function() {
+var SB_URL = 'https://ifbpbtyifiuhzyeifhea.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmYnBidHlpZml1aHp5ZWlmaGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjIxNDMsImV4cCI6MjA5MzczODE0M30.CxWKoHsf0yPtJuoWPSaWFv-m-1GXvi2GGo_KHjxicWk';
 
-  // ── CONFIG — update with your Supabase project ──────────────────
-  var SB_URL  = 'https://ifbpbtyifiuhzyeifhea.supabase.co';       // e.g. https://xxxx.supabase.co
-  var SB_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmYnBidHlpZml1aHp5ZWlmaGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjIxNDMsImV4cCI6MjA5MzczODE0M30.CxWKoHsf0yPtJuoWPSaWFv-m-1GXvi2GGo_KHjxicWk';  // public anon key
-  // ────────────────────────────────────────────────────────────────
+var allJobs = [];
+var lang    = 'es';
+var tab     = 'commercial';
+var role    = 'all';
+var today   = new Date().toISOString().split('T')[0];
 
-  var allJobs = [];
-  var lang    = 'es';
-  var tab     = 'commercial';
-  var role    = 'all';
-  var today   = new Date().toISOString().split('T')[0];
-
-  // ── FETCH FROM SUPABASE ─────────────────────────────────────────
-  function fetchJobs() {
-    var url = SB_URL + '/rest/v1/job_offers'
-      + '?select=*'
-      + '&status=eq.active'
-      + '&order=id.asc';
-
-    fetch(url, {
-      headers: {
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer ' + SB_KEY,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      // Filter expired deadlines client-side
-      allJobs = (data || []).filter(function(j) {
-        return !j.deadline || j.deadline >= today;
-      });
-      updateCounts();
-      pnRender();
-    })
-    .catch(function(err) {
-      document.getElementById('pnGrid').innerHTML =
-        '<div class="pn-error">&#9888; Error loading jobs. Please refresh.<br><small>' + err + '</small></div>';
-    });
-  }
-
-  // ── UPDATE TAB COUNTS ───────────────────────────────────────────
-  function updateCounts() {
-    var counts = {commercial:0, executive:0, ga:0};
-    allJobs.forEach(function(j) { if(counts[j.category]!==undefined) counts[j.category]++; });
-    ['commercial','executive','ga'].forEach(function(cat) {
-      var el = document.getElementById('count-' + cat);
-      if(el) el.textContent = '(' + (counts[cat]||0) + ')';
-    });
-  }
-
-  // ── RENDER CARDS ────────────────────────────────────────────────
-  window.pnRender = function() {
-    var q       = (document.getElementById('pnSearch').value||'').toLowerCase().trim();
-    var maxHrs  = parseInt(document.getElementById('pnHours').value, 10);
-    document.getElementById('pnHoursVal').textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
-
-    var filtered = allJobs.filter(function(j) {
-      var roles = (j.role||'').split(' ');
-      var matchTab  = j.category === tab;
-      var matchRole = role === 'all' || roles.indexOf(role) !== -1;
-      var matchHrs  = maxHrs >= 5500 || (j.min_hours||0) <= maxHrs;
-      var matchQ    = !q || (j.search_text||'').toLowerCase().indexOf(q) !== -1
-                       || (j.company||'').toLowerCase().indexOf(q) !== -1
-                       || (j.title_en||'').toLowerCase().indexOf(q) !== -1;
-      return matchTab && matchRole && matchHrs && matchQ;
-    });
-
-    var grid = document.getElementById('pnGrid');
-    if (!filtered.length) {
-      grid.innerHTML = '<div class="pn-no-results"><span class="lang-es' + (lang==='en'?' is-hidden':'')+'">'
-        + 'No se encontraron ofertas con esos criterios.</span>'
-        + '<span class="lang-en' + (lang==='es'?' is-hidden':'')+'">'
-        + 'No jobs found matching those filters.</span></div>';
-      applyLangClass();
-      document.getElementById('pnResultsInfo').textContent = '0 ' + (lang==='es'?'ofertas':'jobs');
-      return;
+function fetchJobs() {
+  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc';
+  fetch(url, {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY
     }
-
-    grid.innerHTML = filtered.map(buildCard).join('');
-    applyLangClass();
-
-    var word = lang === 'es' ? (filtered.length===1?'oferta':'ofertas') : (filtered.length===1?'job':'jobs');
-    document.getElementById('pnResultsInfo').textContent = filtered.length + ' ' + word;
-  };
-
-  // ── BUILD A SINGLE CARD ─────────────────────────────────────────
-  function buildCard(j) {
-    var badgeHtml = (j.badges||[]).map(function(b) {
-      var cls = 'badge';
-      var bl  = b.toLowerCase();
-      if(bl==='first officer'||bl==='co-pilot') cls+=' fo';
-      else if(bl==='captain'||bl==='comandante') cls+=' captain';
-      else if(bl==='cadet'||bl==='cadete') cls+=' cadet';
-      else if(bl==='non-type rated'||bl==='ntr') cls+=' ntr';
-      else if(bl==='type rated') cls+=' type-rated';
-      else if(bl==='low hours ok'||bl==='ab initio') cls+=' low-hours';
-      else if(bl==='flight instructor'||bl==='instructor') cls+=' fi';
-      return '<span class="' + cls + '">' + b + '</span>';
-    }).join('');
-
-    var logo = j.logo_url
-      ? '<img src="' + j.logo_url + '" alt="' + esc(j.company) + '" onerror="this.style.display='none'">'
-      : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--jobs-blue);">' + (j.company||'').charAt(0) + '</div>';
-
-    var titleEs = j.title_es || j.title_en || '';
-    var titleEn = j.title_en || j.title_es || '';
-    var titleHtml = titleEs === titleEn
-      ? esc(titleEs)
-      : '<span class="lang-es">' + esc(titleEs) + '</span><span class="lang-en">' + esc(titleEn) + '</span>';
-
-    var reqs  = buildList(j.requirements);
-    var offer = buildList(j.offer);
-
-    var deadlineNote = j.deadline
-      ? '<li>&#9201; <strong>Deadline: ' + j.deadline + '</strong></li>'
-      : '';
-
-    return '<div class="job-card">'
-      + '<div class="badges">' + badgeHtml + '</div>'
-      + '<div class="brand">' + logo + '<div>'
-      + '<p class="company">' + esc(j.company) + '</p>'
-      + '<p class="subtitle">' + esc(j.subtitle||'') + '</p>'
-      + '</div></div>'
-      + '<div class="title">' + titleHtml + '</div>'
-      + '<details><summary><span class="lang-es">Requisitos</span><span class="lang-en">Requirements</span></summary>'
-      + '<ul class="reqs">' + reqs + '</ul></details>'
-      + '<details><summary><span class="lang-es">Qu&#233; ofrece la compa&#241;&#237;a</span><span class="lang-en">What the company offers</span></summary>'
-      + '<ul class="reqs">' + offer + deadlineNote + '</ul></details>'
-      + '<div class="actions">'
-      + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
-        + '<span class="lang-es">Aplicar</span><span class="lang-en">Apply</span></a>' : '')
-      + (j.company_url ? '<a class="btn company-btn" href="' + esc(j.company_url) + '" target="_blank" rel="noopener noreferrer">'
-        + '<span class="lang-es">Compa&#241;&#237;a</span><span class="lang-en">Company</span></a>' : '')
-      + '</div></div>';
-  }
-
-  function buildList(arr) {
-    if(!arr||!arr.length) return '';
-    return arr.map(function(i){ return '<li>' + esc(i) + '</li>'; }).join('');
-  }
-
-  function esc(s) {
-    return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
-
-  // ── LANGUAGE ────────────────────────────────────────────────────
-  window.pnSetLang = function(l) {
-    lang = l;
-    var root = document.querySelector('.pn-root');
-    if(l==='en') root.classList.add('pn-lang-en'); else root.classList.remove('pn-lang-en');
-    document.getElementById('pnFlagEs').classList.toggle('active', l==='es');
-    document.getElementById('pnFlagEn').classList.toggle('active', l==='en');
-    document.getElementById('pnSearch').placeholder = document.getElementById('pnSearch').getAttribute('data-ph-'+l);
-    pnRender();
-  };
-
-  function applyLangClass() {
-    var root = document.querySelector('.pn-root');
-    if(lang==='en') root.classList.add('pn-lang-en'); else root.classList.remove('pn-lang-en');
-  }
-
-  // ── TAB ─────────────────────────────────────────────────────────
-  window.pnSetTab = function(t) {
-    tab = t; role = 'all';
-    document.querySelectorAll('.pn-tab').forEach(function(b) {
-      b.classList.toggle('active', b.getAttribute('data-tab')===t);
+  })
+  .then(function(r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(function(data) {
+    allJobs = (data || []).filter(function(j) {
+      if (j.status !== 'active') return false;
+      if (j.deadline && j.deadline < today) return false;
+      return true;
     });
-    document.querySelectorAll('[data-role-filter]').forEach(function(b) {
-      var shows = (b.getAttribute('data-tab-show')||'').split(' ');
-      b.classList.toggle('is-hidden', shows.indexOf(t)===-1);
-      b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
-    });
+    updateCounts();
     pnRender();
-  };
+    resizeParent();
+  })
+  .catch(function(err) {
+    document.getElementById('pnGrid').innerHTML =
+      '<div class="pn-error">&#9888; Error cargando ofertas.<br><small>' + err.message + '</small></div>';
+  });
+}
 
-  // ── ROLE ─────────────────────────────────────────────────────────
-  window.pnSetRole = function(r) {
-    role = r;
-    document.querySelectorAll('[data-role-filter]').forEach(function(b) {
-      b.classList.toggle('active', b.getAttribute('data-role-filter')===r);
-    });
-    pnRender();
-  };
+function updateCounts() {
+  var c = {commercial:0, executive:0, ga:0};
+  allJobs.forEach(function(j) { if (c[j.category] !== undefined) c[j.category]++; });
+  Object.keys(c).forEach(function(k) {
+    var el = document.getElementById('count-' + k);
+    if (el) el.textContent = '(' + c[k] + ')';
+  });
+}
 
-  // ── INIT ─────────────────────────────────────────────────────────
-  function init() {
-    pnSetTab('commercial');
-    fetchJobs();
+function pnRender() {
+  var q      = (document.getElementById('pnSearch').value || '').toLowerCase().trim();
+  var maxHrs = parseInt(document.getElementById('pnHours').value, 10);
+  document.getElementById('pnHoursVal').textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
+
+  var filtered = allJobs.filter(function(j) {
+    var roles     = (j.role || '').split(' ');
+    var matchTab  = j.category === tab;
+    var matchRole = role === 'all' || roles.indexOf(role) !== -1;
+    var matchHrs  = maxHrs >= 5500 || (j.min_hours || 0) <= maxHrs;
+    var matchQ    = !q
+      || (j.search_text || '').toLowerCase().indexOf(q) !== -1
+      || (j.company || '').toLowerCase().indexOf(q) !== -1
+      || (j.title_en || '').toLowerCase().indexOf(q) !== -1;
+    return matchTab && matchRole && matchHrs && matchQ;
+  });
+
+  var grid = document.getElementById('pnGrid');
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="pn-no-results">'
+      + '<span class="lang-es' + (lang === 'en' ? ' is-hidden' : '') + '">No se encontraron ofertas con esos criterios.</span>'
+      + '<span class="lang-en' + (lang === 'es' ? ' is-hidden' : '') + '">No jobs found matching those filters.</span>'
+      + '</div>';
+    document.getElementById('pnResultsInfo').textContent = '0 ' + (lang === 'es' ? 'ofertas' : 'jobs');
+    resizeParent();
+    return;
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
+  grid.innerHTML = filtered.map(buildCard).join('');
+  applyLang();
 
-})();
+  var word = lang === 'es'
+    ? (filtered.length === 1 ? 'oferta' : 'ofertas')
+    : (filtered.length === 1 ? 'job' : 'jobs');
+  document.getElementById('pnResultsInfo').textContent = filtered.length + ' ' + word;
+  resizeParent();
+}
+
+function buildCard(j) {
+  var badges = (j.badges || []).map(function(b) {
+    var cls = 'badge', bl = b.toLowerCase();
+    if (bl === 'first officer' || bl === 'co-pilot') cls += ' fo';
+    else if (bl === 'captain' || bl === 'comandante') cls += ' captain';
+    else if (bl === 'cadet' || bl === 'cadete') cls += ' cadet';
+    else if (bl.indexOf('non-type') !== -1 || bl === 'ntr') cls += ' ntr';
+    else if (bl.indexOf('type rated') !== -1) cls += ' type-rated';
+    else if (bl.indexOf('low hours') !== -1 || bl === 'ab initio' || bl === 'pre-financed') cls += ' low-hours';
+    else if (bl.indexOf('instructor') !== -1) cls += ' fi';
+    return '<span class="' + cls + '">' + esc(b) + '</span>';
+  }).join('');
+
+  var logo = j.logo_url
+    ? '<img src="' + esc(j.logo_url) + '" alt="' + esc(j.company) + '" loading="lazy" onerror="this.style.display='none'">'
+    : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'
+      + esc((j.company || '').charAt(0)) + '</div>';
+
+  var titleEs = j.title_es || j.title_en || '';
+  var titleEn = j.title_en || j.title_es || '';
+  var titleHtml = titleEs === titleEn
+    ? esc(titleEs)
+    : '<span class="lang-es">' + esc(titleEs) + '</span><span class="lang-en">' + esc(titleEn) + '</span>';
+
+  var reqs  = list(j.requirements);
+  var offer = list(j.offer);
+  if (j.deadline) offer += '<li>&#9201; <strong>Deadline: ' + j.deadline + '</strong></li>';
+
+  return '<div class="job-card">'
+    + '<div class="badges">' + badges + '</div>'
+    + '<div class="brand">' + logo
+    + '<div><p class="company">' + esc(j.company) + '</p>'
+    + '<p class="subtitle">' + esc(j.subtitle || '') + '</p></div></div>'
+    + '<div class="title">' + titleHtml + '</div>'
+    + '<details><summary><span class="lang-es">Requisitos</span><span class="lang-en">Requirements</span></summary>'
+    + '<ul class="reqs">' + reqs + '</ul></details>'
+    + '<details><summary><span class="lang-es">Qu&#233; ofrece la compa&#241;&#237;a</span><span class="lang-en">What the company offers</span></summary>'
+    + '<ul class="reqs">' + offer + '</ul></details>'
+    + '<div class="actions">'
+    + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
+      + '<span class="lang-es">Aplicar</span><span class="lang-en">Apply</span></a>' : '')
+    + (j.company_url ? '<a class="btn company-btn" href="' + esc(j.company_url) + '" target="_blank" rel="noopener noreferrer">'
+      + '<span class="lang-es">Compa&#241;&#237;a</span><span class="lang-en">Company</span></a>' : '')
+    + '</div></div>';
+}
+
+function list(arr) {
+  return (arr || []).map(function(i) { return '<li>' + esc(i) + '</li>'; }).join('');
+}
+
+function esc(s) {
+  return (s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function applyLang() {
+  var root = document.body;
+  if (lang === 'en') root.classList.add('pn-lang-en');
+  else root.classList.remove('pn-lang-en');
+}
+
+function pnSetLang(l) {
+  lang = l;
+  applyLang();
+  document.getElementById('pnFlagEs').classList.toggle('active', l === 'es');
+  document.getElementById('pnFlagEn').classList.toggle('active', l === 'en');
+  var s = document.getElementById('pnSearch');
+  s.placeholder = s.getAttribute('data-ph-' + l);
+  pnRender();
+}
+
+function pnSetTab(t) {
+  tab = t; role = 'all';
+  document.querySelectorAll('.pn-tab').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === t);
+  });
+  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
+    var shows = (b.getAttribute('data-tab-show') || '').split(' ');
+    b.classList.toggle('is-hidden', shows.indexOf(t) === -1);
+    b.classList.toggle('active', b.getAttribute('data-role-filter') === 'all');
+  });
+  pnRender();
+}
+
+function pnSetRole(r) {
+  role = r;
+  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-role-filter') === r);
+  });
+  pnRender();
+}
+
+// Tell parent iframe to resize
+function resizeParent() {
+  setTimeout(function() {
+    var h = document.body.scrollHeight;
+    try { window.parent.postMessage({ type: 'pn-resize', height: h }, '*'); } catch(e) {}
+  }, 100);
+}
+
+// Init
+pnSetTab('commercial');
+fetchJobs();
 </script>
-</div>
+
+</body>
+</html>
