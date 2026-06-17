@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Pilot Network — Jobs Board</title>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,6 +30,7 @@ html, body {
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes cardFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+@keyframes spin { to { transform: rotate(360deg); } }
 :root {
   --jobs-bg: #02040a; --jobs-text: #f8fbff; --jobs-muted: #9da8ba; --jobs-soft: #c8d2e3;
   --jobs-line: rgba(255,255,255,.12); --jobs-line-strong: rgba(116,166,255,.42);
@@ -206,7 +210,11 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
   .pn-lang-island { order: -1; margin: 0 auto; }
 }
 
-
+/* REFRESH BUTTON */
+.pn-refresh-btn { border: 1px solid rgba(110,168,255,.28); background: rgba(110,168,255,.08); color: var(--jobs-blue); border-radius: 999px; min-height: 42px; padding: 10px 22px; font-size: 13px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; cursor: pointer; transition: .22s ease; display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; }
+.pn-refresh-btn:hover { background: linear-gradient(180deg, #fff, #b9d3ff); color: #02040a; border-color: rgba(255,255,255,.75); box-shadow: 0 12px 26px rgba(110,168,255,.2); }
+.pn-refresh-btn.loading { pointer-events: none; opacity: .7; }
+.pn-refresh-spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .6s linear infinite; }
 
 /* Overrides for standalone page */
 section { margin: 0 !important; padding: 0 !important; } .jobs-section {
@@ -232,9 +240,8 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   border: 3px solid rgba(110,168,255,.15);
   border-top-color: var(--jobs-blue);
   border-radius: 50%;
-  animation: pnSpin .8s linear infinite;
+  animation: spin .8s linear infinite;
 }
-@keyframes pnSpin { to { transform: rotate(360deg); } }
 .pn-error {
   grid-column: 1/-1;
   text-align: center; padding: 60px 20px;
@@ -259,7 +266,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 
     <div class="pn-lang-top">
       <div class="pn-lang-island">
-        <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Espa&#241;ol">
+        <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Español">
           <span class="pn-flag"><svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg></span>
         </button>
         <button class="pn-flag-btn active" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
@@ -274,11 +281,11 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
         <span class="lang-en">Pilot jobs board</span>
       </div>
       <h1 class="jobs-title-main">
-        <span class="lang-es">Oportunidades de aviaci&#243;n</span><span class="lang-en">Aviation opportunities</span><br>
-        <span class="lang-es">para pilotos en Europa y m&#225;s all&#225;</span><span class="lang-en">for pilots across Europe &amp; beyond</span>
+        <span class="lang-es">Oportunidades de aviación</span><span class="lang-en">Aviation opportunities</span><br>
+        <span class="lang-es">para pilotos en Europa y más allá</span><span class="lang-en">for pilots across Europe & beyond</span>
       </h1>
       <p class="jobs-subtitle">
-        <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviaci&#243;n ejecutiva e instructores. Busca, filtra y encuentra tu pr&#243;ximo destino.</span>
+        <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviación ejecutiva e instructores. Busca, filtra y encuentra tu próximo destino.</span>
         <span class="lang-en">Explore curated vacancies for First Officers, Captains, Cadets, executive aviation and flight instructors. Search, filter and find your next destination.</span>
       </p>
     </div>
@@ -287,15 +294,15 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 
       <div class="pn-tabs">
         <button class="pn-tab active" data-tab="commercial" onclick="pnSetTab('commercial')">
-          <span class="lang-es">Aviaci&#243;n Comercial</span><span class="lang-en">Commercial Aviation</span>
+          <span class="lang-es">Aviación Comercial</span><span class="lang-en">Commercial Aviation</span>
           <span class="pn-tab-count" id="count-commercial">(0)</span>
         </button>
         <button class="pn-tab" data-tab="executive" onclick="pnSetTab('executive')">
-          <span class="lang-es">Aviaci&#243;n Ejecutiva</span><span class="lang-en">Executive Aviation</span>
+          <span class="lang-es">Aviación Ejecutiva</span><span class="lang-en">Executive Aviation</span>
           <span class="pn-tab-count" id="count-executive">(0)</span>
         </button>
         <button class="pn-tab" data-tab="ga" onclick="pnSetTab('ga')">
-          <span class="lang-es">Aviaci&#243;n General</span><span class="lang-en">General Aviation</span>
+          <span class="lang-es">Aviación General</span><span class="lang-en">General Aviation</span>
           <span class="pn-tab-count" id="count-ga">(0)</span>
         </button>
       </div>
@@ -304,7 +311,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
         <div class="pn-search-box">
           <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
           <input type="text" class="pn-search-input" id="pnSearch" oninput="pnRender()"
-            data-ph-es="Buscar aerol&#237;nea, pa&#237;s, avi&#243;n, puesto..."
+            data-ph-es="Buscar aerolínea, país, avión, puesto..."
             data-ph-en="Search airline, country, aircraft, role..."
             placeholder="Search airline, country, aircraft, role...">
         </div>
@@ -319,10 +326,16 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
           <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span></button>
         </div>
         <div class="pn-hours-box">
-          <span class="pn-hours-label"><span class="lang-es">Horas m&#225;x.</span><span class="lang-en">Max hours</span></span>
+          <span class="pn-hours-label"><span class="lang-es">Horas máx.</span><span class="lang-en">Max hours</span></span>
           <input type="range" class="pn-hours-slider" id="pnHours" min="0" max="5500" step="100" value="5500" oninput="pnRender()">
           <span class="pn-hours-value" id="pnHoursVal">5500+</span>
         </div>
+      </div>
+
+      <div style="text-align: center;">
+        <button class="pn-refresh-btn" id="pnRefreshBtn" onclick="fetchJobsNow()">
+          <span class="lang-es">🔄 Recargar ofertas</span><span class="lang-en">🔄 Refresh jobs</span>
+        </button>
       </div>
 
       <div class="pn-results-info" id="pnResultsInfo"></div>
@@ -349,8 +362,10 @@ var role    = 'all';
 var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
-  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc&apikey=' + SB_KEY;
-  fetch(url)
+  // Add cache buster to force fresh data
+  var ts = new Date().getTime();
+  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc&apikey=' + SB_KEY + '&_t=' + ts;
+  fetch(url, { cache: 'no-store' })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return r.json();
@@ -367,8 +382,19 @@ function fetchJobs() {
   })
   .catch(function(err) {
     document.getElementById('pnGrid').innerHTML =
-      '<div class="pn-error">&#9888; Error cargando ofertas.<br><small>' + err.message + '</small></div>';
+      '<div class="pn-error">⚠ Error loading jobs.<br><small>' + err.message + '</small></div>';
   });
+}
+
+function fetchJobsNow() {
+  var btn = document.getElementById('pnRefreshBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span class="pn-refresh-spinner"></span><span><span class="lang-es">Recargando...</span><span class="lang-en">Refreshing...</span></span>';
+  fetchJobs();
+  setTimeout(function() {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<span class="lang-es">🔄 Recargar ofertas</span><span class="lang-en">🔄 Refresh jobs</span>';
+  }, 2000);
 }
 
 function updateCounts() {
@@ -401,8 +427,8 @@ function pnRender() {
 
   if (!filtered.length) {
     grid.innerHTML = '<div class="pn-no-results">'
-      + '<span class="lang-es' + (lang === 'en' ? ' is-hidden' : '') + '">No se encontraron ofertas con esos criterios.</span>'
-      + '<span class="lang-en' + (lang === 'es' ? ' is-hidden' : '') + '">No jobs found matching those filters.</span>'
+      + '<span class="lang-es">No se encontraron ofertas con esos criterios.</span>'
+      + '<span class="lang-en">No jobs found matching those filters.</span>'
       + '</div>';
     document.getElementById('pnResultsInfo').textContent = '0 ' + (lang === 'es' ? 'ofertas' : 'jobs');
     resizeParent();
@@ -445,7 +471,7 @@ function buildCard(j) {
 
   var reqs  = list(j.requirements);
   var offer = list(j.offer);
-  if (j.deadline) offer += '<li>&#9201; <strong>Deadline: ' + j.deadline + '</strong></li>';
+  if (j.deadline) offer += '<li>⏱ <strong>Deadline: ' + j.deadline + '</strong></li>';
 
   return '<div class="job-card">'
     + '<div class="badges">' + badges + '</div>'
@@ -455,13 +481,13 @@ function buildCard(j) {
     + '<div class="title">' + titleHtml + '</div>'
     + '<details><summary><span class="lang-es">Requisitos</span><span class="lang-en">Requirements</span></summary>'
     + '<ul class="reqs">' + reqs + '</ul></details>'
-    + '<details><summary><span class="lang-es">Qu&#233; ofrece la compa&#241;&#237;a</span><span class="lang-en">What the company offers</span></summary>'
+    + '<details><summary><span class="lang-es">Qué ofrece la compañía</span><span class="lang-en">What the company offers</span></summary>'
     + '<ul class="reqs">' + offer + '</ul></details>'
     + '<div class="actions">'
     + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
       + '<span class="lang-es">Aplicar</span><span class="lang-en">Apply</span></a>' : '')
     + (j.company_url ? '<a class="btn company-btn" href="' + esc(j.company_url) + '" target="_blank" rel="noopener noreferrer">'
-      + '<span class="lang-es">Compa&#241;&#237;a</span><span class="lang-en">Company</span></a>' : '')
+      + '<span class="lang-es">Compañía</span><span class="lang-en">Company</span></a>' : '')
     + '</div></div>';
 }
 
@@ -519,6 +545,11 @@ function resizeParent() {
     try { window.parent.postMessage({ type: 'pn-resize', height: h }, '*'); } catch(e) {}
   }, 100);
 }
+
+// Auto-refresh every 30 seconds
+setInterval(function() {
+  fetchJobs();
+}, 30000);
 
 // Init
 pnSetTab('commercial');
