@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,10 +194,10 @@ body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
 .pn-flag-btn { position: relative; display: flex; align-items: center; gap: 0; padding: 5px; border: none; background: transparent; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 900; font-size: 12px; letter-spacing: 1px; overflow: hidden; transition: all .35s cubic-bezier(.4,.2,.2,1); max-width: 36px; height: 36px; }
 .pn-flag-btn .pn-flag { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.4); transition: transform .35s ease; }
 .pn-flag-btn .pn-flag svg { width: 100%; height: 100%; display: block; }
-.pn-flag-btn .pn-flag-label { display: inline-block; max-width: 0; opacity: 0; white-space: nowrap; transition: all .35s cubic-bezier(.4,.2,.2,1); }
-.pn-flag-btn.active { background: linear-gradient(135deg, #fff, #c8daff); color: #02040a; max-width: 70px; padding-right: 12px; box-shadow: 0 6px 20px rgba(110,168,255,.35); }
+.pn-flag-btn .pn-flag-label { display: none !important; }
+.pn-flag-btn.active { background: linear-gradient(135deg, #fff, #c8daff); color: #02040a; max-width: 36px; padding-right: 5px; box-shadow: 0 6px 20px rgba(110,168,255,.35); }
 .pn-flag-btn.active .pn-flag { transform: scale(1.05); }
-.pn-flag-btn.active .pn-flag-label { max-width: 30px; opacity: 1; padding-left: 7px; }
+.pn-flag-btn.active .pn-flag-label { display: none !important; }
 .pn-flag-btn:not(.active):hover .pn-flag { transform: scale(1.12) rotate(-4deg); }
 
 @media (max-width: 640px) {
@@ -261,11 +262,9 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
       <div class="pn-lang-island">
         <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Espa&#241;ol">
           <span class="pn-flag"><svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg></span>
-          <span class="pn-flag-label">ES</span>
         </button>
         <button class="pn-flag-btn active" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
           <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5" transform="translate(1.5,-.8)"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5" transform="translate(-1.5,-.8)"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
-          <span class="pn-flag-label">EN</span>
         </button>
       </div>
     </div>
