@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,9 +63,11 @@ section { margin: 0 !important; padding: 0 !important; }
 .jobs-title-main span { background: linear-gradient(180deg, #ffffff 0%, #8fbaff 100%); -webkit-background-clip: text; color: transparent; }
 .jobs-subtitle { max-width: 720px; margin: 20px auto 0; color: var(--jobs-muted); font-size: 17px; line-height: 1.75; animation: fadeUp .8s ease both; animation-delay: .3s; }
 
-.jobs-topbar { max-width: var(--jobs-maxw); margin: 0 auto 32px; display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; animation: fadeUp .6s ease both; }
-.pn-lang-island { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; padding: 6px; background: rgba(8,12,22,.78); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); border: 1px solid rgba(255,255,255,.13); border-radius: 999px; box-shadow: 0 14px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); position: relative; flex-shrink: 0; animation: fadeUp .6s ease both; }
+.jobs-topbar { position: sticky; top: 16px; z-index: 100; max-width: var(--jobs-maxw); margin: 0 auto 32px; display: flex; justify-content: flex-end; align-items: center; gap: 18px; animation: fadeUp .6s ease both; }
+
+.pn-lang-island { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; padding: 6px; background: rgba(8,12,22,.78); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); border: 1px solid rgba(255,255,255,.13); border-radius: 999px; box-shadow: 0 14px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); position: relative; flex-shrink: 0; }
 .pn-lang-island::before { content: ""; position: absolute; inset: -2px; border-radius: 999px; background: linear-gradient(135deg, rgba(110,168,255,.55), transparent 40%, rgba(181,108,255,.45)); filter: blur(14px); opacity: .4; z-index: -1; }
+
 .pn-flag-btn { position: relative; display: flex; align-items: center; gap: 0; padding: 5px; border: none; background: transparent; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 900; font-size: 12px; letter-spacing: 1px; overflow: hidden; transition: all .35s cubic-bezier(.4,.2,.2,1); max-width: 36px; height: 36px; }
 .pn-flag-btn .pn-flag { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.4); transition: transform .35s ease; }
 .pn-flag-btn .pn-flag svg { width: 100%; height: 100%; display: block; }
@@ -155,10 +157,10 @@ details[open] summary::after { content: "−"; background: rgba(110,168,255,.18)
 @keyframes pnSpin { to { transform: rotate(360deg); } }
 .pn-error { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #ff6b6b; font-size: 15px; line-height: 1.7; }
 
-.lang-es { display: none; }
 .lang-en { display: inline; }
-body.pn-lang-es .lang-es { display: inline; }
+.lang-es { display: none; }
 body.pn-lang-es .lang-en { display: none; }
+body.pn-lang-es .lang-es { display: inline; }
 
 @media (max-width: 900px) { .jobs-section { padding: 58px 18px 82px; } .jobs-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; } .jobs-title-main { letter-spacing: -2px; } }
 @media (max-width: 640px) { .jobs-section { padding: 44px 14px 70px; } .jobs-topbar { justify-content: center; } .jobs-hero { margin-bottom: 30px; } .jobs-title-main { font-size: clamp(34px, 12vw, 48px); letter-spacing: -1.6px; } .jobs-subtitle { font-size: 15.5px; } .jobs-grid { grid-template-columns: 1fr; gap: 14px; } .job-card { padding: 17px; border-radius: 20px; } .brand img { width: 44px; height: 44px; } .title { font-size: 18px; } .btn { flex: 1 1 140px; } }
@@ -167,22 +169,20 @@ body.pn-lang-es .lang-en { display: none; }
 section { margin: 0 !important; padding: 0 !important; }
 .jobs-section { background: transparent !important; margin-top: 0 !important; margin-bottom: 0 !important; width: 100% !important; max-width: 100% !important; margin-left: 0 !important; margin-right: 0 !important; }
 .jobs-section::before, .jobs-section::after { display: none !important; }
-
 </style>
 </head>
-<body class="pn-lang-en">
+<body class="pn-lang-es">
 
 <section class="jobs-section">
   <div class="jobs-inner">
 
     <div class="jobs-topbar">
-      <div></div>
       <div class="pn-lang-island">
-        <button class="pn-flag-btn" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
+        <button class="pn-flag-btn active" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
           <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5" transform="translate(1.5,-.8)"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5" transform="translate(-1.5,-.8)"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
-            <span class="pn-flag-label">EN</span>
+          <span class="pn-flag-label">EN</span>
         </button>
-        <button class="pn-flag-btn active" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Español">
+        <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Español">
           <span class="pn-flag"><svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg></span>
           <span class="pn-flag-label">ES</span>
         </button>
@@ -237,214 +237,4 @@ section { margin: 0 !important; padding: 0 !important; }
           <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnSetRole('fo')">First Officer</button>
           <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnSetRole('captain')"><span class="lang-en">Captain</span><span class="lang-es">Comandante</span></button>
           <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnSetRole('cadet')"><span class="lang-en">Cadet</span><span class="lang-es">Cadete</span></button>
-          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-en">Instructor</span><span class="lang-es">Instructor</span></button>
-        </div>
-        <div class="pn-hours-box">
-          <span class="pn-hours-label"><span class="lang-en">Max hours</span><span class="lang-es">Horas máx.</span></span>
-          <input type="range" class="pn-hours-slider" id="pnHours" min="0" max="5500" step="100" value="5500" oninput="pnRender()">
-          <span class="pn-hours-value" id="pnHoursVal">5500+</span>
-        </div>
-      </div>
-
-      <div class="pn-results-info" id="pnResultsInfo"></div>
-    </div>
-
-    <div class="jobs-grid" id="pnGrid">
-      <div class="pn-loading" id="pnLoading">
-        <div class="pn-spinner"></div>
-        <span><span class="lang-en">Loading jobs...</span><span class="lang-es">Cargando ofertas...</span></span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<script>
-var SB_URL = 'https://ifbpbtyifiuhzyeifhea.supabase.co';
-var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmYnBidHlpZml1aHp5ZWlmaGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjIxNDMsImV4cCI6MjA5MzczODE0M30.CxWKoHsf0yPtJuoWPSaWFv-m-1GXvi2GGo_KHjxicWk';
-
-var allJobs = [];
-var lang    = 'es';
-var tab     = 'commercial';
-var role    = 'all';
-var today   = new Date().toISOString().split('T')[0];
-
-function fetchJobs() {
-  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc&apikey=' + SB_KEY;
-  fetch(url)
-  .then(function(r) {
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    return r.json();
-  })
-  .then(function(data) {
-    allJobs = (data || []).filter(function(j) {
-      if (j.status !== 'active') return false;
-      if (j.deadline && j.deadline < today) return false;
-      return true;
-    });
-    updateCounts();
-    pnRender();
-    resizeParent();
-  })
-  .catch(function(err) {
-    document.getElementById('pnGrid').innerHTML =
-      '<div class="pn-error">&#9888; Error loading jobs.<br><small>' + err.message + '</small></div>';
-  });
-}
-
-function updateCounts() {
-  var c = {commercial:0, executive:0, ga:0};
-  allJobs.forEach(function(j) { if (c[j.category] !== undefined) c[j.category]++; });
-  Object.keys(c).forEach(function(k) {
-    var el = document.getElementById('count-' + k);
-    if (el) el.textContent = '(' + c[k] + ')';
-  });
-}
-
-function pnRender() {
-  var q      = (document.getElementById('pnSearch').value || '').toLowerCase().trim();
-  var maxHrs = parseInt(document.getElementById('pnHours').value, 10);
-  document.getElementById('pnHoursVal').textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
-
-  var filtered = allJobs.filter(function(j) {
-    var roles     = (j.role || '').split(' ');
-    var matchTab  = j.category === tab;
-    var matchRole = role === 'all' || roles.indexOf(role) !== -1;
-    var matchHrs  = maxHrs >= 5500 || (j.min_hours || 0) <= maxHrs;
-    var matchQ    = !q
-      || (j.search_text || '').toLowerCase().indexOf(q) !== -1
-      || (j.company || '').toLowerCase().indexOf(q) !== -1
-      || (j.title_en || '').toLowerCase().indexOf(q) !== -1;
-    return matchTab && matchRole && matchHrs && matchQ;
-  });
-
-  var grid = document.getElementById('pnGrid');
-
-  if (!filtered.length) {
-    grid.innerHTML = '<div class="pn-no-results">'
-      + '<span class="lang-en">No jobs found matching those filters.</span>'
-      + '<span class="lang-es">No se encontraron ofertas con esos criterios.</span>'
-      + '</div>';
-    document.getElementById('pnResultsInfo').textContent = '0 ' + (lang === 'es' ? 'ofertas' : 'jobs');
-    resizeParent();
-    return;
-  }
-
-  grid.innerHTML = filtered.map(buildCard).join('');
-  applyLang();
-
-  var word = lang === 'es'
-    ? (filtered.length === 1 ? 'oferta' : 'ofertas')
-    : (filtered.length === 1 ? 'job' : 'jobs');
-  document.getElementById('pnResultsInfo').textContent = filtered.length + ' ' + word;
-  resizeParent();
-}
-
-function buildCard(j) {
-  var badges = (j.badges || []).map(function(b) {
-    var cls = 'badge', bl = b.toLowerCase();
-    if (bl === 'first officer' || bl === 'co-pilot') cls += ' fo';
-    else if (bl === 'captain' || bl === 'comandante') cls += ' captain';
-    else if (bl === 'cadet' || bl === 'cadete') cls += ' cadet';
-    else if (bl.indexOf('instructor') !== -1) cls += ' fi';
-    return '<span class="' + cls + '">' + esc(b) + '</span>';
-  }).join('');
-
-  var logo = j.logo_url
-    ? '<img src="' + esc(j.logo_url) + '" alt="' + esc(j.company) + '" loading="lazy" onerror="this.style.display=\'none\'">'
-    : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'
-      + esc((j.company || '').charAt(0)) + '</div>';
-
-  var titleEs = j.title_es || j.title_en || '';
-  var titleEn = j.title_en || j.title_es || '';
-  var titleHtml = titleEs === titleEn
-    ? esc(titleEs)
-    : '<span class="lang-en">' + esc(titleEn) + '</span><span class="lang-es">' + esc(titleEs) + '</span>';
-
-  var reqs  = list(j.requirements);
-  var offer = list(j.offer);
-  if (j.deadline) offer += '<li>&#9201; <strong>Deadline: ' + j.deadline + '</strong></li>';
-
-  return '<div class="job-card">'
-    + '<div class="badges">' + badges + '</div>'
-    + '<div class="brand">' + logo
-    + '<div><p class="company">' + esc(j.company) + '</p>'
-    + '<p class="subtitle">' + esc(j.subtitle || '') + '</p></div></div>'
-    + '<div class="title">' + titleHtml + '</div>'
-    + '<details open><summary><span class="lang-en">Requirements</span><span class="lang-es">Requisitos</span></summary>'
-    + '<ul class="reqs">' + reqs + '</ul></details>'
-    + '<details open><summary><span class="lang-en">What the company offers</span><span class="lang-es">Qué ofrece la compañía</span></summary>'
-    + '<ul class="reqs">' + offer + '</ul></details>'
-    + '<div class="actions">'
-    + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
-      + '<span class="lang-en">Apply</span><span class="lang-es">Aplicar</span></a>' : '')
-    + (j.company_url ? '<a class="btn company-btn" href="' + esc(j.company_url) + '" target="_blank" rel="noopener noreferrer">'
-      + '<span class="lang-en">Company</span><span class="lang-es">Compañía</span></a>' : '')
-    + '</div></div>';
-}
-
-function list(arr) {
-  return (arr || []).map(function(i) { return '<li>' + esc(i) + '</li>'; }).join('');
-}
-
-function esc(s) {
-  return (s || '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function applyLang() {
-  var root = document.body;
-  if (lang === 'es') {
-    root.classList.remove('pn-lang-en');
-    root.classList.add('pn-lang-es');
-  } else {
-    root.classList.add('pn-lang-en');
-    root.classList.remove('pn-lang-es');
-  }
-}
-
-function pnSetLang(l) {
-  lang = l;
-  applyLang();
-  document.getElementById('pnFlagEn').classList.toggle('active', l === 'en');
-  document.getElementById('pnFlagEs').classList.toggle('active', l === 'es');
-  var s = document.getElementById('pnSearch');
-  s.placeholder = s.getAttribute('data-ph-' + l);
-  pnRender();
-}
-
-function pnSetTab(t) {
-  tab = t; role = 'all';
-  document.querySelectorAll('.pn-tab').forEach(function(b) {
-    b.classList.toggle('active', b.getAttribute('data-tab') === t);
-  });
-  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
-    var shows = (b.getAttribute('data-tab-show') || '').split(' ');
-    b.classList.toggle('is-hidden', shows.indexOf(t) === -1);
-    b.classList.toggle('active', b.getAttribute('data-role-filter') === 'all');
-  });
-  pnRender();
-}
-
-function pnSetRole(r) {
-  role = r;
-  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
-    b.classList.toggle('active', b.getAttribute('data-role-filter') === r);
-  });
-  pnRender();
-}
-
-function resizeParent() {
-  setTimeout(function() {
-    var h = document.body.scrollHeight;
-    try { window.parent.postMessage({ type: 'pn-resize', height: h }, '*'); } catch(e) {}
-  }, 100);
-}
-
-pnSetTab('commercial');
-fetchJobs();
-</script>
-
-</body>
-</html>
+          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-en">Instructor</span><span
