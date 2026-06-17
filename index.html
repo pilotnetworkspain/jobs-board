@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+h<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -364,7 +364,7 @@ var today   = new Date().toISOString().split('T')[0];
 function fetchJobs() {
   // Add cache buster to force fresh data
   var ts = new Date().getTime();
-  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc&apikey=' + SB_KEY + '&_t=' + ts;
+  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc&apikey=' + SB_KEY + '&_t=' + ts;
   fetch(url, { cache: 'no-store' })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
