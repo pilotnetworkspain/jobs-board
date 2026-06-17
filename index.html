@@ -22,9 +22,11 @@ html, body {
   overflow-x: hidden;
 }
 
+
+
+
 @keyframes fadeUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes cardFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
-
 :root {
   --jobs-bg: #02040a; --jobs-text: #f8fbff; --jobs-muted: #9da8ba; --jobs-soft: #c8d2e3;
   --jobs-line: rgba(255,255,255,.12); --jobs-line-strong: rgba(116,166,255,.42);
@@ -32,53 +34,118 @@ html, body {
   --jobs-shadow: 0 28px 90px rgba(0,0,0,.55); --jobs-shadow-soft: 0 14px 42px rgba(0,0,0,.35);
   --jobs-radius-xl: 24px; --jobs-radius-md: 15px; --jobs-maxw: 1320px;
 }
-
 html, body { background: var(--jobs-bg) !important; overflow-x: hidden !important; }
-
 main, .jw-body, .jw-page, .jw-content, .jw-section, .jw-container, .block-content, .content, .wrapper {
   background-color: var(--jobs-bg) !important;
   background-image: radial-gradient(circle at 50% -8%, rgba(98,151,255,.38), transparent 38%), radial-gradient(circle at 88% 18%, rgba(181,108,255,.18), transparent 32%), radial-gradient(circle at 8% 38%, rgba(125,227,255,.13), transparent 30%), linear-gradient(180deg, #02040a 0%, #060b18 45%, #02040a 100%) !important;
   background-repeat: no-repeat !important; background-size: 100% 100% !important;
   margin-top: 0 !important; margin-bottom: 0 !important;
 }
-
-section { margin: 0 !important; padding: 0 !important; }
-
-.jobs-section {
+.jw-section:has(.jobs-section), .jw-container:has(.jobs-section), .jw-content:has(.jobs-section), .jw-page:has(.jobs-section), .jw-body:has(.jobs-section), .block-content:has(.jobs-section), .content:has(.jobs-section), .wrapper:has(.jobs-section) {
+  padding-top: 0 !important; padding-bottom: 0 !important;
+  background-color: var(--jobs-bg) !important;
+  background-image: radial-gradient(circle at 50% -8%, rgba(98,151,255,.38), transparent 38%), radial-gradient(circle at 88% 18%, rgba(181,108,255,.18), transparent 32%), radial-gradient(circle at 8% 38%, rgba(125,227,255,.13), transparent 30%), linear-gradient(180deg, #02040a 0%, #060b18 45%, #02040a 100%) !important;
+  background-repeat: no-repeat !important; background-size: 100% 100% !important;
+}
+section { margin: 0 !important; padding: 0 !important; } .jobs-section { margin-top: 0 !important; margin-bottom: 0 !important; }
+.jobs-section, .jobs-section *, .jobs-section *::before, .jobs-section *::after { box-sizing: border-box; }
+section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   width: 100vw; max-width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
   position: relative; isolation: isolate; overflow: hidden; color: var(--jobs-text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   padding: 72px 22px 100px;
   background: radial-gradient(circle at 50% -8%, rgba(98,151,255,.38), transparent 38%), radial-gradient(circle at 88% 18%, rgba(181,108,255,.18), transparent 32%), radial-gradient(circle at 8% 38%, rgba(125,227,255,.13), transparent 30%), linear-gradient(180deg, #02040a 0%, #060b18 45%, #02040a 100%);
 }
-
 .jobs-section::before { content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 72px 72px; background-position: 0 0; opacity: .42; }
 .jobs-section::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: linear-gradient(115deg, transparent 0%, rgba(110,168,255,.08) 42%, transparent 56%), radial-gradient(ellipse at 50% 100%, rgba(110,168,255,.16), transparent 48%); opacity: .9; }
-
 .jobs-inner { width: 100%; max-width: var(--jobs-maxw); margin: 0 auto; position: relative; z-index: 2; }
-
+.jobs-topbar { max-width: var(--jobs-maxw); margin: 0 auto 32px; display: flex; justify-content: center; align-items: center; gap: 18px; flex-wrap: wrap; animation: fadeUp .6s ease both; }
+.jobs-lang, .jobs-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.jobs-lang-btn, .jobs-filter-btn { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.055); color: #f8fbff; border-radius: 999px; min-height: 36px; padding: 8px 14px; font-size: 12px; font-weight: 900; letter-spacing: .7px; text-transform: uppercase; cursor: pointer; transition: .22s ease; animation: fadeUp .6s ease both; animation-delay: .1s; }
+.jobs-lang-btn:hover, .jobs-filter-btn:hover, .jobs-lang-btn.active, .jobs-filter-btn.active { background: linear-gradient(180deg, #ffffff, #b9d3ff); color: #02040a; border-color: rgba(255,255,255,.75); box-shadow: 0 12px 26px rgba(110,168,255,.18); }
 .jobs-hero { max-width: 920px; margin: 0 auto 42px; text-align: center; animation: fadeUp .8s ease both; animation-delay: .15s; }
 .jobs-kicker { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px; padding: 8px 14px; border: 1px solid rgba(110,168,255,.28); border-radius: 999px; background: rgba(110,168,255,.08); color: var(--jobs-blue); font-size: 12px; font-weight: 900; letter-spacing: 1.8px; text-transform: uppercase; animation: fadeUp .6s ease both; }
 .jobs-title-main { margin: 0; font-size: clamp(38px, 6vw, 76px); line-height: .95; letter-spacing: -3px; font-weight: 950; animation: fadeUp .7s ease both; animation-delay: .2s; }
 .jobs-title-main span { background: linear-gradient(180deg, #ffffff 0%, #8fbaff 100%); -webkit-background-clip: text; color: transparent; }
 .jobs-subtitle { max-width: 720px; margin: 20px auto 0; color: var(--jobs-muted); font-size: 17px; line-height: 1.75; animation: fadeUp .8s ease both; animation-delay: .3s; }
-
-.jobs-topbar { position: sticky; top: 16px; z-index: 100; max-width: var(--jobs-maxw); margin: 0 auto 32px; display: flex; justify-content: flex-end; align-items: center; gap: 18px; animation: fadeUp .6s ease both; }
-
-.pn-lang-island { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; padding: 6px; background: rgba(8,12,22,.78); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); border: 1px solid rgba(255,255,255,.13); border-radius: 999px; box-shadow: 0 14px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); position: relative; flex-shrink: 0; }
-.pn-lang-island::before { content: ""; position: absolute; inset: -2px; border-radius: 999px; background: linear-gradient(135deg, rgba(110,168,255,.55), transparent 40%, rgba(181,108,255,.45)); filter: blur(14px); opacity: .4; z-index: -1; }
-
-.pn-flag-btn { position: relative; display: flex; align-items: center; gap: 0; padding: 5px; border: none; background: transparent; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 900; font-size: 12px; letter-spacing: 1px; overflow: hidden; transition: all .35s cubic-bezier(.4,.2,.2,1); max-width: 36px; height: 36px; }
-.pn-flag-btn .pn-flag { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.4); transition: transform .35s ease; }
+.jobs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap: 20px; width: 100%; align-items: stretch; }
+.job-card { position: relative; min-width: 0; overflow: hidden; display: flex; flex-direction: column; padding: 20px; border-radius: var(--jobs-radius-xl); border: 1px solid var(--jobs-line); background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.032)), rgba(8,12,22,.72); box-shadow: var(--jobs-shadow-soft); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, background .28s ease; animation: fadeUp .7s ease both, cardFloat 6s ease-in-out infinite; }
+.job-card:nth-child(1) { animation-delay: .35s, 0s; } .job-card:nth-child(2) { animation-delay: .42s, 0s; } .job-card:nth-child(3) { animation-delay: .49s, 0s; } .job-card:nth-child(4) { animation-delay: .56s, 0s; } .job-card:nth-child(5) { animation-delay: .63s, 0s; } .job-card:nth-child(6) { animation-delay: .70s, 0s; } .job-card:nth-child(7) { animation-delay: .77s, 0s; } .job-card:nth-child(n+8) { animation-delay: .84s, 0s; }
+.job-card::before { content: ""; position: absolute; inset: -1px; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 22% 0%, rgba(110,168,255,.20), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.12), transparent 32%); opacity: .55; }
+.job-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,.12), transparent 38%); opacity: 0; transition: opacity .28s ease; }
+.job-card:hover { transform: translateY(-7px); border-color: var(--jobs-line-strong); background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.045)), rgba(10,16,30,.82); box-shadow: var(--jobs-shadow); }
+.job-card:hover::after { opacity: 1; }
+.job-card > * { position: relative; z-index: 2; }
+.badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.badge { display: inline-flex; align-items: center; min-height: 25px; padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); color: #dce7ff; font-size: 11px; font-weight: 900; letter-spacing: .45px; text-transform: uppercase; }
+.badge.fo { color: #d7e7ff; background: rgba(110,168,255,.14); border-color: rgba(110,168,255,.34); }
+.badge.captain { color: #ffe7c2; background: rgba(255,177,82,.13); border-color: rgba(255,177,82,.34); }
+.badge.cadet { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
+.badge.fi { color: #ffe9d6; background: rgba(255,177,82,.10); border-color: rgba(255,177,82,.28); }
+.badge.low-hours { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
+.badge.type-rated { color: #eadbff; background: rgba(181,108,255,.13); border-color: rgba(181,108,255,.32); }
+.badge.ntr { color: #d8fbff; background: rgba(125,227,255,.12); border-color: rgba(125,227,255,.30); }
+.brand { display: flex; align-items: center; gap: 13px; margin-bottom: 12px; min-width: 0; }
+.brand img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; display: block; border-radius: 14px; background: #ffffff; border: 1px solid rgba(255,255,255,.65); padding: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.24); }
+.brand div { min-width: 0; }
+.company { margin: 0; color: #ffffff; font-weight: 900; font-size: 15.5px; line-height: 1.25; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.subtitle { margin: 3px 0 0; color: var(--jobs-muted); font-size: 12.5px; line-height: 1.45; overflow-wrap: anywhere; }
+.title { margin: 10px 0 15px; color: #ffffff; font-size: 19px; font-weight: 950; line-height: 1.28; letter-spacing: -.03em; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+details { border: 1px solid rgba(255,255,255,.10); border-radius: var(--jobs-radius-md); padding: 0; margin-bottom: 10px; max-width: 100%; overflow: hidden; background: rgba(255,255,255,.045); box-shadow: inset 0 1px 0 rgba(255,255,255,.035); transition: border-color .2s ease, background .2s ease; }
+details[open] { border-color: rgba(110,168,255,.28); background: rgba(110,168,255,.06); }
+summary { cursor: pointer; list-style: none; position: relative; min-height: 46px; display: flex; align-items: center; padding: 12px 43px 12px 14px; color: #ffffff; font-weight: 900; font-size: 14px; overflow-wrap: anywhere; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 23px; height: 23px; border-radius: 999px; display: grid; place-items: center; color: #ffffff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); font-weight: 900; font-size: 15px; }
+details[open] summary::after { content: "\2212"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
+.reqs { padding: 0 15px 15px 31px; margin: 0; color: var(--jobs-soft); font-size: 13.5px; line-height: 1.58; }
+.reqs li { margin-bottom: 6px; word-break: break-word; overflow-wrap: anywhere; }
+.reqs li:last-child { margin-bottom: 0; }
+.actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 9px; padding-top: 8px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 11px 15px; border-radius: 12px; font-size: 13px; line-height: 1.2; text-decoration: none; font-weight: 950; letter-spacing: .01em; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease, color .2s ease; }
+.btn:hover { transform: translateY(-2px); }
+.apply { color: #02040a; background: linear-gradient(180deg, #ffffff, #b9d3ff); border: 1px solid rgba(255,255,255,.75); box-shadow: 0 12px 26px rgba(110,168,255,.18); }
+.apply:hover { background: linear-gradient(180deg, #ffffff, #8fbaff); box-shadow: 0 16px 34px rgba(110,168,255,.27); }
+.company-btn { color: #f4f8ff; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.065); }
+.company-btn:hover { background: rgba(255,255,255,.105); border-color: rgba(255,255,255,.26); }
+.job-card.is-hidden { display: none !important; }
+.btn:focus-visible, summary:focus-visible, .jobs-lang-btn:focus-visible, .jobs-filter-btn:focus-visible { outline: 2px solid var(--jobs-blue); outline-offset: 3px; }
+@media (max-width: 900px) { section { margin: 0 !important; padding: 0 !important; } .jobs-section { padding: 58px 18px 82px; } .jobs-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; } .jobs-title-main { letter-spacing: -2px; } }
+@media (max-width: 640px) { section { margin: 0 !important; padding: 0 !important; } .jobs-section { padding: 44px 14px 70px; } .jobs-topbar { justify-content: center; margin-bottom: 24px; } .jobs-lang, .jobs-filters { justify-content: center; } .jobs-hero { margin-bottom: 30px; } .jobs-title-main { font-size: clamp(34px, 12vw, 48px); letter-spacing: -1.6px; } .jobs-subtitle { font-size: 15.5px; } .jobs-grid { grid-template-columns: 1fr; gap: 14px; } .job-card { padding: 17px; border-radius: 20px; } .brand img { width: 44px; height: 44px; } .title { font-size: 18px; } .btn { flex: 1 1 140px; } }
+@media (prefers-reduced-motion: reduce) { .jobs-section *, .jobs-section *::before, .jobs-section *::after { animation: none !important; transition: none !important; } }
+html, body {
+  background-color: #02040a !important;
+  background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(115deg, transparent 0%, rgba(110,168,255,.08) 42%, transparent 56%), radial-gradient(ellipse at 50% 100%, rgba(110,168,255,.16), transparent 48%), radial-gradient(circle at 50% -8%, rgba(98,151,255,.38), transparent 38%), radial-gradient(circle at 88% 18%, rgba(181,108,255,.18), transparent 32%), radial-gradient(circle at 8% 38%, rgba(125,227,255,.13), transparent 30%), linear-gradient(180deg, #02040a 0%, #060b18 45%, #02040a 100%) !important;
+  background-size: 72px 72px, 72px 72px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+  background-position: 0 0, 0 0, center center, center bottom, center top, center center, center center, center center !important;
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat !important;
+  overflow-x: hidden !important;
+}
+main, .jw-body, .jw-page, .jw-content, .jw-section, .jw-container, .jw-element, .jw-element-content, .jw-html-content, .block-content, .content, .wrapper { background: transparent !important; background-color: transparent !important; background-image: none !important; }
+section { margin: 0 !important; padding: 0 !important; } .jobs-section { background: transparent !important; background-color: transparent !important; background-image: none !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+.jobs-section::before, .jobs-section::after { display: none !important; }
+section { margin: 0 !important; padding: 0 !important; } .jobs-section { width: 100vw !important; max-width: 100vw !important; margin-left: calc(50% - 50vw) !important; margin-right: calc(50% - 50vw) !important; }
+.jw-html-content, .jw-element-content, .block-content { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
+/* DYNAMIC ISLAND */
+.pn-island-anchor { position: sticky; top: 16px; z-index: 100; display: flex; justify-content: center; margin-bottom: 32px; pointer-events: none; }
+.pn-island { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; padding: 7px; background: rgba(8,12,22,.78); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); border: 1px solid rgba(255,255,255,.13); border-radius: 999px; box-shadow: 0 14px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.08); position: relative; animation: islandDrop .8s cubic-bezier(.2,1.2,.3,1) both; }
+@keyframes islandDrop { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.pn-island::before { content: ""; position: absolute; inset: -2px; border-radius: 999px; background: linear-gradient(135deg, rgba(110,168,255,.55), transparent 40%, rgba(181,108,255,.45)); filter: blur(14px); opacity: .5; z-index: -1; animation: islandGlow 4s ease-in-out infinite; }
+@keyframes islandGlow { 0%, 100% { opacity: .3; } 50% { opacity: .75; } }
+.pn-flag-btn { position: relative; display: flex; align-items: center; gap: 0; padding: 6px; border: none; background: transparent; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 900; font-size: 13px; letter-spacing: 1.2px; overflow: hidden; transition: all .4s cubic-bezier(.4,.2,.2,1); max-width: 44px; }
+.pn-flag-btn .pn-flag { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; overflow: hidden; display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.4); transition: transform .4s ease; }
 .pn-flag-btn .pn-flag svg { width: 100%; height: 100%; display: block; }
-.pn-flag-btn .pn-flag-label { display: inline-block; max-width: 0; opacity: 0; white-space: nowrap; transition: all .35s cubic-bezier(.4,.2,.2,1); }
-.pn-flag-btn.active { background: linear-gradient(135deg, #fff, #c8daff); color: #02040a; max-width: 70px; padding-right: 12px; box-shadow: 0 6px 20px rgba(110,168,255,.35); }
+.pn-flag-btn .pn-label { display: inline-block; max-width: 0; opacity: 0; white-space: nowrap; transition: all .4s cubic-bezier(.4,.2,.2,1); }
+.pn-flag-btn.active { background: linear-gradient(135deg, #fff, #c8daff); color: #02040a; max-width: 130px; padding-right: 14px; box-shadow: 0 6px 20px rgba(110,168,255,.35); }
 .pn-flag-btn.active .pn-flag { transform: scale(1.05); }
-.pn-flag-btn.active .pn-flag-label { max-width: 30px; opacity: 1; padding-left: 7px; }
+.pn-flag-btn.active .pn-label { max-width: 80px; opacity: 1; padding-left: 8px; }
 .pn-flag-btn:not(.active):hover .pn-flag { transform: scale(1.12) rotate(-4deg); }
+    
 
+
+
+
+/* ===== NEW CONTROLS: TABS, SEARCH, HOURS ===== */
 .pn-controls { max-width: var(--jobs-maxw); margin: 0 auto 28px; display: flex; flex-direction: column; gap: 16px; animation: fadeUp .6s ease both; }
-
 .pn-tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .pn-tab { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.055); color: #f8fbff; border-radius: 999px; min-height: 42px; padding: 10px 22px; font-size: 13px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; cursor: pointer; transition: .22s ease; display: inline-flex; align-items: center; gap: 8px; }
 .pn-tab:hover { background: rgba(255,255,255,.1); }
@@ -96,6 +163,7 @@ section { margin: 0 !important; padding: 0 !important; }
 .pn-chip { border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.055); color: #f8fbff; border-radius: 999px; min-height: 38px; padding: 8px 16px; font-size: 12px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: .2s ease; }
 .pn-chip:hover { background: rgba(255,255,255,.1); }
 .pn-chip.active { background: linear-gradient(180deg, #fff, #b9d3ff); color: #02040a; border-color: rgba(255,255,255,.75); box-shadow: 0 10px 22px rgba(110,168,255,.18); }
+.pn-chip.is-hidden { display: none !important; }
 
 .pn-hours-box { display: flex; align-items: center; gap: 14px; flex: 1 1 320px; max-width: 420px; padding: 10px 18px; border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.04); }
 .pn-hours-label { font-size: 12px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; color: var(--jobs-muted); white-space: nowrap; }
@@ -105,99 +173,115 @@ section { margin: 0 !important; padding: 0 !important; }
 .pn-hours-slider::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 3px solid var(--jobs-blue); cursor: pointer; }
 
 .pn-results-info { text-align: center; color: var(--jobs-muted); font-size: 13px; font-weight: 600; margin-top: 4px; }
+.pn-no-results { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--jobs-muted); font-size: 16px; }
 
-.jobs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap: 20px; width: 100%; align-items: stretch; }
+.job-card.is-hidden { display: none !important; }
 
-.job-card { position: relative; min-width: 0; overflow: hidden; display: flex; flex-direction: column; padding: 20px; border-radius: var(--jobs-radius-xl); border: 1px solid var(--jobs-line); background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.032)), rgba(8,12,22,.72); box-shadow: var(--jobs-shadow-soft); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease, background .28s ease; animation: fadeUp .7s ease both, cardFloat 6s ease-in-out infinite; }
-.job-card:nth-child(1) { animation-delay: .35s, 0s; } .job-card:nth-child(2) { animation-delay: .42s, 0s; } .job-card:nth-child(3) { animation-delay: .49s, 0s; } .job-card:nth-child(4) { animation-delay: .56s, 0s; } .job-card:nth-child(5) { animation-delay: .63s, 0s; } .job-card:nth-child(6) { animation-delay: .70s, 0s; }
+/* language span defaults (JS controlled) */
+.lang-en { display: none; }
+.lang-es { display: inline; }
+body.pn-lang-en .lang-en, .pn-root.pn-lang-en .lang-en { display: inline; }
+body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
 
-.job-card::before { content: ""; position: absolute; inset: -1px; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 22% 0%, rgba(110,168,255,.20), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.12), transparent 32%); opacity: .55; }
-.job-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 50% 0%, rgba(255,255,255,.12), transparent 38%); opacity: 0; transition: opacity .28s ease; }
-.job-card:hover { transform: translateY(-7px); border-color: var(--jobs-line-strong); background: linear-gradient(180deg, rgba(255,255,255,.105), rgba(255,255,255,.045)), rgba(10,16,30,.82); box-shadow: var(--jobs-shadow); }
-.job-card:hover::after { opacity: 1; }
-.job-card > * { position: relative; z-index: 2; }
 
-.badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-.badge { display: inline-flex; align-items: center; min-height: 25px; padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.13); background: rgba(255,255,255,.06); color: #dce7ff; font-size: 11px; font-weight: 900; letter-spacing: .45px; text-transform: uppercase; }
-.badge.fo { color: #d7e7ff; background: rgba(110,168,255,.14); border-color: rgba(110,168,255,.34); }
-.badge.captain { color: #ffe7c2; background: rgba(255,177,82,.13); border-color: rgba(255,177,82,.34); }
-.badge.cadet { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
-.badge.fi { color: #ffe9d6; background: rgba(255,177,82,.10); border-color: rgba(255,177,82,.28); }
+.pn-lang-top { position: sticky; top: 14px; z-index: 120; display: flex; justify-content: center; align-items: center; margin: 0 auto 28px; pointer-events: none; }
+.pn-lang-top .pn-lang-island { pointer-events: auto; }
 
-.brand { display: flex; align-items: center; gap: 13px; margin-bottom: 12px; min-width: 0; }
-.brand img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; display: block; border-radius: 14px; background: #ffffff; border: 1px solid rgba(255,255,255,.65); padding: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.24); }
-.brand div { min-width: 0; }
-.company { margin: 0; color: #ffffff; font-weight: 900; font-size: 15.5px; line-height: 1.25; letter-spacing: -.01em; overflow-wrap: anywhere; }
-.subtitle { margin: 3px 0 0; color: var(--jobs-muted); font-size: 12.5px; line-height: 1.45; overflow-wrap: anywhere; }
-.title { margin: 10px 0 15px; color: #ffffff; font-size: 19px; font-weight: 950; line-height: 1.28; letter-spacing: -.03em; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* ===== LANGUAGE ISLAND (flag selector) ===== */
+.pn-lang-island { pointer-events: auto; display: inline-flex; align-items: center; gap: 6px; padding: 6px; background: rgba(8,12,22,.78); backdrop-filter: blur(22px) saturate(1.4); -webkit-backdrop-filter: blur(22px) saturate(1.4); border: 1px solid rgba(255,255,255,.13); border-radius: 999px; box-shadow: 0 14px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); position: relative; flex-shrink: 0; }
+.pn-lang-island::before { content: ""; position: absolute; inset: -2px; border-radius: 999px; background: linear-gradient(135deg, rgba(110,168,255,.55), transparent 40%, rgba(181,108,255,.45)); filter: blur(14px); opacity: .4; z-index: -1; }
+.pn-flag-btn { position: relative; display: flex; align-items: center; gap: 0; padding: 5px; border: none; background: transparent; border-radius: 999px; cursor: pointer; color: #fff; font-family: inherit; font-weight: 900; font-size: 12px; letter-spacing: 1px; overflow: hidden; transition: all .35s cubic-bezier(.4,.2,.2,1); max-width: 36px; height: 36px; }
+.pn-flag-btn .pn-flag { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; display: block; box-shadow: 0 0 0 1px rgba(255,255,255,.18), 0 4px 10px rgba(0,0,0,.4); transition: transform .35s ease; }
+.pn-flag-btn .pn-flag svg { width: 100%; height: 100%; display: block; }
+.pn-flag-btn .pn-flag-label { display: inline-block; max-width: 0; opacity: 0; white-space: nowrap; transition: all .35s cubic-bezier(.4,.2,.2,1); }
+.pn-flag-btn.active { background: linear-gradient(135deg, #fff, #c8daff); color: #02040a; max-width: 70px; padding-right: 12px; box-shadow: 0 6px 20px rgba(110,168,255,.35); }
+.pn-flag-btn.active .pn-flag { transform: scale(1.05); }
+.pn-flag-btn.active .pn-flag-label { max-width: 30px; opacity: 1; padding-left: 7px; }
+.pn-flag-btn:not(.active):hover .pn-flag { transform: scale(1.12) rotate(-4deg); }
 
-details { border: 1px solid rgba(255,255,255,.10); border-radius: var(--jobs-radius-md); padding: 0; margin-bottom: 10px; max-width: 100%; overflow: hidden; background: rgba(255,255,255,.045); box-shadow: inset 0 1px 0 rgba(255,255,255,.035); transition: border-color .2s ease, background .2s ease; }
-details[open] { border-color: rgba(110,168,255,.28); background: rgba(110,168,255,.06); }
-summary { cursor: pointer; list-style: none; position: relative; min-height: 46px; display: flex; align-items: center; padding: 12px 43px 12px 14px; color: #ffffff; font-weight: 900; font-size: 14px; overflow-wrap: anywhere; }
-summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 23px; height: 23px; border-radius: 999px; display: grid; place-items: center; color: #ffffff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); font-weight: 900; font-size: 15px; }
-details[open] summary::after { content: "−"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
+@media (max-width: 640px) {
+  .pn-tab { padding: 9px 16px; font-size: 12px; }
+  .pn-search-box { flex: 1 1 100%; }
+  .pn-hours-box { flex: 1 1 100%; }
+  .pn-lang-island { order: -1; margin: 0 auto; }
+}
 
-.reqs { padding: 0 15px 15px 31px; margin: 0; color: var(--jobs-soft); font-size: 13.5px; line-height: 1.58; }
-.reqs li { margin-bottom: 6px; word-break: break-word; overflow-wrap: anywhere; }
-.reqs li:last-child { margin-bottom: 0; }
 
-.actions { margin-top: auto; display: flex; flex-wrap: wrap; gap: 9px; padding-top: 8px; }
-.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 11px 15px; border-radius: 12px; font-size: 13px; line-height: 1.2; text-decoration: none; font-weight: 950; letter-spacing: .01em; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease, color .2s ease; border: none; cursor: pointer; }
-.btn:hover { transform: translateY(-2px); }
-.apply { color: #02040a; background: linear-gradient(180deg, #ffffff, #b9d3ff); border: 1px solid rgba(255,255,255,.75); box-shadow: 0 12px 26px rgba(110,168,255,.18); }
-.apply:hover { background: linear-gradient(180deg, #ffffff, #8fbaff); box-shadow: 0 16px 34px rgba(110,168,255,.27); }
-.company-btn { color: #f4f8ff; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.065); }
-.company-btn:hover { background: rgba(255,255,255,.105); border-color: rgba(255,255,255,.26); }
 
-.pn-loading { grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 80px 20px; color: var(--jobs-muted); }
-.pn-spinner { width: 42px; height: 42px; border: 3px solid rgba(110,168,255,.15); border-top-color: var(--jobs-blue); border-radius: 50%; animation: pnSpin .8s linear infinite; }
+/* Overrides for standalone page */
+section { margin: 0 !important; padding: 0 !important; } .jobs-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  background: transparent !important;
+  min-height: 100vh;
+}
+.jobs-section::before, .jobs-section::after { display: none !important; }
+
+/* Loading */
+.pn-loading {
+  grid-column: 1/-1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 18px; padding: 80px 20px;
+  color: var(--jobs-muted);
+}
+.pn-spinner {
+  width: 42px; height: 42px;
+  border: 3px solid rgba(110,168,255,.15);
+  border-top-color: var(--jobs-blue);
+  border-radius: 50%;
+  animation: pnSpin .8s linear infinite;
+}
 @keyframes pnSpin { to { transform: rotate(360deg); } }
-.pn-error { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #ff6b6b; font-size: 15px; line-height: 1.7; }
-.pn-no-results { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--jobs-muted); font-size: 16px; }
-
-.lang-en { display: inline; }
-.lang-es { display: none; }
-body.pn-lang-es .lang-en { display: none; }
-body.pn-lang-es .lang-es { display: inline; }
-
-@media (max-width: 900px) { .jobs-section { padding: 58px 18px 82px; } .jobs-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; } }
-@media (max-width: 640px) { .jobs-section { padding: 44px 14px 70px; } .jobs-topbar { justify-content: center; } .jobs-hero { margin-bottom: 30px; } .jobs-grid { grid-template-columns: 1fr; gap: 14px; } .job-card { padding: 17px; } .btn { flex: 1 1 140px; } }
-
-section { margin: 0 !important; padding: 0 !important; }
-.jobs-section { background: transparent !important; margin-top: 0 !important; margin-bottom: 0 !important; width: 100% !important; max-width: 100% !important; }
+.pn-error {
+  grid-column: 1/-1;
+  text-align: center; padding: 60px 20px;
+  color: #ff6b6b; font-size: 15px; line-height: 1.7;
+}
+.pn-no-results {
+  grid-column: 1/-1;
+  text-align: center; padding: 60px 20px;
+  color: var(--jobs-muted); font-size: 16px;
+}
+.pn-chip.is-hidden { display: none !important; }
+.lang-en { display: none; }
+.lang-es { display: inline; }
+.pn-lang-en .lang-en { display: inline; }
+.pn-lang-en .lang-es { display: none; }
 </style>
 </head>
-<body>
+<body class="pn-lang-en">
 
 <section class="jobs-section">
   <div class="jobs-inner">
 
-    <div class="jobs-topbar">
+    <div class="pn-lang-top">
       <div class="pn-lang-island">
-        <button class="pn-flag-btn active" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
-          <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
-          <span class="pn-flag-label">EN</span>
-        </button>
-        <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Español">
+        <button class="pn-flag-btn" id="pnFlagEs" onclick="pnSetLang('es')" aria-label="Espa&#241;ol">
           <span class="pn-flag"><svg viewBox="0 0 60 40" preserveAspectRatio="xMidYMid slice"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg></span>
           <span class="pn-flag-label">ES</span>
+        </button>
+        <button class="pn-flag-btn active" id="pnFlagEn" onclick="pnSetLang('en')" aria-label="English">
+          <span class="pn-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><defs><clipPath id="ukc"><rect width="60" height="30"/></clipPath></defs><g clip-path="url(#ukc)"><rect width="60" height="30" fill="#012169"/><path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,30" stroke="#C8102E" stroke-width="2.5" transform="translate(1.5,-.8)"/><path d="M60,0 L0,30" stroke="#C8102E" stroke-width="2.5" transform="translate(-1.5,-.8)"/><rect x="25" width="10" height="30" fill="#fff"/><rect y="10" width="60" height="10" fill="#fff"/><rect x="27" width="6" height="30" fill="#C8102E"/><rect y="12" width="60" height="6" fill="#C8102E"/></g></svg></span>
+          <span class="pn-flag-label">EN</span>
         </button>
       </div>
     </div>
 
     <div class="jobs-hero">
       <div class="jobs-kicker">
-        <span class="lang-en">Pilot jobs board</span>
         <span class="lang-es">Ofertas de pilotos</span>
+        <span class="lang-en">Pilot jobs board</span>
       </div>
       <h1 class="jobs-title-main">
-        <span class="lang-en">Aviation opportunities<br>for pilots across Europe & beyond</span>
-        <span class="lang-es">Oportunidades de aviación<br>para pilotos en Europa y más allá</span>
+        <span class="lang-es">Oportunidades de aviaci&#243;n</span><span class="lang-en">Aviation opportunities</span><br>
+        <span class="lang-es">para pilotos en Europa y m&#225;s all&#225;</span><span class="lang-en">for pilots across Europe &amp; beyond</span>
       </h1>
       <p class="jobs-subtitle">
+        <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviaci&#243;n ejecutiva e instructores. Busca, filtra y encuentra tu pr&#243;ximo destino.</span>
         <span class="lang-en">Explore curated vacancies for First Officers, Captains, Cadets, executive aviation and flight instructors. Search, filter and find your next destination.</span>
-        <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviación ejecutiva e instructores. Busca, filtra y encuentra tu próximo destino.</span>
       </p>
     </div>
 
@@ -205,15 +289,15 @@ section { margin: 0 !important; padding: 0 !important; }
 
       <div class="pn-tabs">
         <button class="pn-tab active" data-tab="commercial" onclick="pnSetTab('commercial')">
-          <span class="lang-en">Commercial Aviation</span><span class="lang-es">Aviación Comercial</span>
+          <span class="lang-es">Aviaci&#243;n Comercial</span><span class="lang-en">Commercial Aviation</span>
           <span class="pn-tab-count" id="count-commercial">(0)</span>
         </button>
         <button class="pn-tab" data-tab="executive" onclick="pnSetTab('executive')">
-          <span class="lang-en">Executive Aviation</span><span class="lang-es">Aviación Ejecutiva</span>
+          <span class="lang-es">Aviaci&#243;n Ejecutiva</span><span class="lang-en">Executive Aviation</span>
           <span class="pn-tab-count" id="count-executive">(0)</span>
         </button>
         <button class="pn-tab" data-tab="ga" onclick="pnSetTab('ga')">
-          <span class="lang-en">General Aviation</span><span class="lang-es">Aviación General</span>
+          <span class="lang-es">Aviaci&#243;n General</span><span class="lang-en">General Aviation</span>
           <span class="pn-tab-count" id="count-ga">(0)</span>
         </button>
       </div>
@@ -222,22 +306,22 @@ section { margin: 0 !important; padding: 0 !important; }
         <div class="pn-search-box">
           <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
           <input type="text" class="pn-search-input" id="pnSearch" oninput="pnRender()"
+            data-ph-es="Buscar aerol&#237;nea, pa&#237;s, avi&#243;n, puesto..."
             data-ph-en="Search airline, country, aircraft, role..."
-            data-ph-es="Buscar aerolínea, país, avión, puesto..."
             placeholder="Search airline, country, aircraft, role...">
         </div>
       </div>
 
       <div class="pn-search-row">
         <div class="pn-filters-row">
-          <button class="pn-chip active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')"><span class="lang-en">All</span><span class="lang-es">Todos</span></button>
+          <button class="pn-chip active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')"><span class="lang-es">Todos</span><span class="lang-en">All</span></button>
           <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnSetRole('fo')">First Officer</button>
-          <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnSetRole('captain')"><span class="lang-en">Captain</span><span class="lang-es">Comandante</span></button>
-          <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnSetRole('cadet')"><span class="lang-en">Cadet</span><span class="lang-es">Cadete</span></button>
-          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-en">Instructor</span><span class="lang-es">Instructor</span></button>
+          <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnSetRole('captain')"><span class="lang-es">Comandante</span><span class="lang-en">Captain</span></button>
+          <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnSetRole('cadet')"><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span></button>
+          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span></button>
         </div>
         <div class="pn-hours-box">
-          <span class="pn-hours-label"><span class="lang-en">Max hours</span><span class="lang-es">Horas máx.</span></span>
+          <span class="pn-hours-label"><span class="lang-es">Horas m&#225;x.</span><span class="lang-en">Max hours</span></span>
           <input type="range" class="pn-hours-slider" id="pnHours" min="0" max="5500" step="100" value="5500" oninput="pnRender()">
           <span class="pn-hours-value" id="pnHoursVal">5500+</span>
         </div>
@@ -247,9 +331,9 @@ section { margin: 0 !important; padding: 0 !important; }
     </div>
 
     <div class="jobs-grid" id="pnGrid">
-      <div class="pn-loading">
+      <div class="pn-loading" id="pnLoading">
         <div class="pn-spinner"></div>
-        <span><span class="lang-en">Loading jobs...</span><span class="lang-es">Cargando ofertas...</span></span>
+        <span><span class="lang-es">Cargando ofertas...</span><span class="lang-en">Loading jobs...</span></span>
       </div>
     </div>
 
@@ -261,10 +345,10 @@ var SB_URL = 'https://ifbpbtyifiuhzyeifhea.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmYnBidHlpZml1aHp5ZWlmaGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjIxNDMsImV4cCI6MjA5MzczODE0M30.CxWKoHsf0yPtJuoWPSaWFv-m-1GXvi2GGo_KHjxicWk';
 
 var allJobs = [];
-var lang = 'en';
-var tab = 'commercial';
-var role = 'all';
-var today = new Date().toISOString().split('T')[0];
+var lang    = 'en';
+var tab     = 'commercial';
+var role    = 'all';
+var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
   var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc&apikey=' + SB_KEY;
@@ -283,4 +367,165 @@ function fetchJobs() {
     pnRender();
     resizeParent();
   })
-  .catch(function(err)
+  .catch(function(err) {
+    document.getElementById('pnGrid').innerHTML =
+      '<div class="pn-error">&#9888; Error cargando ofertas.<br><small>' + err.message + '</small></div>';
+  });
+}
+
+function updateCounts() {
+  var c = {commercial:0, executive:0, ga:0};
+  allJobs.forEach(function(j) { if (c[j.category] !== undefined) c[j.category]++; });
+  Object.keys(c).forEach(function(k) {
+    var el = document.getElementById('count-' + k);
+    if (el) el.textContent = '(' + c[k] + ')';
+  });
+}
+
+function pnRender() {
+  var q      = (document.getElementById('pnSearch').value || '').toLowerCase().trim();
+  var maxHrs = parseInt(document.getElementById('pnHours').value, 10);
+  document.getElementById('pnHoursVal').textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
+
+  var filtered = allJobs.filter(function(j) {
+    var roles     = (j.role || '').split(' ');
+    var matchTab  = j.category === tab;
+    var matchRole = role === 'all' || roles.indexOf(role) !== -1;
+    var matchHrs  = maxHrs >= 5500 || (j.min_hours || 0) <= maxHrs;
+    var matchQ    = !q
+      || (j.search_text || '').toLowerCase().indexOf(q) !== -1
+      || (j.company || '').toLowerCase().indexOf(q) !== -1
+      || (j.title_en || '').toLowerCase().indexOf(q) !== -1;
+    return matchTab && matchRole && matchHrs && matchQ;
+  });
+
+  var grid = document.getElementById('pnGrid');
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="pn-no-results">'
+      + '<span class="lang-es' + (lang === 'en' ? ' is-hidden' : '') + '">No se encontraron ofertas con esos criterios.</span>'
+      + '<span class="lang-en' + (lang === 'es' ? ' is-hidden' : '') + '">No jobs found matching those filters.</span>'
+      + '</div>';
+    document.getElementById('pnResultsInfo').textContent = '0 ' + (lang === 'es' ? 'ofertas' : 'jobs');
+    resizeParent();
+    return;
+  }
+
+  grid.innerHTML = filtered.map(buildCard).join('');
+  applyLang();
+
+  var word = lang === 'es'
+    ? (filtered.length === 1 ? 'oferta' : 'ofertas')
+    : (filtered.length === 1 ? 'job' : 'jobs');
+  document.getElementById('pnResultsInfo').textContent = filtered.length + ' ' + word;
+  resizeParent();
+}
+
+function buildCard(j) {
+  var badges = (j.badges || []).map(function(b) {
+    var cls = 'badge', bl = b.toLowerCase();
+    if (bl === 'first officer' || bl === 'co-pilot') cls += ' fo';
+    else if (bl === 'captain' || bl === 'comandante') cls += ' captain';
+    else if (bl === 'cadet' || bl === 'cadete') cls += ' cadet';
+    else if (bl.indexOf('non-type') !== -1 || bl === 'ntr') cls += ' ntr';
+    else if (bl.indexOf('type rated') !== -1) cls += ' type-rated';
+    else if (bl.indexOf('low hours') !== -1 || bl === 'ab initio' || bl === 'pre-financed') cls += ' low-hours';
+    else if (bl.indexOf('instructor') !== -1) cls += ' fi';
+    return '<span class="' + cls + '">' + esc(b) + '</span>';
+  }).join('');
+
+  var logo = j.logo_url
+    ? '<img src="' + esc(j.logo_url) + '" alt="' + esc(j.company) + '" loading="lazy" onerror="this.style.display=&quot;none&quot;">'
+    : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'
+      + esc((j.company || '').charAt(0)) + '</div>';
+
+  var titleEs = j.title_es || j.title_en || '';
+  var titleEn = j.title_en || j.title_es || '';
+  var titleHtml = titleEs === titleEn
+    ? esc(titleEs)
+    : '<span class="lang-es">' + esc(titleEs) + '</span><span class="lang-en">' + esc(titleEn) + '</span>';
+
+  var reqs  = list(j.requirements);
+  var offer = list(j.offer);
+  if (j.deadline) offer += '<li>&#9201; <strong>Deadline: ' + j.deadline + '</strong></li>';
+
+  return '<div class="job-card">'
+    + '<div class="badges">' + badges + '</div>'
+    + '<div class="brand">' + logo
+    + '<div><p class="company">' + esc(j.company) + '</p>'
+    + '<p class="subtitle">' + esc(j.subtitle || '') + '</p></div></div>'
+    + '<div class="title">' + titleHtml + '</div>'
+    + '<details><summary><span class="lang-es">Requisitos</span><span class="lang-en">Requirements</span></summary>'
+    + '<ul class="reqs">' + reqs + '</ul></details>'
+    + '<details><summary><span class="lang-es">Qu&#233; ofrece la compa&#241;&#237;a</span><span class="lang-en">What the company offers</span></summary>'
+    + '<ul class="reqs">' + offer + '</ul></details>'
+    + '<div class="actions">'
+    + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
+      + '<span class="lang-es">Aplicar</span><span class="lang-en">Apply</span></a>' : '')
+    + (j.company_url ? '<a class="btn company-btn" href="' + esc(j.company_url) + '" target="_blank" rel="noopener noreferrer">'
+      + '<span class="lang-es">Compa&#241;&#237;a</span><span class="lang-en">Company</span></a>' : '')
+    + '</div></div>';
+}
+
+function list(arr) {
+  return (arr || []).map(function(i) { return '<li>' + esc(i) + '</li>'; }).join('');
+}
+
+function esc(s) {
+  return (s || '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function applyLang() {
+  var root = document.body;
+  if (lang === 'en') root.classList.add('pn-lang-en');
+  else root.classList.remove('pn-lang-en');
+}
+
+function pnSetLang(l) {
+  lang = l;
+  applyLang();
+  document.getElementById('pnFlagEs').classList.toggle('active', l === 'es');
+  document.getElementById('pnFlagEn').classList.toggle('active', l === 'en');
+  var s = document.getElementById('pnSearch');
+  s.placeholder = s.getAttribute('data-ph-' + l);
+  pnRender();
+}
+
+function pnSetTab(t) {
+  tab = t; role = 'all';
+  document.querySelectorAll('.pn-tab').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === t);
+  });
+  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
+    var shows = (b.getAttribute('data-tab-show') || '').split(' ');
+    b.classList.toggle('is-hidden', shows.indexOf(t) === -1);
+    b.classList.toggle('active', b.getAttribute('data-role-filter') === 'all');
+  });
+  pnRender();
+}
+
+function pnSetRole(r) {
+  role = r;
+  document.querySelectorAll('[data-role-filter]').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-role-filter') === r);
+  });
+  pnRender();
+}
+
+// Tell parent iframe to resize
+function resizeParent() {
+  setTimeout(function() {
+    var h = document.body.scrollHeight;
+    try { window.parent.postMessage({ type: 'pn-resize', height: h }, '*'); } catch(e) {}
+  }, 100);
+}
+
+// Init
+pnSetTab('commercial');
+fetchJobs();
+</script>
+
+</body>
+</html>
