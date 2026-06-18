@@ -362,7 +362,6 @@ var role    = 'all';
 var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
-  var ts = new Date().getTime();
   var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc';
   
   fetch(url, {
