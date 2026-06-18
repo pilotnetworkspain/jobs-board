@@ -1,6 +1,6 @@
-hvar url = SB_URL + '/rest/v1/job_offers?select=id,company,subtitle,title_es,title_en,category,role,min_hours,badges,logo_url,apply_url,company_url,requirements,offer,search_text,deadline,status,created_at,updated_at&order=id.asc&apikey=' + SB_KEY + '&_t=' + ts;h<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<heselect=id,company,subtitle,title_es,title_en,category,role,min_hours,badges,logo_url,apply_url,company_url,requirements,offer,search_text,deadline,status,created_at,updated_atad>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -364,7 +364,7 @@ var today   = new Date().toISOString().split('T')[0];
 function fetchJobs() {
   // Add cache buster to force fresh data
   var ts = new Date().getTime();
-  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.asc&apikey=' + SB_KEY + '&_t=' + ts;
+  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc&apikey=' + SB_KEY + '&_t=' + ts;
   fetch(url, { cache: 'no-store' })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
