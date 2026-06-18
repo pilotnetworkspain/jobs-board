@@ -100,7 +100,7 @@ details[open] { border-color: rgba(110,168,255,.28); background: rgba(110,168,25
 summary { cursor: pointer; list-style: none; position: relative; min-height: 46px; display: flex; align-items: center; padding: 12px 43px 12px 14px; color: #ffffff; font-weight: 900; font-size: 14px; overflow-wrap: anywhere; }
 summary::-webkit-details-marker { display: none; }
 summary::after { content: "+"; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 23px; height: 23px; border-radius: 999px; display: grid; place-items: center; color: #ffffff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); font-weight: 900; font-size: 15px; }
-details[open] summary::after { content: "\2212"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
+details[open] summary::after { content: "−"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
 .reqs { padding: 0 15px 15px 31px; margin: 0; color: var(--jobs-soft); font-size: 13.5px; line-height: 1.58; }
 .reqs li { margin-bottom: 6px; word-break: break-word; overflow-wrap: anywhere; }
 .reqs li:last-child { margin-bottom: 0; }
@@ -362,10 +362,17 @@ var role    = 'all';
 var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
-  // Add cache buster to force fresh data
   var ts = new Date().getTime();
-  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc&apikey=' + SB_KEY + '&_t=' + ts;
-  fetch(url, { cache: 'no-store' })
+  var url = SB_URL + '/rest/v1/job_offers?select=*&order=id.desc';
+  
+  fetch(url, {
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json'
+    },
+    cache: 'no-store'
+  })
   .then(function(r) {
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return r.json();
@@ -381,6 +388,7 @@ function fetchJobs() {
     resizeParent();
   })
   .catch(function(err) {
+    console.error('Fetch error:', err);
     document.getElementById('pnGrid').innerHTML =
       '<div class="pn-error">⚠ Error loading jobs.<br><small>' + err.message + '</small></div>';
   });
@@ -498,7 +506,7 @@ function list(arr) {
 function esc(s) {
   return (s || '')
     .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    .replace(/>/g,'&gt;').replace(/\"/g,'&quot;');
 }
 
 function applyLang() {
