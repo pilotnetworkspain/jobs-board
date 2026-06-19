@@ -554,7 +554,13 @@ function resizeParent() {
 }
 
 // Init
-pnSetTab('commercial');
+// Resize the iframe when a details panel opens/closes so expanded content is
+  // never cut off by the iframe boundary (especially the last cards).
+  document.addEventListener('toggle', function(e) {
+    if (e.target && e.target.tagName === 'DETAILS') resizeParent();
+  }, true);
+  
+  pnSetTab('commercial');
 fetchJobs();
 </script>
 
