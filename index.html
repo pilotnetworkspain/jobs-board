@@ -186,6 +186,10 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section { width: 
 .lang-es { display: inline; }
 body.pn-lang-en .lang-en, .pn-root.pn-lang-en .lang-en { display: inline; }
 body.pn-lang-en .lang-es, .pn-root.pn-lang-en .lang-es { display: none; }
+  .reqs-lang-en { display: none; }
+  .reqs-lang-es { display: block; }
+  body.pn-lang-en .reqs-lang-en, .pn-root.pn-lang-en .reqs-lang-en { display: block; }
+  body.pn-lang-en .reqs-lang-es, .pn-root.pn-lang-en .reqs-lang-es { display: none; }
 
 
 .pn-lang-top { position: sticky; top: 14px; z-index: 120; display: flex; justify-content: center; align-items: center; margin: 0 auto 28px; pointer-events: none; }
@@ -476,9 +480,13 @@ function buildCard(j) {
     ? esc(titleEs)
     : '<span class="lang-es">' + esc(titleEs) + '</span><span class="lang-en">' + esc(titleEn) + '</span>';
 
-  var reqs  = list(j.requirements);
-  var offer = list(j.offer);
-  if (j.deadline) offer += '<li>⏱ <strong>Deadline: ' + j.deadline + '</strong></li>';
+  var reqsEn  = list(j.requirements);
+  var reqsEs  = list((j.requirements_es && j.requirements_es.length) ? j.requirements_es : j.requirements);
+  var offerEn = list(j.offer);
+  var offerEs = list((j.offer_es && j.offer_es.length) ? j.offer_es : j.offer);
+  var deadlineLi = j.deadline ? '<li>⏱ <strong>Deadline: ' + j.deadline + '</strong></li>' : '';
+  offerEn += deadlineLi;
+  offerEs += deadlineLi;
 
   return '<div class="job-card">'
     + '<div class="badges">' + badges + '</div>'
@@ -487,9 +495,9 @@ function buildCard(j) {
     + '<p class="subtitle">' + esc(j.subtitle || '') + '</p></div></div>'
     + '<div class="title">' + titleHtml + '</div>'
     + '<details><summary><span class="lang-es">Requisitos</span><span class="lang-en">Requirements</span></summary>'
-    + '<ul class="reqs">' + reqs + '</ul></details>'
+    + '<ul class="reqs reqs-lang-es">' + reqsEs + '</ul><ul class="reqs reqs-lang-en">' + reqsEn + '</ul></details>'
     + '<details><summary><span class="lang-es">Qué ofrece la compañía</span><span class="lang-en">What the company offers</span></summary>'
-    + '<ul class="reqs">' + offer + '</ul></details>'
+    + '<ul class="reqs reqs-lang-es">' + offerEs + '</ul><ul class="reqs reqs-lang-en">' + offerEn + '</ul></details>'
     + '<div class="actions">'
     + (j.apply_url ? '<a class="btn apply" href="' + esc(j.apply_url) + '" target="_blank" rel="noopener noreferrer">'
       + '<span class="lang-es">Aplicar</span><span class="lang-en">Apply</span></a>' : '')
