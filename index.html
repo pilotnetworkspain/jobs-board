@@ -425,7 +425,7 @@ function pnRender() {
   var filtered = allJobs.filter(function(j) {
     var roles     = (j.role || '').split(' ');
     var matchTab  = j.category === tab;
-    var matchRole = role === 'all' || roles.indexOf(role) !== -1;
+    var matchRole = role === 'all' || (role instanceof Set ? roles.some(function(r){return role.has(r);}) : roles.indexOf(role) !== -1);
     var matchHrs  = maxHrs >= 5500 || (j.min_hours || 0) <= maxHrs;
     var matchQ    = !q
       || (j.search_text || '').toLowerCase().indexOf(q) !== -1
