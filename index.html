@@ -324,9 +324,9 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
       <div class="pn-search-row">
         <div class="pn-filters-row">
           <button class="pn-chip active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')"><span class="lang-es">Todos</span><span class="lang-en">All</span></button>
-          <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnSetRole('fo')">First Officer</button>
-          <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnSetRole('captain')"><span class="lang-es">Comandante</span><span class="lang-en">Captain</span></button>
-          <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnSetRole('cadet')"><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span></button>
+          <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnToggleRole('fo')">First Officer</button>
+          <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnToggleRole('captain')"><span class="lang-es">Comandante</span><span class="lang-en">Captain</span></button>
+          <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnToggleRole('cadet')"><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span></button>
           <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span></button>
         </div>
         <div class="pn-hours-box">
@@ -359,7 +359,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 var SB_URL = 'https://ifbpbtyifiuhzyeifhea.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmYnBidHlpZml1aHp5ZWlmaGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjIxNDMsImV4cCI6MjA5MzczODE0M30.CxWKoHsf0yPtJuoWPSaWFv-m-1GXvi2GGo_KHjxicWk';
 
-var allJobs = [];
+var allJobs = [];var pendingDeepLinkId = null;
 var lang    = 'en';
 var tab     = 'commercial';
 var role    = 'all';
@@ -545,7 +545,7 @@ function pnSetTab(t) {
   pnRender();
 }
 
-function pnSetRole(r) {
+function pnSetRole(r) {  role = r;  document.querySelectorAll('[data-role-filter]').forEach(function(b) {    b.classList.toggle('active', b.getAttribute('data-role-filter') === r);  });  pnRender();}function pnToggleRole(r) {  if (role === 'all' || role === 'fi' || !(role instanceof Set)) { role = new Set([r]); } else { if (role.has(r)) { role.delete(r); if (role.size === 0) role = 'all'; } else { role.add(r); } }  document.querySelectorAll('[data-role-filter]').forEach(function(b) {    var br = b.getAttribute('data-role-filter');    if (br === 'all') b.classList.toggle('active', role === 'all');    else if (br === 'fi') b.classList.toggle('active', role === 'fi');    else b.classList.toggle('active', role instanceof Set && role.has(br));  });  pnRender();}function pnOpenDeepLinkJob(jobId) {  var job = allJobs.find(function(j) { return String(j.id) === String(jobId); });  if (!job) return;  tab = job.category || 'commercial'; role = 'all';  document.querySelectorAll('.pn-tab').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-tab') === tab); });  document.querySelectorAll('[data-role-filter]').forEach(function(b) {    var shows = (b.getAttribute('data-tab-show') || '').split(' ');    b.classList.toggle('is-hidden', shows.indexOf(tab) === -1);    b.classList.toggle('active', b.getAttribute('data-role-filter') === 'all');  });  pnRender();  setTimeout(function() {    var el = document.getElementById('job-' + jobId);    if (!el) return;    el.scrollIntoView({ behavior: 'smooth', block: 'center' });    el.classList.add('pn-highlight');    setTimeout(function() { el.classList.remove('pn-highlight'); }, 3000);  }, 100);}function {
   role = r;
   document.querySelectorAll('[data-role-filter]').forEach(function(b) {
     b.classList.toggle('active', b.getAttribute('data-role-filter') === r);
