@@ -286,6 +286,24 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .job-card.pn-highlight { animation: hlPulse 1s ease 3 !important; }
 .pn-hours-badge { background:rgba(125,227,255,.1); border-color:rgba(125,227,255,.3); color:#7de3ff; }
 
+
+/* COUNTRY FILTER */
+.pn-country-wrap { position: relative; display: inline-flex; align-items: center; }
+.pn-country-select { appearance: none; -webkit-appearance: none; border: 1px solid rgba(125,227,255,.2); background: rgba(125,227,255,.06); color: var(--jobs-cyan); border-radius: 999px; height: 34px; padding: 0 32px 0 14px; font-size: 11px; font-weight: 900; font-family: inherit; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: .2s ease; outline: none; }
+.pn-country-select:hover, .pn-country-select:focus { background: rgba(125,227,255,.12); }
+.pn-country-wrap::after { content: "▾"; position: absolute; right: 12px; pointer-events: none; color: var(--jobs-cyan); font-size: 11px; }
+.pn-country-select option { background: #0d1525; color: #f8fbff; text-transform: none; font-weight: 600; }
+
+/* CONTRACT TYPE BADGE */
+.badge.permanent   { color: #dcfff0; background: rgba(125,255,186,.1); border-color: rgba(125,255,186,.28); }
+.badge.wet-lease   { color: #ffe9d6; background: rgba(255,177,82,.1); border-color: rgba(255,177,82,.28); }
+.badge.contract    { color: #eadbff; background: rgba(181,108,255,.1); border-color: rgba(181,108,255,.28); }
+.badge.freelance   { color: #d8fbff; background: rgba(125,227,255,.1); border-color: rgba(125,227,255,.28); }
+.badge.seasonal    { color: #fff3d8; background: rgba(255,220,100,.1); border-color: rgba(255,220,100,.28); }
+
+/* FLAG EMOJI in country badge */
+.pn-country-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--jobs-muted); margin-top: 4px; }
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -370,6 +388,15 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
       </div>
 
       <div class="pn-ac-row" id="pnAcRow"></div>
+
+      <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;">
+        <div class="pn-country-wrap">
+          <select class="pn-country-select" id="pnCountry" onchange="pnRender()">
+            <option value="">🌍 All countries</option>
+          </select>
+        </div>
+      </div>
+
       <div class="pn-active-filters" id="pnActiveFilters"></div>
 
       <div style="text-align:center;">
@@ -399,6 +426,7 @@ var lang    = 'en';
 var tab     = 'commercial';
 var role    = 'all';
 var acFilter = null;
+var countryFilter = '';
 var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
@@ -412,7 +440,7 @@ function fetchJobs() {
       if(j.deadline && j.deadline < today) return false;
       return true;
     });
-    updateCounts(); buildAcChips(); pnRender(); resizeParent();
+    updateCounts(); buildAcChips(); buildCountrySelect(); pnRender(); resizeParent();
     if(window._pendingJobId){ pnOpenDeepLinkJob(window._pendingJobId); window._pendingJobId = null; }
   })
   .catch(function(err){
@@ -464,7 +492,8 @@ function pnToggleAc(ac) {
 function _corpus(j) {
   var p = [j.search_text||'',j.company||'',j.title_en||'',j.title_es||'',
     j.subtitle||'',(j.aircraft_types||[]).join(' '),(j.badges||[]).join(' '),
-    (j.requirements||[]).join(' '),(j.offer||[]).join(' '),j.role||''];
+    (j.requirements||[]).join(' '),(j.offer||[]).join(' '),j.role||'',
+    j.base_country||'',j.contract_type||''];
   return p.join(' ').toLowerCase();
 }
 function _mq(corpus, q) {
@@ -504,7 +533,8 @@ function pnRender() {
       && matchRole(j, role)
       && (maxHrs >= 5500 || (j.min_hours||0) <= maxHrs)
       && _mq(_corpus(j), q)
-      && (!acFilter || (j.aircraft_types||[]).indexOf(acFilter) !== -1);
+      && (!acFilter || (j.aircraft_types||[]).indexOf(acFilter) !== -1)
+      && (!countryFilter || (j.base_country||'').toLowerCase() === countryFilter.toLowerCase());
   });
   filtered = sortJobs(filtered);
 
@@ -535,6 +565,7 @@ function updateActiveFilters(q, maxHrs) {
   if(!bar) return;
   var tags = [];
   if(q) tags.push('<span class="pn-active-tag">🔍 '+esc(q)+' <button onclick="document.getElementById(\'pnSearch\').value=\'\';pnRender()">✕<\/button><\/span>');
+  if(countryFilter) tags.push('<span class="pn-active-tag">🌍 '+countryFilter+' <button onclick="countryFilter=\'\';document.getElementById(\'pnCountry\').value=\'\';pnRender()">✕<\/button><\/span>');
   if(acFilter) tags.push('<span class="pn-active-tag">✈ '+acFilter+' <button onclick="pnToggleAc(\''+acFilter+'\')">✕<\/button><\/span>');
   if(maxHrs < 5500) tags.push('<span class="pn-active-tag">⏱ ≤'+maxHrs+'h <button onclick="document.getElementById(\'pnHours\').value=5500;pnRender()">✕<\/button><\/span>');
   if(role !== 'all' && !(role instanceof Set)) tags.push('<span class="pn-active-tag">👤 '+role+' <button onclick="pnSetRole(\'all\')">✕<\/button><\/span>');
@@ -546,7 +577,8 @@ function updateActiveFilters(q, maxHrs) {
 function pnClearAll() {
   document.getElementById('pnSearch').value = '';
   document.getElementById('pnHours').value = 5500;
-  acFilter = null; role = 'all';
+  acFilter = null; countryFilter = ''; role = 'all';
+  var cs = document.getElementById('pnCountry'); if(cs) cs.value = '';
   document.querySelectorAll('[data-role-filter]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
   });
@@ -584,6 +616,10 @@ function buildCard(j) {
 
   var hoursBadge = (j.min_hours&&j.min_hours>0)
     ? '<span class="badge pn-hours-badge">⏱ '+j.min_hours+'h+<\/span>' : '';
+  var ctLabel = contractLabel(j.contract_type||'');
+  var ctBadge = ctLabel ? '<span class="badge '+(j.contract_type||'')+'">' + ctLabel + '<\/span>' : '';
+  var countryBadge = j.base_country && j.base_country !== 'Europe' && j.base_country !== 'International'
+    ? '<span class="badge" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--jobs-muted)">'+countryFlag(j.base_country)+' '+esc(j.base_country)+'<\/span>' : '';
 
   var applyBtn = j.apply_url
     ? '<a class="btn apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span><\/a>' : '';
@@ -603,6 +639,40 @@ function buildCard(j) {
     +'<div class="actions">'+applyBtn+coBtn+'<\/div><\/div>';
 }
 
+function buildCountrySelect() {
+  var sel = document.getElementById('pnCountry');
+  if(!sel) return;
+  var countries = {};
+  allJobs.filter(function(j){ return j.category === tab; }).forEach(function(j){
+    var c = (j.base_country||'').trim();
+    if(c) countries[c] = (countries[c]||0)+1;
+  });
+  var sorted = Object.keys(countries).sort();
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">🌍 All countries<\/option>'
+    + sorted.map(function(c){ return '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+countryFlag(c)+' '+esc(c)+' ('+countries[c]+')<\/option>'; }).join('');
+}
+
+function countryFlag(country) {
+  var flags = {
+    'Spain':'🇪🇸','Germany':'🇩🇪','Belgium':'🇧🇪','UAE':'🇦🇪','Denmark':'🇩🇰',
+    'Luxembourg':'🇱🇺','United Kingdom':'🇬🇧','France':'🇫🇷','Italy':'🇮🇹',
+    'Netherlands':'🇳🇱','Poland':'🇵🇱','Greece':'🇬🇷','Serbia':'🇷🇸',
+    'Czech Republic':'🇨🇿','Romania':'🇷🇴','Turkey':'🇹🇷','Switzerland':'🇨🇭',
+    'Hong Kong':'🇭🇰','Panama':'🇵🇦','Europe':'🇪🇺','International':'🌍',
+    'Multiple bases':'🌐','Worldwide':'🌐'
+  };
+  return flags[country] || '📍';
+}
+
+function contractLabel(ct) {
+  var labels = {
+    permanent:'Permanent', wet_lease:'Wet Lease', contract:'Contract',
+    freelance:'Freelance', seasonal:'Seasonal'
+  };
+  return labels[ct] || null;
+}
+
 function list(arr){ return (arr||[]).map(function(i){return '<li>'+esc(i)+'<\/li>';}).join(''); }
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -619,7 +689,7 @@ function pnSetLang(l) {
 }
 
 function pnSetTab(t) {
-  tab = t; role = 'all'; acFilter = null;
+  tab = t; role = 'all'; acFilter = null; countryFilter = '';
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===t);
   });
