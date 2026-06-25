@@ -100,7 +100,7 @@ details[open] { border-color: rgba(110,168,255,.28); background: rgba(110,168,25
 summary { cursor: pointer; list-style: none; position: relative; min-height: 46px; display: flex; align-items: center; padding: 12px 43px 12px 14px; color: #ffffff; font-weight: 900; font-size: 14px; overflow-wrap: anywhere; }
 summary::-webkit-details-marker { display: none; }
 summary::after { content: "+"; position: absolute; right: 13px; top: 50%; transform: translateY(-50%); width: 23px; height: 23px; border-radius: 999px; display: grid; place-items: center; color: #ffffff; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); font-weight: 900; font-size: 15px; }
-details[open] summary::after { content: "â"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
+details[open] summary::after { content: "\00d7"; background: rgba(110,168,255,.18); border-color: rgba(110,168,255,.36); }
 .reqs { padding: 0 15px 15px 31px; margin: 0; color: var(--jobs-soft); font-size: 13.5px; line-height: 1.58; }
 .reqs li { margin-bottom: 6px; word-break: break-word; overflow-wrap: anywhere; }
 .reqs li:last-child { margin-bottom: 0; }
@@ -447,7 +447,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   overflow: hidden; text-overflow: ellipsis;
   opacity: .8;
 }
-.card-offer-preview::before { content: "🎁 "; }
+.card-offer-preview::before { content: ""; }
 
 /* ── DEADLINE PILL ──────────────────────────────────────────────────────────── */
 .card-deadline {
@@ -937,8 +937,14 @@ function buildCard(j) {
     : '';
 
   // ── Requirements/Offer completos (collapsible) ──
-  var reqsEnFull  = list(reqs);
-  var reqsEsFull  = list(reqs_es);
+  // Excluir del collapsible los reqs que ya se muestran en el top 3 visible
+  var topReqsSet = new Set(topReqs.map(function(r){ return r.toLowerCase().trim(); }));
+  var topReqsEsSet = new Set(topReqsEs.map(function(r){ return r.toLowerCase().trim(); }));
+  var reqsEnFull  = list(reqs.filter(function(r){ return !topReqsSet.has(r.toLowerCase().trim()); }));
+  var reqsEsFull  = list(reqs_es.filter(function(r){ return !topReqsEsSet.has(r.toLowerCase().trim()); }));
+  // Si tras filtrar no quedan reqs, mostrar todos (mejor repetir que vacío)
+  if(!reqsEnFull) reqsEnFull = list(reqs);
+  if(!reqsEsFull) reqsEsFull = list(reqs_es);
   var offerEn = list(j.offer);
   var offerEs = list((j.offer_es&&j.offer_es.length)?j.offer_es:j.offer);
   var dl = j.deadline ? '<li>📅 <strong>Deadline: '+j.deadline+'<\/strong><\/li>' : '';
