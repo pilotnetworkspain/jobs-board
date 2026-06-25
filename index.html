@@ -287,12 +287,74 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .pn-hours-badge { background:rgba(125,227,255,.1); border-color:rgba(125,227,255,.3); color:#7de3ff; }
 
 
-/* COUNTRY FILTER */
-.pn-country-wrap { position: relative; display: inline-flex; align-items: center; }
-.pn-country-select { appearance: none; -webkit-appearance: none; border: 1px solid rgba(125,227,255,.2); background: rgba(125,227,255,.06); color: var(--jobs-cyan); border-radius: 999px; height: 34px; padding: 0 32px 0 14px; font-size: 11px; font-weight: 900; font-family: inherit; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: .2s ease; outline: none; }
-.pn-country-select:hover, .pn-country-select:focus { background: rgba(125,227,255,.12); }
-.pn-country-wrap::after { content: "▾"; position: absolute; right: 12px; pointer-events: none; color: var(--jobs-cyan); font-size: 11px; }
-.pn-country-select option { background: #0d1525; color: #f8fbff; text-transform: none; font-weight: 600; }
+/* CUSTOM DROPDOWN — country + sort */
+.pn-dropdown { position: relative; display: inline-flex; align-items: center; user-select: none; }
+.pn-dropdown-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(125,227,255,.22); background: rgba(125,227,255,.07);
+  color: var(--jobs-cyan); border-radius: 999px; height: 36px; padding: 0 14px;
+  font-size: 11px; font-weight: 900; font-family: inherit; letter-spacing: .6px;
+  text-transform: uppercase; cursor: pointer; transition: .2s ease; white-space: nowrap;
+}
+.pn-dropdown-btn:hover { background: rgba(125,227,255,.14); border-color: rgba(125,227,255,.4); }
+.pn-dropdown-btn.open { background: rgba(125,227,255,.18); border-color: rgba(125,227,255,.5); }
+.pn-dropdown-btn.active-filter { background: linear-gradient(135deg,#7de3ff22,#5bcfff11); border-color: rgba(125,227,255,.6); box-shadow: 0 0 0 3px rgba(125,227,255,.12); }
+.pn-dropdown-btn .dd-chevron { font-size: 9px; transition: transform .2s ease; opacity: .7; }
+.pn-dropdown-btn.open .dd-chevron { transform: rotate(180deg); }
+
+.pn-dropdown-panel {
+  position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  min-width: 200px; max-width: 260px;
+  background: rgba(8,14,28,.92); backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.07);
+  z-index: 200; overflow: hidden;
+  animation: ddOpen .18s cubic-bezier(.2,1,.3,1) both;
+}
+@keyframes ddOpen { from { opacity:0; transform:translateX(-50%) translateY(-8px) scale(.97); } to { opacity:1; transform:translateX(-50%) translateY(0) scale(1); } }
+
+.pn-dropdown-panel.sort-panel { min-width: 170px; }
+
+.pn-dd-search {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px 8px; border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.pn-dd-search input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #fff; font-size: 13px; font-family: inherit;
+}
+.pn-dd-search input::placeholder { color: var(--jobs-muted); }
+.pn-dd-search svg { width: 14px; height: 14px; fill: var(--jobs-muted); flex-shrink: 0; }
+
+.pn-dd-list { max-height: 240px; overflow-y: auto; padding: 6px; }
+.pn-dd-list::-webkit-scrollbar { width: 4px; }
+.pn-dd-list::-webkit-scrollbar-track { background: transparent; }
+.pn-dd-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+
+.pn-dd-item {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 8px 10px; border-radius: 10px;
+  cursor: pointer; transition: background .15s ease; font-size: 13px;
+  color: var(--jobs-soft);
+}
+.pn-dd-item:hover { background: rgba(255,255,255,.07); color: #fff; }
+.pn-dd-item.selected { background: rgba(125,227,255,.12); color: var(--jobs-cyan); }
+.pn-dd-item .dd-flag { font-size: 16px; line-height: 1; flex-shrink: 0; }
+.pn-dd-item .dd-name { flex: 1; font-weight: 600; }
+.pn-dd-item .dd-count { font-size: 11px; opacity: .55; font-weight: 700; }
+.pn-dd-item .dd-check { font-size: 13px; color: var(--jobs-cyan); }
+
+.pn-dd-divider { height: 1px; background: rgba(255,255,255,.06); margin: 4px 6px; }
+
+/* Sort dropdown — diferente color (azul) */
+.pn-dropdown.sort-dd .pn-dropdown-btn { border-color: rgba(110,168,255,.22); background: rgba(110,168,255,.07); color: var(--jobs-blue); }
+.pn-dropdown.sort-dd .pn-dropdown-btn:hover { background: rgba(110,168,255,.14); }
+.pn-dropdown.sort-dd .pn-dropdown-btn.open { background: rgba(110,168,255,.18); }
+.pn-dropdown.sort-dd .pn-dd-item.selected { background: rgba(110,168,255,.12); color: var(--jobs-blue); }
+
+/* HIDE native selects */
+.pn-country-wrap { display: none !important; }
 
 /* CONTRACT TYPE BADGE */
 .badge.permanent   { color: #dcfff0; background: rgba(125,255,186,.1); border-color: rgba(125,255,186,.28); }
@@ -394,13 +456,14 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
             data-ph-en="Search airline, country, aircraft, role, hours..."
             placeholder="Search airline, country, aircraft, role, hours...">
         </div>
-        <div class="pn-sort-wrap">
-          <select class="pn-sort-select" id="pnSort" onchange="pnRender()">
-            <option value="newest">⏰ Newest first</option>
-            <option value="hours_asc">⬆ Min. hours</option>
-            <option value="hours_desc">⬇ Max. hours</option>
-            <option value="company">🔤 Company A-Z</option>
-          </select>
+        <div class="pn-dropdown sort-dd" id="pnSortDd">
+          <button class="pn-dropdown-btn" onclick="pnToggleDd('sort')" id="pnSortBtn">
+            <span id="pnSortLabel">⏰ Newest</span>
+            <span class="dd-chevron">▾</span>
+          </button>
+          <div class="pn-dropdown-panel sort-panel" id="pnSortPanel" style="display:none">
+            <div class="pn-dd-list" id="pnSortList"></div>
+          </div>
         </div>
       </div>
 
@@ -422,11 +485,24 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
       <div class="pn-ac-row" id="pnAcRow"></div>
 
       <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;">
-        <div class="pn-country-wrap">
-          <select class="pn-country-select" id="pnCountry" onchange="countryFilter=this.value;pnRender()">
-            <option value="">🌍 All countries</option>
-          </select>
+        <!-- Custom country dropdown -->
+        <div class="pn-dropdown country-dd" id="pnCountryDd">
+          <button class="pn-dropdown-btn" onclick="pnToggleDd('country')" id="pnCountryBtn">
+            <span id="pnCountryLabel">🌍 <span class="lang-es">País</span><span class="lang-en">Country</span></span>
+            <span class="dd-chevron">▾</span>
+          </button>
+          <div class="pn-dropdown-panel" id="pnCountryPanel" style="display:none">
+            <div class="pn-dd-search">
+              <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
+              <input type="text" id="pnCountrySearch" placeholder="Search..." oninput="pnFilterDdSearch('country')">
+            </div>
+            <div class="pn-dd-list" id="pnCountryList"></div>
+          </div>
         </div>
+        <!-- Hidden legacy select (kept for JS compat) -->
+        <select id="pnCountry" style="display:none" onchange="countryFilter=this.value;pnRender()">
+          <option value="">All countries</option>
+        </select>
         <div class="pn-ct-row" id="pnCtRow"></div>
         <button class="pn-share-btn" id="pnShareBtn" onclick="pnShareURL()" title="Copy link with current filters">
           🔗 <span class="lang-es">Compartir</span><span class="lang-en">Share</span>
@@ -581,7 +657,7 @@ function matchRole(j, roleFilter) {
 }
 
 function sortJobs(jobs) {
-  var sv = (document.getElementById('pnSort')||{}).value||'newest';
+  var sv = _ddSortVal || 'newest';
   var arr = jobs.slice();
   if(sv==='newest')       arr.sort(function(a,b){ return b.id - a.id; });
   else if(sv==='hours_asc')  arr.sort(function(a,b){ return (a.min_hours||0)-(b.min_hours||0); });
@@ -669,8 +745,13 @@ function updateActiveFilters(q, maxHrs) {
 function pnClearAll() {
   document.getElementById('pnSearch').value = '';
   document.getElementById('pnHours').value = 5500;
-  acFilter = null; countryFilter = ''; contractFilter = ''; role = 'all';
+  acFilter = null; countryFilter = ''; contractFilter = ''; role = 'all'; _ddSortVal = 'newest';
   var cs = document.getElementById('pnCountry'); if(cs) cs.value = '';
+  var cb = document.getElementById('pnCountryBtn'); if(cb) cb.classList.remove('active-filter');
+  var cl = document.getElementById('pnCountryLabel'); if(cl) cl.innerHTML = '🌍 <span class="lang-es">País<\/span><span class="lang-en">Country<\/span>';
+  var sb = document.getElementById('pnSortBtn'); if(sb) sb.classList.remove('active-filter');
+  var sl = document.getElementById('pnSortLabel'); if(sl) sl.textContent = '⏰ Newest';
+  applyLang();
   document.querySelectorAll('[data-role-filter]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
   });
@@ -757,6 +838,7 @@ function pnToggleCt(ct) {
 function pnShareURL() {
   var params = new URLSearchParams();
   params.set('tab', tab);
+  if(_ddSortVal && _ddSortVal !== 'newest') params.set('sort', _ddSortVal);
   if(role !== 'all' && !(role instanceof Set)) params.set('role', role);
   var q = document.getElementById('pnSearch').value;
   if(q) params.set('q', q);
@@ -773,6 +855,128 @@ function pnShareURL() {
   });
 }
 
+
+// ── CUSTOM DROPDOWNS ─────────────────────────────────────────────────────────
+var _ddSortVal = 'newest';
+var _ddOpen = null;  // 'sort' | 'country' | null
+
+var SORT_OPTS = [
+  {val:'newest',  icon:'⏰', label:'Newest first'},
+  {val:'hours_asc', icon:'⬆', label:'Min. hours'},
+  {val:'hours_desc',icon:'⬇', label:'Max. hours'},
+  {val:'company', icon:'🔤', label:'Company A-Z'},
+];
+
+function pnToggleDd(which) {
+  if(_ddOpen === which) { pnCloseDd(); return; }
+  pnCloseDd();
+  _ddOpen = which;
+  var panel = document.getElementById('pn'+cap(which)+'Panel');
+  var btn   = document.getElementById('pn'+cap(which)+'Btn');
+  if(!panel || !btn) return;
+  panel.style.display = 'block';
+  btn.classList.add('open');
+  if(which === 'sort')    _buildSortList();
+  if(which === 'country') _buildCountryList('');
+  // Focus search input if exists
+  var inp = document.getElementById('pn'+cap(which)+'Search');
+  if(inp) setTimeout(function(){ inp.focus(); }, 50);
+  // Close on outside click
+  setTimeout(function(){
+    document.addEventListener('click', _ddOutsideClick, {once:true, capture:true});
+  }, 10);
+}
+
+function pnCloseDd() {
+  if(!_ddOpen) return;
+  var panel = document.getElementById('pn'+cap(_ddOpen)+'Panel');
+  var btn   = document.getElementById('pn'+cap(_ddOpen)+'Btn');
+  if(panel) panel.style.display = 'none';
+  if(btn)   btn.classList.remove('open');
+  _ddOpen = null;
+}
+
+function _ddOutsideClick(e) {
+  var panel = _ddOpen ? document.getElementById('pn'+cap(_ddOpen)+'Panel') : null;
+  var btn   = _ddOpen ? document.getElementById('pn'+cap(_ddOpen)+'Btn')   : null;
+  if(panel && !panel.contains(e.target) && btn && !btn.contains(e.target)) pnCloseDd();
+  else if(_ddOpen) document.addEventListener('click', _ddOutsideClick, {once:true, capture:true});
+}
+
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+function _buildSortList() {
+  var list = document.getElementById('pnSortList');
+  if(!list) return;
+  list.innerHTML = SORT_OPTS.map(function(o){
+    var sel = _ddSortVal === o.val;
+    return '<div class="pn-dd-item'+(sel?' selected':'')+'" onclick="pnSelectSort(\''+o.val+'\',\''+o.icon+' '+o.label+'\')">'
+      +'<span class="dd-name">'+o.icon+' '+o.label+'<\/span>'
+      +(sel ? '<span class="dd-check">✓<\/span>' : '')
+      +'<\/div>';
+  }).join('');
+}
+
+function pnSelectSort(val, label) {
+  _ddSortVal = val;
+  var lbl = document.getElementById('pnSortLabel');
+  if(lbl) lbl.textContent = label;
+  var btn = document.getElementById('pnSortBtn');
+  if(btn) btn.classList.toggle('active-filter', val !== 'newest');
+  pnCloseDd();
+  pnRender();
+}
+
+function _buildCountryList(filter) {
+  var list = document.getElementById('pnCountryList');
+  if(!list) return;
+  var countries = {};
+  allJobs.filter(function(j){ return j.category === tab; }).forEach(function(j){
+    var c = (j.base_country||'').trim();
+    if(c) countries[c] = (countries[c]||0)+1;
+  });
+  var sorted = Object.keys(countries).sort();
+  if(filter) sorted = sorted.filter(function(c){ return c.toLowerCase().includes(filter.toLowerCase()); });
+
+  var allItem = '<div class="pn-dd-item'+(countryFilter===''?' selected':'')+'" onclick="pnSelectCountry(\'\',\'🌍 Country\')">'
+    +'<span class="dd-flag">🌍<\/span><span class="dd-name">All countries<\/span>'
+    +(countryFilter==='' ? '<span class="dd-check">✓<\/span>' : '')+'<\/div>';
+
+  var items = sorted.map(function(c){
+    var sel = countryFilter === c;
+    var flag = countryFlag(c);
+    var n = countries[c];
+    return '<div class="pn-dd-item'+(sel?' selected':'')+'" onclick="pnSelectCountry(\''+c.replace(/'/g,"\\'")+'\',\''+flag+' '+c.replace(/'/g,"\\'")+'\')">'
+      +'<span class="dd-flag">'+flag+'<\/span>'
+      +'<span class="dd-name">'+esc(c)+'<\/span>'
+      +'<span class="dd-count">'+n+'<\/span>'
+      +(sel ? '<span class="dd-check">✓<\/span>' : '')
+      +'<\/div>';
+  }).join('');
+
+  list.innerHTML = allItem + (sorted.length ? '<div class="pn-dd-divider"><\/div>' + items : '');
+}
+
+function pnSelectCountry(val, label) {
+  countryFilter = val;
+  var lbl = document.getElementById('pnCountryLabel');
+  if(lbl) lbl.innerHTML = label || ('🌍 <span class="lang-es">País<\/span><span class="lang-en">Country<\/span>');
+  var btn = document.getElementById('pnCountryBtn');
+  if(btn) btn.classList.toggle('active-filter', val !== '');
+  // Sync hidden select
+  var sel = document.getElementById('pnCountry');
+  if(sel) sel.value = val;
+  applyLang();
+  pnCloseDd();
+  pnRender();
+}
+
+function pnFilterDdSearch(which) {
+  var inp = document.getElementById('pn'+cap(which)+'Search');
+  var q = inp ? inp.value : '';
+  if(which === 'country') _buildCountryList(q);
+}
+
 function buildCountrySelect() {
   var sel = document.getElementById('pnCountry');
   if(!sel) return;
@@ -785,6 +989,11 @@ function buildCountrySelect() {
   var cur = sel.value;
   sel.innerHTML = '<option value="">🌍 All countries<\/option>'
     + sorted.map(function(c){ return '<option value="'+esc(c)+'"'+(c===cur?' selected':'')+'>'+countryFlag(c)+' '+esc(c)+' ('+countries[c]+')<\/option>'; }).join('');
+  // También actualizar el label del custom dropdown si está visible
+  if(countryFilter) {
+    var lbl = document.getElementById('pnCountryLabel');
+    if(lbl) lbl.textContent = countryFlag(countryFilter) + ' ' + countryFilter;
+  }
 }
 
 function countryFlag(country) {
@@ -893,7 +1102,8 @@ document.addEventListener('toggle', function(e){
   if(p.get('tab'))  tab  = p.get('tab');
   if(p.get('job'))  window._pendingJobId = p.get('job');
   if(p.get('ac'))   acFilter = p.get('ac');
-  if(p.get('country')) countryFilter = p.get('country');
+  if(p.get('country')) { countryFilter = p.get('country'); }
+  if(p.get('sort'))   { _ddSortVal = p.get('sort'); }
   if(p.get('ct'))   contractFilter = p.get('ct');
   if(p.get('q'))    { document.getElementById('pnSearch') && (document.getElementById('pnSearch').value = p.get('q')); }
   window.addEventListener('message', function(ev){
