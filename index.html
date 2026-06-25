@@ -304,6 +304,21 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 /* FLAG EMOJI in country badge */
 .pn-country-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--jobs-muted); margin-top: 4px; }
 
+
+/* SHARE BUTTON */
+.pn-share-btn { border: 1px solid rgba(125,255,186,.25); background: rgba(125,255,186,.07); color: var(--jobs-green); border-radius: 999px; height: 34px; padding: 0 16px; font-size: 11px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; cursor: pointer; transition: .2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.pn-share-btn:hover { background: rgba(125,255,186,.15); }
+.pn-share-btn.copied { background: rgba(125,255,186,.25); }
+
+/* CONTRACT CHIPS */
+.pn-ct-chip { border: 1px solid rgba(181,108,255,.25); background: rgba(181,108,255,.07); color: var(--jobs-purple); border-radius: 999px; min-height: 34px; padding: 6px 14px; font-size: 11px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; cursor: pointer; transition: .2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.pn-ct-chip:hover { background: rgba(181,108,255,.15); }
+.pn-ct-chip.active { background: linear-gradient(180deg,#b56cff,#9b4dff); color: #fff; border-color: rgba(181,108,255,.8); box-shadow: 0 8px 20px rgba(181,108,255,.25); }
+
+/* NEW BADGE in cards */
+.badge.new-job { color: #7dffba; background: rgba(125,255,186,.15); border-color: rgba(125,255,186,.4); animation: newPulse 2s ease infinite; }
+@keyframes newPulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -395,6 +410,10 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
             <option value="">🌍 All countries</option>
           </select>
         </div>
+        <div class="pn-ct-row" id="pnCtRow"></div>
+        <button class="pn-share-btn" id="pnShareBtn" onclick="pnShareURL()" title="Copy link with current filters">
+          🔗 <span class="lang-es">Compartir</span><span class="lang-en">Share</span>
+        </button>
       </div>
 
       <div class="pn-active-filters" id="pnActiveFilters"></div>
@@ -427,6 +446,7 @@ var tab     = 'commercial';
 var role    = 'all';
 var acFilter = null;
 var countryFilter = '';
+var contractFilter = '';
 var today   = new Date().toISOString().split('T')[0];
 
 function fetchJobs() {
@@ -440,7 +460,7 @@ function fetchJobs() {
       if(j.deadline && j.deadline < today) return false;
       return true;
     });
-    updateCounts(); buildAcChips(); buildCountrySelect(); pnRender(); resizeParent();
+    updateCounts(); buildAcChips(); buildCountrySelect(); buildCtChips(); pnRender(); resizeParent();
     if(window._pendingJobId){ pnOpenDeepLinkJob(window._pendingJobId); window._pendingJobId = null; }
   })
   .catch(function(err){
@@ -486,7 +506,7 @@ function buildAcChips() {
 
 function pnToggleAc(ac) {
   acFilter = acFilter === ac ? null : ac;
-  buildAcChips(); pnRender();
+  buildAcChips(); buildCountrySelect(); buildCtChips(); pnRender();
 }
 
 function _corpus(j) {
@@ -527,6 +547,7 @@ function pnRender() {
   var maxHrs = parseInt(document.getElementById('pnHours').value,10);
   var csel   = document.getElementById('pnCountry');
   countryFilter = csel ? csel.value : '';
+  // contractFilter se actualiza desde pnToggleCt()
   var hv = document.getElementById('pnHoursVal');
   if(hv) hv.textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
 
@@ -536,7 +557,8 @@ function pnRender() {
       && (maxHrs >= 5500 || (j.min_hours||0) <= maxHrs)
       && _mq(_corpus(j), q)
       && (!acFilter || (j.aircraft_types||[]).indexOf(acFilter) !== -1)
-      && (!countryFilter || (j.base_country||'').toLowerCase() === countryFilter.toLowerCase());
+      && (!countryFilter || (j.base_country||'').toLowerCase() === countryFilter.toLowerCase())
+      && (!contractFilter || (j.contract_type||'').toLowerCase() === contractFilter.toLowerCase());
   });
   filtered = sortJobs(filtered);
 
@@ -568,6 +590,7 @@ function updateActiveFilters(q, maxHrs) {
   var tags = [];
   if(q) tags.push('<span class="pn-active-tag">🔍 '+esc(q)+' <button onclick="document.getElementById(\'pnSearch\').value=\'\';pnRender()">✕<\/button><\/span>');
   if(countryFilter) tags.push('<span class="pn-active-tag">🌍 '+countryFilter+' <button onclick="countryFilter=\'\';document.getElementById(\'pnCountry\').value=\'\';pnRender()">✕<\/button><\/span>');
+  if(contractFilter) tags.push('<span class="pn-active-tag">📋 '+contractFilter+' <button onclick="pnToggleCt(\'\')" >✕<\/button><\/span>');
   if(acFilter) tags.push('<span class="pn-active-tag">✈ '+acFilter+' <button onclick="pnToggleAc(\''+acFilter+'\')">✕<\/button><\/span>');
   if(maxHrs < 5500) tags.push('<span class="pn-active-tag">⏱ ≤'+maxHrs+'h <button onclick="document.getElementById(\'pnHours\').value=5500;pnRender()">✕<\/button><\/span>');
   if(role !== 'all' && !(role instanceof Set)) tags.push('<span class="pn-active-tag">👤 '+role+' <button onclick="pnSetRole(\'all\')">✕<\/button><\/span>');
@@ -579,7 +602,7 @@ function updateActiveFilters(q, maxHrs) {
 function pnClearAll() {
   document.getElementById('pnSearch').value = '';
   document.getElementById('pnHours').value = 5500;
-  acFilter = null; countryFilter = ''; role = 'all';
+  acFilter = null; countryFilter = ''; contractFilter = ''; role = 'all';
   var cs = document.getElementById('pnCountry'); if(cs) cs.value = '';
   document.querySelectorAll('[data-role-filter]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
@@ -618,6 +641,8 @@ function buildCard(j) {
 
   var hoursBadge = (j.min_hours&&j.min_hours>0)
     ? '<span class="badge pn-hours-badge">⏱ '+j.min_hours+'h+<\/span>' : '';
+  var isNew = j.created_at && (Date.now() - new Date(j.created_at).getTime()) < 3*24*3600*1000;
+  var newBadge = isNew ? '<span class="badge new-job">🆕 NEW<\/span>' : '';
   var ctLabel = contractLabel(j.contract_type||'');
   var ctBadge = ctLabel ? '<span class="badge '+(j.contract_type||'')+'">' + ctLabel + '<\/span>' : '';
   var countryBadge = j.base_country && j.base_country !== 'Europe' && j.base_country !== 'International'
@@ -629,7 +654,7 @@ function buildCard(j) {
     ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
 
   return '<div class="job-card" id="job-'+j.id+'">'
-    +'<div class="badges">'+badges+hoursBadge+ctBadge+countryBadge+'<\/div>'
+    +'<div class="badges">'+badges+hoursBadge+newBadge+ctBadge+countryBadge+'<\/div>'
     +'<div class="brand">'+logo
     +'<div><p class="company">'+esc(j.company)+'<\/p>'
     +'<p class="subtitle">'+esc(j.subtitle||'')+'<\/p><\/div><\/div>'
@@ -639,6 +664,46 @@ function buildCard(j) {
     +'<details><summary><span class="lang-es">Qué ofrece la compañía<\/span><span class="lang-en">What the company offers<\/span><\/summary>'
     +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>'
     +'<div class="actions">'+applyBtn+coBtn+'<\/div><\/div>';
+}
+
+function buildCtChips() {
+  var row = document.getElementById('pnCtRow');
+  if(!row) return;
+  var ctCount = {};
+  allJobs.filter(function(j){ return j.category === tab && j.contract_type && j.contract_type !== 'unknown'; })
+    .forEach(function(j){ var ct = j.contract_type; ctCount[ct] = (ctCount[ct]||0)+1; });
+  var sorted = Object.entries(ctCount).sort(function(a,b){ return b[1]-a[1]; });
+  if(!sorted.length){ row.innerHTML=''; return; }
+  var labels = { permanent:'Permanent', wet_lease:'Wet Lease', contract:'Contract', freelance:'Freelance', seasonal:'Seasonal' };
+  row.innerHTML = sorted.map(function(e){
+    var ct = e[0], cnt = e[1], isActive = contractFilter === ct;
+    var label = labels[ct] || ct;
+    return '<button class="pn-ct-chip'+(isActive?' active':'')+'" onclick="pnToggleCt(\''+ct+'\')">'+label+' <span class="ac-count">('+cnt+')<\/span><\/button>';
+  }).join('');
+}
+
+function pnToggleCt(ct) {
+  contractFilter = contractFilter === ct ? '' : ct;
+  buildCtChips(); pnRender();
+}
+
+function pnShareURL() {
+  var params = new URLSearchParams();
+  params.set('tab', tab);
+  if(role !== 'all' && !(role instanceof Set)) params.set('role', role);
+  var q = document.getElementById('pnSearch').value;
+  if(q) params.set('q', q);
+  if(acFilter) params.set('ac', acFilter);
+  if(countryFilter) params.set('country', countryFilter);
+  if(contractFilter) params.set('ct', contractFilter);
+  var url = window.location.origin + window.location.pathname + '?' + params.toString();
+  navigator.clipboard.writeText(url).then(function(){
+    var btn = document.getElementById('pnShareBtn');
+    if(btn){ btn.classList.add('copied'); btn.innerHTML = '✅ <span>Copied!</span>'; 
+      setTimeout(function(){ btn.classList.remove('copied'); btn.innerHTML = '🔗 <span class="lang-es">Compartir<\/span><span class="lang-en">Share<\/span>'; applyLang(); }, 2000); }
+  }).catch(function(){
+    prompt('Copy this URL:', url);
+  });
 }
 
 function buildCountrySelect() {
@@ -691,7 +756,7 @@ function pnSetLang(l) {
 }
 
 function pnSetTab(t) {
-  tab = t; role = 'all'; acFilter = null; countryFilter = '';
+  tab = t; role = 'all'; acFilter = null; countryFilter = ''; contractFilter = '';
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===t);
   });
@@ -761,6 +826,9 @@ document.addEventListener('toggle', function(e){
   if(p.get('tab'))  tab  = p.get('tab');
   if(p.get('job'))  window._pendingJobId = p.get('job');
   if(p.get('ac'))   acFilter = p.get('ac');
+  if(p.get('country')) countryFilter = p.get('country');
+  if(p.get('ct'))   contractFilter = p.get('ct');
+  if(p.get('q'))    { document.getElementById('pnSearch') && (document.getElementById('pnSearch').value = p.get('q')); }
   window.addEventListener('message', function(ev){
     if(!ev.data||ev.data.type!=='pn-params') return;
     var pp = new URLSearchParams(ev.data.search||'');
