@@ -525,6 +525,8 @@ function sortJobs(jobs) {
 function pnRender() {
   var q      = (document.getElementById('pnSearch').value||'').toLowerCase().trim();
   var maxHrs = parseInt(document.getElementById('pnHours').value,10);
+  var csel   = document.getElementById('pnCountry');
+  countryFilter = csel ? csel.value : '';
   var hv = document.getElementById('pnHoursVal');
   if(hv) hv.textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
 
