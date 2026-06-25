@@ -426,28 +426,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 }
 .card-meta-sep { opacity: .3; }
 
-/* ── KEY REQS (top 3 requisitos visibles sin expandir) ─────────────────────── */
-.card-key-reqs {
-  margin: 0 0 12px;
-  display: flex; flex-direction: column; gap: 4px;
-}
-.card-key-req {
-  display: flex; align-items: flex-start; gap: 7px;
-  font-size: 12.5px; color: var(--jobs-soft); line-height: 1.4;
-}
-.card-key-req::before {
-  content: "✓"; color: var(--jobs-blue); font-weight: 900;
-  font-size: 11px; margin-top: 1px; flex-shrink: 0;
-}
-
-/* ── OFFER PREVIEW (1 línea del offer visible) ─────────────────────────────── */
-.card-offer-preview {
-  font-size: 12px; color: var(--jobs-muted);
-  margin: 0 0 10px; white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis;
-  opacity: .8;
-}
-.card-offer-preview::before { content: ""; }
+/* key-reqs y offer-preview eliminados */
 
 /* ── DEADLINE PILL ──────────────────────────────────────────────────────────── */
 .card-deadline {
@@ -964,14 +943,7 @@ function buildCard(j) {
     : '';
 
   // ── Requirements/Offer completos (collapsible) ──
-  // Excluir del collapsible los reqs que ya se muestran en el top 3 visible
-  var topReqsSet = new Set(topReqs.map(function(r){ return r.toLowerCase().trim(); }));
-  var topReqsEsSet = new Set(topReqsEs.map(function(r){ return r.toLowerCase().trim(); }));
-  var reqsEnFull  = list(reqs.filter(function(r){ return !topReqsSet.has(r.toLowerCase().trim()); }));
-  var reqsEsFull  = list(reqs_es.filter(function(r){ return !topReqsEsSet.has(r.toLowerCase().trim()); }));
-  // Si tras filtrar no quedan reqs, mostrar todos (mejor repetir que vacío)
-  if(!reqsEnFull) reqsEnFull = list(reqs);
-  if(!reqsEsFull) reqsEsFull = list(reqs_es);
+
   var offerEn = list(j.offer);
   var offerEs = list((j.offer_es&&j.offer_es.length)?j.offer_es:j.offer);
   var dl = j.deadline ? '<li>📅 <strong>Deadline: '+j.deadline+'<\/strong><\/li>' : '';
@@ -1001,12 +973,6 @@ function buildCard(j) {
 
     // Meta (fecha + aircraft)
     +metaHtml
-
-    // Top 3 requisitos visibles
-    +keyReqsHtml
-
-    // Preview del primer beneficio
-    +offerPreview
 
     // Requisitos completos (collapsible)
     +(reqCount ? '<details><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
