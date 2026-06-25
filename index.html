@@ -919,28 +919,11 @@ function buildCard(j) {
     }
   }
 
-  // ── Key requirements (top 3 visibles sin expandir) ──
-  var reqs = j.requirements || [];
+  // ── Requirements/Offer (collapsible) ──
+  var reqs    = j.requirements || [];
   var reqs_es = (j.requirements_es&&j.requirements_es.length) ? j.requirements_es : reqs;
-  // Priorizar: horas, licencia, type rating, inglés
-  var priority = ['hour','atpl','cpl','type rat','rating','english','inglés','medical','clase','class'];
-  function reqScore(r) {
-    var rl = r.toLowerCase();
-    for(var i=0;i<priority.length;i++) if(rl.indexOf(priority[i])!==-1) return priority.length-i;
-    return 0;
-  }
-  var topReqs = reqs.slice().sort(function(a,b){return reqScore(b)-reqScore(a);}).slice(0,3);
-  var topReqsEs = reqs_es.slice().sort(function(a,b){return reqScore(b)-reqScore(a);}).slice(0,3);
-  var keyReqsEn = topReqs.map(function(r){ return '<div class="card-key-req">'+esc(r)+'<\/div>'; }).join('');
-  var keyReqsEs = topReqsEs.map(function(r){ return '<div class="card-key-req">'+esc(r)+'<\/div>'; }).join('');
-  var keyReqsHtml = (keyReqsEn||keyReqsEs) ? '<div class="card-key-reqs"><div class="reqs-lang-es">'+keyReqsEs+'<\/div><div class="reqs-lang-en">'+keyReqsEn+'<\/div><\/div>' : '';
-
-  // ── Offer preview (primera línea del offer) ──
-  var offerFirst = (j.offer && j.offer.length) ? j.offer[0] : '';
-  var offerFirstEs = (j.offer_es&&j.offer_es.length) ? j.offer_es[0] : offerFirst;
-  var offerPreview = offerFirst
-    ? '<div class="card-offer-preview"><span class="lang-es">'+esc(offerFirstEs)+'<\/span><span class="lang-en">'+esc(offerFirst)+'<\/span><\/div>'
-    : '';
+  var reqsEnFull = list(reqs);
+  var reqsEsFull = list(reqs_es);
 
   // ── Requirements/Offer completos (collapsible) ──
 
