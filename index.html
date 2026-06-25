@@ -391,7 +391,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 
       <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;">
         <div class="pn-country-wrap">
-          <select class="pn-country-select" id="pnCountry" onchange="pnRender()">
+          <select class="pn-country-select" id="pnCountry" onchange="countryFilter=this.value;pnRender()">
             <option value="">🌍 All countries</option>
           </select>
         </div>
