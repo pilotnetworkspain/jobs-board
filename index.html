@@ -319,6 +319,22 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .badge.new-job { color: #7dffba; background: rgba(125,255,186,.15); border-color: rgba(125,255,186,.4); animation: newPulse 2s ease infinite; }
 @keyframes newPulse { 0%,100%{opacity:1} 50%{opacity:.7} }
 
+
+/* SKELETON LOADER */
+.pn-skeleton-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap: 20px; width: 100%; }
+.pn-skeleton-card { border-radius: 24px; border: 1px solid rgba(255,255,255,.06); background: rgba(255,255,255,.04); padding: 20px; height: 280px; overflow: hidden; position: relative; }
+.pn-skeleton-card::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.06) 50%, transparent 100%); animation: skelShimmer 1.4s ease infinite; }
+@keyframes skelShimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+.pn-skel-line { height: 12px; border-radius: 6px; background: rgba(255,255,255,.08); margin-bottom: 10px; }
+.pn-skel-line.w30 { width: 30%; }
+.pn-skel-line.w50 { width: 50%; }
+.pn-skel-line.w70 { width: 70%; }
+.pn-skel-line.w100 { width: 100%; }
+.pn-skel-line.h20 { height: 20px; margin-bottom: 14px; }
+.pn-skel-circle { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,.08); }
+.pn-skel-brand { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
+.pn-skel-brand-text { flex: 1; }
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -349,7 +365,8 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
       <p class="jobs-subtitle">
         <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviación ejecutiva e instructores. Busca, filtra y encuentra tu próximo destino.</span>
         <span class="lang-en">Explore curated vacancies for First Officers, Captains, Cadets, executive aviation and flight instructors. Search, filter and find your next destination.</span>
-      </p>
+      
+        <br><span style="color:var(--jobs-blue);font-size:14px;font-weight:700;margin-top:8px;display:inline-block"><span id="pnTotalCount">77</span> <span class="lang-es">ofertas activas ahora mismo</span><span class="lang-en">active opportunities right now</span></span></p>
     </div>
 
     <div class="pn-controls">
@@ -427,9 +444,38 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
     </div></div>
 
     <div class="jobs-grid" id="pnGrid">
-      <div class="pn-loading" id="pnLoading">
-        <div class="pn-spinner"></div>
-        <span><span class="lang-es">Cargando ofertas...</span><span class="lang-en">Loading jobs...</span></span>
+      <div class="pn-skeleton-grid">
+        <div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div><div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div><div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div><div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div><div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div><div class="pn-skeleton-card">
+          <div class="pn-skel-line w50"></div>
+          <div class="pn-skel-brand"><div class="pn-skel-circle"></div><div class="pn-skel-brand-text"><div class="pn-skel-line w70"></div><div class="pn-skel-line w30"></div></div></div>
+          <div class="pn-skel-line h20 w100"></div>
+          <div class="pn-skel-line w100"></div><div class="pn-skel-line w70"></div>
+        </div>
       </div>
     </div>
 
@@ -487,6 +533,8 @@ function updateCounts() {
     var el = document.getElementById('count-'+k);
     if(el) el.textContent = '('+c[k]+')';
   });
+  var totalEl = document.getElementById('pnTotalCount');
+  if(totalEl) totalEl.textContent = allJobs.length;
 }
 
 function buildAcChips() {
@@ -564,9 +612,15 @@ function pnRender() {
 
   var grid = document.getElementById('pnGrid');
   if(!filtered.length){
-    grid.innerHTML = '<div class="pn-no-results"><div style="font-size:42px;margin-bottom:12px">🔍<\/div>'
+    var q2 = document.getElementById('pnSearch').value || '';
+    var suggestions = allJobs.filter(function(j){return j.category===tab;}).slice(0,3)
+      .map(function(j){return '<span style="opacity:.6;font-size:13px">'+esc(j.company)+'<\/span>';}).join(' · ');
+    grid.innerHTML = '<div class="pn-no-results">'
+      +'<div style="font-size:42px;margin-bottom:12px">🔍<\/div>'
       +'<span class="lang-es">No se encontraron ofertas con esos criterios.<\/span>'
-      +'<span class="lang-en">No jobs found matching those filters.<\/span><br><br>'
+      +'<span class="lang-en">No jobs found matching those filters.<\/span>'
+      +(q2 ? '<br><div style="margin-top:12px;font-size:13px;color:var(--jobs-muted)">Try: '+suggestions+'<\/div>' : '')
+      +'<br><br>'
       +'<button onclick="pnClearAll()" class="pn-clear-all" style="font-size:13px;padding:8px 20px">'
       +'<span class="lang-es">Limpiar filtros<\/span><span class="lang-en">Clear filters<\/span><\/button><\/div>';
   } else {
@@ -578,7 +632,20 @@ function pnRender() {
   var word = lang==='es' ? (filtered.length===1?'oferta':'ofertas') : (filtered.length===1?'job':'jobs');
   var inf = document.getElementById('pnResultsInfo');
   if(inf){
-    inf.textContent = filtered.length + ' ' + word;
+    // Animación countUp
+    var target = filtered.length;
+    var current = parseInt(inf.dataset.count || '0', 10);
+    inf.dataset.count = target;
+    if(Math.abs(target - current) > 3) {
+      var step = target > current ? 1 : -1;
+      var interval = setInterval(function(){
+        current += step;
+        inf.textContent = current + ' ' + word;
+        if(current === target) clearInterval(interval);
+      }, 16);
+    } else {
+      inf.textContent = target + ' ' + word;
+    }
     inf.classList.remove('pop'); void inf.offsetWidth; inf.classList.add('pop');
   }
   resizeParent();
@@ -607,7 +674,7 @@ function pnClearAll() {
   document.querySelectorAll('[data-role-filter]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
   });
-  buildAcChips(); pnRender();
+  buildAcChips(); buildCountrySelect(); buildCtChips(); pnRender();
 }
 
 function buildCard(j) {
