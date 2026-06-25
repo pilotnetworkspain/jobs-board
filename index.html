@@ -397,6 +397,81 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .pn-skel-brand { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; }
 .pn-skel-brand-text { flex: 1; }
 
+
+/* ── CARD ANIMATION STAGGERED ─────────────────────────────────────────────── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(22px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+.job-card { animation: cardIn .45s cubic-bezier(.2,1,.3,1) both, cardFloat 7s ease-in-out 1s infinite; }
+.job-card:nth-child(1)  { animation-delay: .05s, 1s; }
+.job-card:nth-child(2)  { animation-delay: .10s, 1.3s; }
+.job-card:nth-child(3)  { animation-delay: .15s, 1.6s; }
+.job-card:nth-child(4)  { animation-delay: .20s, 1.9s; }
+.job-card:nth-child(5)  { animation-delay: .25s, 2.2s; }
+.job-card:nth-child(6)  { animation-delay: .30s, 2.5s; }
+.job-card:nth-child(7)  { animation-delay: .35s, 2.8s; }
+.job-card:nth-child(8)  { animation-delay: .40s, 3.1s; }
+.job-card:nth-child(9)  { animation-delay: .45s, 3.4s; }
+.job-card:nth-child(10) { animation-delay: .50s, 3.7s; }
+.job-card:nth-child(n+11) { animation-delay: .55s, 4s; }
+
+/* ── CARD META INFO ────────────────────────────────────────────────────────── */
+.card-meta {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin: 8px 0 12px; font-size: 11.5px; color: var(--jobs-muted);
+}
+.card-meta-item {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.card-meta-sep { opacity: .3; }
+
+/* ── KEY REQS (top 3 requisitos visibles sin expandir) ─────────────────────── */
+.card-key-reqs {
+  margin: 0 0 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.card-key-req {
+  display: flex; align-items: flex-start; gap: 7px;
+  font-size: 12.5px; color: var(--jobs-soft); line-height: 1.4;
+}
+.card-key-req::before {
+  content: "✓"; color: var(--jobs-blue); font-weight: 900;
+  font-size: 11px; margin-top: 1px; flex-shrink: 0;
+}
+
+/* ── OFFER PREVIEW (1 línea del offer visible) ─────────────────────────────── */
+.card-offer-preview {
+  font-size: 12px; color: var(--jobs-muted);
+  margin: 0 0 10px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  opacity: .8;
+}
+.card-offer-preview::before { content: "🎁 "; }
+
+/* ── DEADLINE PILL ──────────────────────────────────────────────────────────── */
+.card-deadline {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; padding: 3px 9px;
+  border-radius: 999px; border: 1px solid rgba(255,177,82,.3);
+  background: rgba(255,177,82,.08); color: #ffb152;
+}
+.card-deadline.urgent {
+  border-color: rgba(255,80,80,.4); background: rgba(255,80,80,.1); color: #ff6b6b;
+  animation: urgentPulse 2s ease infinite;
+}
+@keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:.65} }
+
+/* ── PUBLISHED DATE ─────────────────────────────────────────────────────────── */
+.card-age { font-size: 11px; color: var(--jobs-muted); opacity: .7; }
+
+/* ── DETAILS mejorado ──────────────────────────────────────────────────────── */
+details summary .reqs-count {
+  font-size: 10px; opacity: .55; font-weight: 700;
+  margin-left: 6px; background: rgba(255,255,255,.07);
+  padding: 1px 7px; border-radius: 999px;
+}
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -758,7 +833,27 @@ function pnClearAll() {
   buildAcChips(); buildCountrySelect(); buildCtChips(); pnRender();
 }
 
+function timeAgo(iso) {
+  if(!iso) return '';
+  var diff = Date.now() - new Date(iso).getTime();
+  var d = Math.floor(diff / 86400000);
+  var h = Math.floor(diff / 3600000);
+  if(d === 0 && h < 1) return 'Just now';
+  if(d === 0) return h + 'h ago';
+  if(d === 1) return 'Yesterday';
+  if(d < 7)  return d + 'd ago';
+  if(d < 30) return Math.floor(d/7) + 'w ago';
+  return Math.floor(d/30) + 'mo ago';
+}
+
+function daysUntil(isoDate) {
+  if(!isoDate) return null;
+  var diff = new Date(isoDate).getTime() - Date.now();
+  return Math.ceil(diff / 86400000);
+}
+
 function buildCard(j) {
+  // ── Badges ──
   var badges = (j.badges||[]).map(function(b){
     var cls='badge',bl=b.toLowerCase();
     if(bl==='first officer'||bl==='co-pilot') cls+=' fo';
@@ -771,48 +866,130 @@ function buildCard(j) {
     return '<span class="'+cls+'">'+esc(b)+'<\/span>';
   }).join('');
 
+  // ── Logo ──
   var logo = j.logo_url
     ? '<img src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" loading="lazy" onerror="this.style.display=&quot;none&quot;">'
     : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'+esc((j.company||'').charAt(0))+'<\/div>';
 
+  // ── Título bilingüe ──
   var titleEs = j.title_es||j.title_en||'';
   var titleEn = j.title_en||j.title_es||'';
   var titleHtml = titleEs===titleEn ? esc(titleEs)
     : '<span class="lang-es">'+esc(titleEs)+'<\/span><span class="lang-en">'+esc(titleEn)+'<\/span>';
 
-  var reqsEn  = list(j.requirements);
-  var reqsEs  = list((j.requirements_es&&j.requirements_es.length)?j.requirements_es:j.requirements);
-  var offerEn = list(j.offer);
-  var offerEs = list((j.offer_es&&j.offer_es.length)?j.offer_es:j.offer);
-  var dl = j.deadline ? '<li>⏱ <strong>Deadline: '+j.deadline+'<\/strong><\/li>' : '';
-  offerEn += dl; offerEs += dl;
-
+  // ── Badges extra ──
   var hoursBadge = (j.min_hours&&j.min_hours>0)
     ? '<span class="badge pn-hours-badge">⏱ '+j.min_hours+'h+<\/span>' : '';
-  var isNew = j.created_at && (Date.now() - new Date(j.created_at).getTime()) < 3*24*3600*1000;
+  var isNew = j.created_at && (Date.now()-new Date(j.created_at).getTime()) < 3*24*3600*1000;
   var newBadge = isNew ? '<span class="badge new-job">🆕 NEW<\/span>' : '';
   var ctLabel = contractLabel(j.contract_type||'');
-  var ctBadge = ctLabel ? '<span class="badge '+(j.contract_type||'')+'">' + ctLabel + '<\/span>' : '';
-  var countryBadge = j.base_country && j.base_country !== 'Europe' && j.base_country !== 'International'
-    ? '<span class="badge" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--jobs-muted)">'+countryFlag(j.base_country)+' '+esc(j.base_country)+'<\/span>' : '';
+  var ctBadge = ctLabel ? '<span class="badge '+(j.contract_type||'')+'">'+ctLabel+'<\/span>' : '';
+  var cFlag = countryFlag(j.base_country||'');
+  var countryBadge = j.base_country && !['Europe','International','Worldwide','Multiple bases'].includes(j.base_country)
+    ? '<span class="badge" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--jobs-muted)">'+cFlag+' '+esc(j.base_country)+'<\/span>' : '';
 
+  // ── Meta info (fecha + aircraft) ──
+  var age = timeAgo(j.created_at);
+  var acList = (j.aircraft_types||[]).slice(0,3).map(function(a){ return '<span class="card-meta-item">✈ '+esc(a)+'<\/span>'; }).join('');
+  var metaItems = [];
+  if(age) metaItems.push('<span class="card-meta-item card-age">🕐 '+age+'<\/span>');
+  if(acList) metaItems.push(acList);
+  if(j.category==='executive') metaItems.push('<span class="card-meta-item">💼 <span class="lang-es">Ejecutiva<\/span><span class="lang-en">Executive<\/span><\/span>');
+  if(j.category==='ga') metaItems.push('<span class="card-meta-item">🛩 <span class="lang-es">Aviación General<\/span><span class="lang-en">General Aviation<\/span><\/span>');
+  var metaHtml = metaItems.length ? '<div class="card-meta">'+metaItems.join('<span class="card-meta-sep">·<\/span>')+'<\/div>' : '';
+
+  // ── Deadline pill ──
+  var dlHtml = '';
+  if(j.deadline) {
+    var daysLeft = daysUntil(j.deadline);
+    if(daysLeft !== null && daysLeft >= 0) {
+      var urgent = daysLeft <= 5;
+      dlHtml = '<span class="card-deadline'+(urgent?' urgent':'')+'">'
+        +(urgent ? '🔥' : '📅')+' '
+        +(daysLeft===0 ? '<span class="lang-es">Hoy</span><span class="lang-en">Today</span>'
+          : daysLeft===1 ? '<span class="lang-es">Mañana</span><span class="lang-en">Tomorrow</span>'
+          : '<span class="lang-es">'+daysLeft+' días</span><span class="lang-en">'+daysLeft+' days</span>')
+        +'<\/span>';
+    }
+  }
+
+  // ── Key requirements (top 3 visibles sin expandir) ──
+  var reqs = j.requirements || [];
+  var reqs_es = (j.requirements_es&&j.requirements_es.length) ? j.requirements_es : reqs;
+  // Priorizar: horas, licencia, type rating, inglés
+  var priority = ['hour','atpl','cpl','type rat','rating','english','inglés','medical','clase','class'];
+  function reqScore(r) {
+    var rl = r.toLowerCase();
+    for(var i=0;i<priority.length;i++) if(rl.indexOf(priority[i])!==-1) return priority.length-i;
+    return 0;
+  }
+  var topReqs = reqs.slice().sort(function(a,b){return reqScore(b)-reqScore(a);}).slice(0,3);
+  var topReqsEs = reqs_es.slice().sort(function(a,b){return reqScore(b)-reqScore(a);}).slice(0,3);
+  var keyReqsEn = topReqs.map(function(r){ return '<div class="card-key-req">'+esc(r)+'<\/div>'; }).join('');
+  var keyReqsEs = topReqsEs.map(function(r){ return '<div class="card-key-req">'+esc(r)+'<\/div>'; }).join('');
+  var keyReqsHtml = (keyReqsEn||keyReqsEs) ? '<div class="card-key-reqs"><div class="reqs-lang-es">'+keyReqsEs+'<\/div><div class="reqs-lang-en">'+keyReqsEn+'<\/div><\/div>' : '';
+
+  // ── Offer preview (primera línea del offer) ──
+  var offerFirst = (j.offer && j.offer.length) ? j.offer[0] : '';
+  var offerFirstEs = (j.offer_es&&j.offer_es.length) ? j.offer_es[0] : offerFirst;
+  var offerPreview = offerFirst
+    ? '<div class="card-offer-preview"><span class="lang-es">'+esc(offerFirstEs)+'<\/span><span class="lang-en">'+esc(offerFirst)+'<\/span><\/div>'
+    : '';
+
+  // ── Requirements/Offer completos (collapsible) ──
+  var reqsEnFull  = list(reqs);
+  var reqsEsFull  = list(reqs_es);
+  var offerEn = list(j.offer);
+  var offerEs = list((j.offer_es&&j.offer_es.length)?j.offer_es:j.offer);
+  var dl = j.deadline ? '<li>📅 <strong>Deadline: '+j.deadline+'<\/strong><\/li>' : '';
+  offerEn += dl; offerEs += dl;
+
+  var reqCount = reqs.length;
+  var offerCount = (j.offer||[]).length;
+
+  // ── Botones ──
   var applyBtn = j.apply_url
     ? '<a class="btn apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span><\/a>' : '';
   var coBtn = (j.company_url && j.company_url !== j.apply_url)
     ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
 
   return '<div class="job-card" id="job-'+j.id+'">'
-    +'<div class="badges">'+badges+hoursBadge+newBadge+ctBadge+countryBadge+'<\/div>'
+
+    // Badges row
+    +'<div class="badges">'+badges+hoursBadge+newBadge+ctBadge+countryBadge+(dlHtml?'&nbsp;'+dlHtml:'')+'<\/div>'
+
+    // Brand (logo + empresa + subtítulo)
     +'<div class="brand">'+logo
     +'<div><p class="company">'+esc(j.company)+'<\/p>'
     +'<p class="subtitle">'+esc(j.subtitle||'')+'<\/p><\/div><\/div>'
+
+    // Título
     +'<div class="title">'+titleHtml+'<\/div>'
-    +'<details><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span><\/summary>'
-    +'<ul class="reqs reqs-lang-es">'+reqsEs+'<\/ul><ul class="reqs reqs-lang-en">'+reqsEn+'<\/ul><\/details>'
-    +'<details><summary><span class="lang-es">Qué ofrece la compañía<\/span><span class="lang-en">What the company offers<\/span><\/summary>'
-    +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>'
-    +'<div class="actions">'+applyBtn+coBtn+'<\/div><\/div>';
+
+    // Meta (fecha + aircraft)
+    +metaHtml
+
+    // Top 3 requisitos visibles
+    +keyReqsHtml
+
+    // Preview del primer beneficio
+    +offerPreview
+
+    // Requisitos completos (collapsible)
+    +(reqCount ? '<details><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
+      +'<span class="reqs-count">'+reqCount+'<\/span><\/summary>'
+      +'<ul class="reqs reqs-lang-es">'+reqsEsFull+'<\/ul><ul class="reqs reqs-lang-en">'+reqsEnFull+'<\/ul><\/details>' : '')
+
+    // Oferta completa (collapsible)
+    +(offerCount ? '<details><summary><span class="lang-es">Qué ofrece<\/span><span class="lang-en">Benefits<\/span>'
+      +'<span class="reqs-count">'+offerCount+'<\/span><\/summary>'
+      +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>' : '')
+
+    // Acciones
+    +'<div class="actions">'+applyBtn+coBtn+'<\/div>'
+    +'<\/div>';
 }
+
 
 function buildCtChips() {
   var row = document.getElementById('pnCtRow');
