@@ -593,6 +593,15 @@ details summary .reqs-count {
   vertical-align: middle;
 }
 
+
+/* Card modal hint */
+.card-modal-hint {
+  font-size: 11px; color: var(--jobs-muted); opacity: .5;
+  text-align: center; padding: 8px 0 4px;
+  letter-spacing: .3px;
+}
+.job-card:hover .card-modal-hint { opacity: .8; }
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -1266,15 +1275,8 @@ function buildCard(j) {
     // Meta (fecha + aircraft)
     +metaHtml
 
-    // Requisitos completos (collapsible)
-    +(reqCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
-      +'<span class="reqs-count">'+reqCount+'<\/span><\/summary>'
-      +'<ul class="reqs reqs-lang-es">'+reqsEsFull+'<\/ul><ul class="reqs reqs-lang-en">'+reqsEnFull+'<\/ul><\/details>' : '')
-
-    // Oferta completa (collapsible)
-    +(offerCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Qué ofrece<\/span><span class="lang-en">Benefits<\/span>'
-      +'<span class="reqs-count">'+offerCount+'<\/span><\/summary>'
-      +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>' : '')
+    // Hint para abrir el modal (en lugar de los collapsibles)
+    +'<div class="card-modal-hint"><span class="lang-es">👆 Toca para ver detalles completos<\/span><span class="lang-en">👆 Tap to view full details<\/span><\/div>'
 
     // Acciones
     +'<div class="actions">'+applyBtn+coBtn+'<\/div>'
