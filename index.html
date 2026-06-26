@@ -1625,5 +1625,22 @@ fetchJobs();
 </script>
 
 
+
+  <!-- JOB DETAIL MODAL -->
+  <div class="pn-modal-overlay" id="pnModalOverlay" onclick="pnModalClose(event)">
+    <div class="pn-modal-drawer" id="pnModalDrawer">
+      <div class="pn-modal-header">
+        <div id="pnModalLogo"></div>
+        <div class="pn-modal-title-wrap">
+          <p class="pn-modal-company" id="pnModalCompany"></p>
+          <p class="pn-modal-role" id="pnModalRole"></p>
+        </div>
+        <button class="pn-modal-close" onclick="pnCloseModal()">&#215;</button>
+      </div>
+      <div class="pn-modal-body" id="pnModalBody"></div>
+      <div class="pn-modal-actions" id="pnModalActions"></div>
+    </div>
+  </div>
+
 </body>
 </html>
