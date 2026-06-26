@@ -1391,6 +1391,16 @@ function buildCard(j) {
     // Hint para abrir el modal (en lugar de los collapsibles)
     +'<div class="card-modal-hint"><span class="lang-es">👆 Toca para ver detalles completos<\/span><span class="lang-en">👆 Tap to view full details<\/span><\/div>'
 
+    // Requisitos completos (collapsible)
+    +(reqCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
+      +'<span class="reqs-count">'+reqCount+'<\/span><\/summary>'
+      +'<ul class="reqs reqs-lang-es">'+reqsEsFull+'<\/ul><ul class="reqs reqs-lang-en">'+reqsEnFull+'<\/ul><\/details>' : '')
+
+    // Qué ofrece (collapsible)
+    +(offerCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Qué ofrece<\/span><span class="lang-en">Benefits<\/span>'
+      +'<span class="reqs-count">'+offerCount+'<\/span><\/summary>'
+      +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>' : '')
+
     // Acciones + Share
     +'<div class="actions">'+applyBtn+coBtn+'<\/div>'
     +'<div class="card-share-row" onclick="event.stopPropagation()">'
