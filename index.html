@@ -602,6 +602,58 @@ details summary .reqs-count {
 }
 .job-card:hover .card-modal-hint { opacity: .8; }
 
+
+/* ── SHARE BUTTONS EN CARDS ─────────────────────────────────────────────────── */
+.card-share-row {
+  display: flex; gap: 6px; justify-content: flex-end;
+  padding: 8px 0 2px; opacity: 0; transition: opacity .2s ease;
+}
+.job-card:hover .card-share-row { opacity: 1; }
+
+.card-share-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  border: none; border-radius: 999px; height: 28px; padding: 0 11px;
+  font-size: 11px; font-weight: 800; letter-spacing: .3px;
+  cursor: pointer; transition: .15s ease; text-decoration: none;
+  white-space: nowrap;
+}
+.card-share-btn.wa {
+  background: rgba(37,211,102,.15); color: #25D366;
+  border: 1px solid rgba(37,211,102,.3);
+}
+.card-share-btn.wa:hover { background: rgba(37,211,102,.28); }
+.card-share-btn.tg {
+  background: rgba(39,171,226,.15); color: #27ABE2;
+  border: 1px solid rgba(39,171,226,.3);
+}
+.card-share-btn.tg:hover { background: rgba(39,171,226,.28); }
+
+/* ── SHARE EN MODAL ──────────────────────────────────────────────────────────── */
+.pn-modal-share-row {
+  display: flex; gap: 8px; padding: 0 24px 16px;
+}
+.pn-modal-share-btn {
+  flex: 1; height: 40px; border-radius: 12px; border: none;
+  font-size: 12px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px; transition: .15s ease; text-decoration: none;
+  letter-spacing: .2px;
+}
+.pn-modal-share-btn.wa {
+  background: rgba(37,211,102,.15); color: #25D366;
+  border: 1px solid rgba(37,211,102,.3);
+}
+.pn-modal-share-btn.wa:hover { background: rgba(37,211,102,.25); transform: translateY(-1px); }
+.pn-modal-share-btn.tg {
+  background: rgba(39,171,226,.15); color: #27ABE2;
+  border: 1px solid rgba(39,171,226,.3);
+}
+.pn-modal-share-btn.tg:hover { background: rgba(39,171,226,.25); transform: translateY(-1px); }
+
+/* Iconos SVG WhatsApp y Telegram */
+.icon-wa { display: inline-block; width: 14px; height: 14px; }
+.icon-tg { display: inline-block; width: 14px; height: 14px; }
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -880,6 +932,23 @@ function pnOpenModal(jobId) {
   actions += '🔗 <span class="lang-es">Ver en web</span><span class="lang-en">View on web</span></a>';
   document.getElementById('pnModalActions').innerHTML = actions;
 
+  // Share row en modal
+  var shareHtml = '<div class="pn-modal-share-row">'
+    + '<a class="pn-modal-share-btn wa" href="javascript:void(0)" onclick="shareJobWA(' + j.id + ',event)">'
+    + '<svg class=\"icon-wa\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z\"/><path d=\"M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.86L.057 23.427a.75.75 0 0 0 .916.964l5.683-1.49A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.715 9.715 0 0 1-4.953-1.355l-.355-.211-3.676.964.981-3.585-.232-.369A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z\"/></svg> WhatsApp</a>'
+    + '<a class="pn-modal-share-btn tg" href="javascript:void(0)" onclick="shareJobTG(' + j.id + ',event)">'
+    + '<svg class=\"icon-tg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z\"/></svg> Telegram</a>'
+    + '</div>';
+  // Insertar share row justo antes de pnModalActions
+  var actEl = document.getElementById('pnModalActions');
+  var shareEl = document.getElementById('pnModalShareRow');
+  if(!shareEl) {
+    shareEl = document.createElement('div');
+    shareEl.id = 'pnModalShareRow';
+    actEl.parentNode.insertBefore(shareEl, actEl);
+  }
+  shareEl.innerHTML = shareHtml;
+
   // ── Abrir ──
   var overlay = document.getElementById('pnModalOverlay');
   overlay.classList.add('open');
@@ -917,6 +986,53 @@ document.addEventListener('keydown', function(e) {
     if(s) { s.focus(); s.select(); }
   }
 });
+
+
+// ── SHARE FUNCTIONS ──────────────────────────────────────────────────────────
+function buildShareText(j) {
+  var lang = document.documentElement.getAttribute('data-lang') || 'en';
+  var title = lang === 'es' ? (j.title_es||j.title_en||'') : (j.title_en||j.title_es||'');
+  var url   = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id;
+  var ac    = (j.aircraft_types||[]).slice(0,2).join(' / ');
+  var loc   = j.base_country || '';
+  var hours = j.min_hours && j.min_hours > 0 ? ' · ' + j.min_hours + 'h+' : '';
+  var emoji = j.category === 'executive' ? '🛩' : j.category === 'ga' ? '🛩' : '✈️';
+
+  if(lang === 'es') {
+    return emoji + ' *' + title + '*\n'
+      + '🏢 ' + j.company
+      + (ac  ? ' · ' + ac  : '')
+      + (loc ? ' · ' + loc : '')
+      + hours + '\n'
+      + '📋 Más info en Pilot Network Jobs Board:\n' + url;
+  } else {
+    return emoji + ' *' + title + '*\n'
+      + '🏢 ' + j.company
+      + (ac  ? ' · ' + ac  : '')
+      + (loc ? ' · ' + loc : '')
+      + hours + '\n'
+      + '📋 More info at Pilot Network Jobs Board:\n' + url;
+  }
+}
+
+function shareJobWA(jobId, event) {
+  if(event) event.stopPropagation();
+  var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
+  if(!j) return;
+  var text = buildShareText(j);
+  window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+}
+
+function shareJobTG(jobId, event) {
+  if(event) event.stopPropagation();
+  var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
+  if(!j) return;
+  var url  = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id;
+  var lang = document.documentElement.getAttribute('data-lang') || 'en';
+  var title = lang === 'es' ? (j.title_es||j.title_en||'') : (j.title_en||j.title_es||'');
+  var text = (j.category === 'executive' ? '🛩' : '✈️') + ' ' + title + ' — ' + j.company;
+  window.open('https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text), '_blank');
+}
 
 function fetchJobs() {
   fetch(SB_URL + '/rest/v1/job_offers?select=*&order=id.desc', {
@@ -1278,8 +1394,19 @@ function buildCard(j) {
     // Hint para abrir el modal (en lugar de los collapsibles)
     +'<div class="card-modal-hint"><span class="lang-es">👆 Toca para ver detalles completos<\/span><span class="lang-en">👆 Tap to view full details<\/span><\/div>'
 
+    // Share row
+    var shareRow = '<div class="card-share-row" onclick="event.stopPropagation()">'
+      + '<a class="card-share-btn wa" href="javascript:void(0)" onclick="shareJobWA('+j.id+',event)" title="Compartir en WhatsApp">'
+      + '<svg class=\"icon-wa\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z\"/><path d=\"M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.532 5.86L.057 23.427a.75.75 0 0 0 .916.964l5.683-1.49A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.715 9.715 0 0 1-4.953-1.355l-.355-.211-3.676.964.981-3.585-.232-.369A9.718 9.718 0 0 1 2.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z\"/></svg>'
+      + ' WhatsApp<\/a>'
+      + '<a class="card-share-btn tg" href="javascript:void(0)" onclick="shareJobTG('+j.id+',event)" title="Compartir en Telegram">'
+      + '<svg class=\"icon-tg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.932z\"/></svg>'
+      + ' Telegram<\/a>'
+      + '<\/div>';
+
     // Acciones
     +'<div class="actions">'+applyBtn+coBtn+'<\/div>'
+    +shareRow
     +'<\/div>';
 }
 
