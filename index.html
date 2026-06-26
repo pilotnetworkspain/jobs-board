@@ -774,16 +774,23 @@ var today   = new Date().toISOString().split('T')[0];
 
 // ── JOB DETAIL MODAL ─────────────────────────────────────────────────────────
 var _modalJob = null;
+var _modalCompany = '';
+
+function pnModalLogoFallback(img) {
+  var fallback = '<div class="pn-modal-logo-fallback">'+(_modalCompany||'?').charAt(0)+'</div>';
+  if(img && img.parentNode) img.parentNode.innerHTML = fallback;
+}
 
 function pnOpenModal(jobId) {
   var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
   if(!j) return;
   _modalJob = j;
+  _modalCompany = j.company || '';
 
   // ── Logo ──
   var logoEl = document.getElementById('pnModalLogo');
   if(j.logo_url) {
-    logoEl.innerHTML = '<img class="pn-modal-logo" src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" onerror="this.parentNode.innerHTML='<div class=\"pn-modal-logo-fallback\">'+(''+esc(j.company)+'').charAt(0)+'</div>'">';
+    logoEl.innerHTML = '<img class="pn-modal-logo" src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" onerror="pnModalLogoFallback(this)">';
   } else {
     logoEl.innerHTML = '<div class="pn-modal-logo-fallback">'+esc((j.company||'').charAt(0))+'</div>';
   }
