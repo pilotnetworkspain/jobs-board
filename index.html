@@ -1574,6 +1574,8 @@ function pnOpenDeepLinkJob(jobId) {
     el.classList.add('pn-highlight');
     setTimeout(function(){ el.classList.remove('pn-highlight'); }, 3000);
   }, 120);
+  // Abrir modal con la oferta
+  setTimeout(function(){ pnOpenModal(jobId); }, 100);
 }
 
 function resizeParent() {
