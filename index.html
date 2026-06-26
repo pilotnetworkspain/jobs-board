@@ -582,8 +582,9 @@ details summary .reqs-count {
 .pn-modal-web:hover { background: rgba(255,255,255,.1); color: #fff; }
 
 /* Cards clickables */
-.job-card { cursor: pointer; }
+.job-card { cursor: pointer; display: flex; flex-direction: column; }
 .job-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+.job-card .actions { margin-top: auto; padding-top: 12px; }
 
 /* pn-tab-new badge */
 .pn-tab-new {
@@ -594,28 +595,22 @@ details summary .reqs-count {
 }
 
 
-/* Card modal hint */
-.card-modal-hint {
-  font-size: 11px; color: var(--jobs-muted); opacity: .5;
-  text-align: center; padding: 8px 0 4px;
-  letter-spacing: .3px;
-}
-.job-card:hover .card-modal-hint { opacity: .8; }
+/* Card modal hint — oculto */
+.card-modal-hint { display: none; }
 
 
 /* ── SHARE BUTTONS EN CARDS ─────────────────────────────────────────────────── */
 .card-share-row {
-  display: flex; gap: 6px; justify-content: flex-end;
-  padding: 8px 0 2px; opacity: 0; transition: opacity .2s ease;
+  display: flex; gap: 6px; justify-content: center;
+  padding: 8px 0 4px;
 }
-.job-card:hover .card-share-row { opacity: 1; }
 
 .card-share-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  border: none; border-radius: 999px; height: 28px; padding: 0 11px;
-  font-size: 11px; font-weight: 800; letter-spacing: .3px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: none; border-radius: 999px; height: 34px; padding: 0 16px;
+  font-size: 12px; font-weight: 800; letter-spacing: .3px;
   cursor: pointer; transition: .15s ease; text-decoration: none;
-  white-space: nowrap;
+  white-space: nowrap; flex: 1; max-width: 140px;
 }
 .card-share-btn.wa {
   background: rgba(37,211,102,.15); color: #25D366;
