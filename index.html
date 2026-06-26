@@ -1391,15 +1391,12 @@ function buildCard(j) {
     // Hint para abrir el modal (en lugar de los collapsibles)
     +'<div class="card-modal-hint"><span class="lang-es">👆 Toca para ver detalles completos<\/span><span class="lang-en">👆 Tap to view full details<\/span><\/div>'
 
-    // Share row — emojis simples, sin SVG inline
-    var shareRow = '<div class="card-share-row" onclick="event.stopPropagation()">'
-      + '<a class="card-share-btn wa" href="javascript:void(0)" onclick="shareJobWA('+j.id+',event)">📲 WhatsApp<\/a>'
-      + '<a class="card-share-btn tg" href="javascript:void(0)" onclick="shareJobTG('+j.id+',event)">✈ Telegram<\/a>'
-      + '<\/div>';
-
-    // Acciones
+    // Acciones + Share
     +'<div class="actions">'+applyBtn+coBtn+'<\/div>'
-    +shareRow
+    +'<div class="card-share-row" onclick="event.stopPropagation()">'
+    +'<a class="card-share-btn wa" href="javascript:void(0)" onclick="shareJobWA('+j.id+',event)">📲 WhatsApp<\/a>'
+    +'<a class="card-share-btn tg" href="javascript:void(0)" onclick="shareJobTG('+j.id+',event)">✈ Telegram<\/a>'
+    +'<\/div>'
     +'<\/div>';
 }
 
