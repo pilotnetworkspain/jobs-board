@@ -764,7 +764,6 @@ details summary .reqs-count {
         <select id="pnCountry" style="display:none" onchange="countryFilter=this.value;pnRender()">
           <option value="">All countries</option>
         </select>
-        <div class="pn-ct-row" id="pnCtRow"></div>
         <button class="pn-share-btn" id="pnShareBtn" onclick="pnShareURL()" title="Copy link with current filters">
           🔗 <span class="lang-es">Compartir</span><span class="lang-en">Share</span>
         </button>
@@ -1047,7 +1046,7 @@ function fetchJobs() {
     var newCount = allJobs.length;
     window._lastJobCount = newCount;
 
-    updateCounts(); buildAcChips(); buildCountrySelect(); buildCtChips(); pnRender(); resizeParent();
+    updateCounts(); buildAcChips(); buildCountrySelect(); pnRender(); resizeParent();
 
     // Si hay más ofertas que antes, mostrar notificación con la nueva
     if(prevCount > 0 && newCount > prevCount) {
@@ -1246,7 +1245,6 @@ function updateActiveFilters(q, maxHrs) {
   var tags = [];
   if(q) tags.push('<span class="pn-active-tag">🔍 '+esc(q)+' <button onclick="document.getElementById(\'pnSearch\').value=\'\';pnRender()">✕<\/button><\/span>');
   if(countryFilter) tags.push('<span class="pn-active-tag">🌍 '+countryFilter+' <button onclick="countryFilter=\'\';document.getElementById(\'pnCountry\').value=\'\';pnRender()">✕<\/button><\/span>');
-  if(contractFilter) tags.push('<span class="pn-active-tag">📋 '+contractFilter+' <button onclick="pnToggleCt(\'\')" >✕<\/button><\/span>');
   if(acFilter) tags.push('<span class="pn-active-tag">✈ '+acFilter+' <button onclick="pnToggleAc(\''+acFilter+'\')">✕<\/button><\/span>');
   if(maxHrs < 5500) tags.push('<span class="pn-active-tag">⏱ ≤'+maxHrs+'h <button onclick="document.getElementById(\'pnHours\').value=5500;pnRender()">✕<\/button><\/span>');
   if(role !== 'all' && !(role instanceof Set)) tags.push('<span class="pn-active-tag">👤 '+role+' <button onclick="pnSetRole(\'all\')">✕<\/button><\/span>');
