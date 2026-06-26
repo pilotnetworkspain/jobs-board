@@ -464,6 +464,134 @@ details summary .reqs-count {
 }
 .pn-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+
+/* ── JOB DETAIL MODAL ──────────────────────────────────────────────────────── */
+.pn-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.65);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  z-index: 1000; opacity: 0; pointer-events: none;
+  transition: opacity .3s ease;
+}
+.pn-modal-overlay.open { opacity: 1; pointer-events: all; }
+
+.pn-modal-drawer {
+  position: fixed; top: 0; right: 0; bottom: 0;
+  width: min(560px, 100vw); max-width: 100vw;
+  background: linear-gradient(180deg, #0d1525 0%, #080c14 100%);
+  border-left: 1px solid rgba(255,255,255,.1);
+  box-shadow: -24px 0 80px rgba(0,0,0,.6);
+  z-index: 1001; overflow-y: auto; padding: 0;
+  transform: translateX(100%); transition: transform .35s cubic-bezier(.2,1,.3,1);
+  display: flex; flex-direction: column;
+}
+.pn-modal-overlay.open .pn-modal-drawer { transform: translateX(0); }
+
+.pn-modal-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(8,14,28,.95); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 18px 24px 16px; display: flex; align-items: center; gap: 14px;
+}
+.pn-modal-logo {
+  width: 52px; height: 52px; border-radius: 14px; object-fit: contain;
+  background: rgba(255,255,255,.06); padding: 4px; flex-shrink: 0;
+}
+.pn-modal-logo-fallback {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: rgba(110,168,255,.15); display: flex; align-items: center;
+  justify-content: center; font-weight: 900; font-size: 20px;
+  color: var(--jobs-blue); flex-shrink: 0;
+}
+.pn-modal-title-wrap { flex: 1; min-width: 0; }
+.pn-modal-company { font-size: 13px; font-weight: 700; color: var(--jobs-muted); margin: 0 0 2px; }
+.pn-modal-role { font-size: 18px; font-weight: 900; color: #f8fbff; margin: 0; line-height: 1.2; }
+.pn-modal-close {
+  width: 36px; height: 36px; border-radius: 999px; border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06); color: var(--jobs-muted); cursor: pointer;
+  font-size: 18px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: .2s ease;
+}
+.pn-modal-close:hover { background: rgba(255,255,255,.12); color: #fff; }
+
+.pn-modal-body { padding: 24px; flex: 1; }
+
+.pn-modal-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+
+.pn-modal-meta {
+  display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;
+  padding: 14px 16px; border-radius: 14px;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+}
+.pn-modal-meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--jobs-soft);
+}
+.pn-modal-meta-item strong { color: #f8fbff; font-weight: 700; }
+
+.pn-modal-section { margin-bottom: 22px; }
+.pn-modal-section-title {
+  font-size: 11px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase;
+  color: var(--jobs-muted); margin: 0 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.pn-modal-section-title::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.07);
+}
+.pn-modal-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+.pn-modal-list li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13.5px; color: var(--jobs-soft); line-height: 1.5;
+}
+.pn-modal-list li::before {
+  content: '✓'; color: var(--jobs-blue); font-weight: 900;
+  font-size: 12px; margin-top: 2px; flex-shrink: 0;
+}
+.pn-modal-list.benefits li::before { content: '✦'; color: var(--jobs-purple); }
+
+.pn-modal-deadline {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  border-radius: 12px; margin-bottom: 20px; font-size: 13px; font-weight: 700;
+}
+.pn-modal-deadline.urgent { background: rgba(255,80,80,.1); border: 1px solid rgba(255,80,80,.3); color: #ff6b6b; }
+.pn-modal-deadline.warning { background: rgba(255,177,82,.08); border: 1px solid rgba(255,177,82,.25); color: #ffb152; }
+.pn-modal-deadline.ok { background: rgba(125,255,186,.08); border: 1px solid rgba(125,255,186,.2); color: #7dffba; }
+
+.pn-modal-actions {
+  position: sticky; bottom: 0;
+  background: rgba(8,14,28,.97); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding: 16px 24px; display: flex; gap: 10px;
+}
+.pn-modal-apply {
+  flex: 1; height: 50px; border-radius: 14px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--jobs-blue), #4a8de8);
+  color: #fff; font-size: 15px; font-weight: 900; letter-spacing: .3px;
+  transition: .2s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+  text-decoration: none;
+}
+.pn-modal-apply:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(110,168,255,.35); }
+.pn-modal-web {
+  height: 50px; padding: 0 18px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.06);
+  color: var(--jobs-soft); font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: .2s ease; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px; text-decoration: none;
+}
+.pn-modal-web:hover { background: rgba(255,255,255,.1); color: #fff; }
+
+/* Cards clickables */
+.job-card { cursor: pointer; }
+.job-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,.4); }
+
+/* pn-tab-new badge */
+.pn-tab-new {
+  display: none; background: var(--jobs-green); color: #000;
+  border-radius: 999px; font-size: 9px; font-weight: 900;
+  padding: 2px 7px; letter-spacing: .3px; margin-left: 4px;
+  vertical-align: middle;
+}
+
 </style>
 </head>
 <body class="pn-lang-en">
@@ -504,14 +632,17 @@ details summary .reqs-count {
         <button class="pn-tab active" data-tab="commercial" onclick="pnSetTab('commercial')">
           <span class="lang-es">Aviación Comercial</span><span class="lang-en">Commercial Aviation</span>
           <span class="pn-tab-count" id="count-commercial">(0)</span>
+          <span class="pn-tab-new" id="new-commercial"></span>
         </button>
         <button class="pn-tab" data-tab="executive" onclick="pnSetTab('executive')">
           <span class="lang-es">Aviación Ejecutiva</span><span class="lang-en">Executive Aviation</span>
           <span class="pn-tab-count" id="count-executive">(0)</span>
+          <span class="pn-tab-new" id="new-executive"></span>
         </button>
         <button class="pn-tab" data-tab="ga" onclick="pnSetTab('ga')">
           <span class="lang-es">Aviación General</span><span class="lang-en">General Aviation</span>
           <span class="pn-tab-count" id="count-ga">(0)</span>
+          <span class="pn-tab-new" id="new-ga"></span>
         </button>
       </div>
 
@@ -639,6 +770,137 @@ var countryFilter = '';
 var contractFilter = '';
 var today   = new Date().toISOString().split('T')[0];
 
+
+// ── JOB DETAIL MODAL ─────────────────────────────────────────────────────────
+var _modalJob = null;
+
+function pnOpenModal(jobId) {
+  var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
+  if(!j) return;
+  _modalJob = j;
+
+  // ── Logo ──
+  var logoEl = document.getElementById('pnModalLogo');
+  if(j.logo_url) {
+    logoEl.innerHTML = '<img class="pn-modal-logo" src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" onerror="this.parentNode.innerHTML='<div class=\"pn-modal-logo-fallback\">'+(''+esc(j.company)+'').charAt(0)+'</div>'">';
+  } else {
+    logoEl.innerHTML = '<div class="pn-modal-logo-fallback">'+esc((j.company||'').charAt(0))+'</div>';
+  }
+
+  // ── Títulos ──
+  document.getElementById('pnModalCompany').textContent = j.company || '';
+  var lang = document.documentElement.getAttribute('data-lang') || 'en';
+  var title = lang === 'es' ? (j.title_es||j.title_en||'') : (j.title_en||j.title_es||'');
+  document.getElementById('pnModalRole').textContent = title;
+
+  // ── Body ──
+  var body = '';
+
+  // Badges
+  var badges = (j.badges||[]).map(function(b){
+    var cls='badge',bl=b.toLowerCase();
+    if(bl==='first officer'||bl==='co-pilot') cls+=' fo';
+    else if(bl==='captain'||bl==='comandante') cls+=' captain';
+    else if(bl==='cadet'||bl==='cadete') cls+=' cadet';
+    return '<span class="'+cls+'">'+esc(b)+'</span>';
+  }).join('');
+  var isNew = j.created_at && (Date.now()-new Date(j.created_at).getTime()) < 3*24*3600*1000;
+  if(isNew) badges += '<span class="badge new-job">🆕 NEW</span>';
+  if(j.min_hours && j.min_hours>0) badges += '<span class="badge pn-hours-badge">⏱ '+j.min_hours+'h+</span>';
+  body += '<div class="pn-modal-badges">'+badges+'</div>';
+
+  // Meta info
+  var metas = [];
+  if(j.subtitle) metas.push('<div class="pn-modal-meta-item">📍 <strong>'+esc(j.subtitle)+'</strong></div>');
+  if(j.base_country) metas.push('<div class="pn-modal-meta-item">'+countryFlag(j.base_country)+' <strong>'+esc(j.base_country)+'</strong></div>');
+  if(j.aircraft_types&&j.aircraft_types.length) metas.push('<div class="pn-modal-meta-item">✈ <strong>'+j.aircraft_types.slice(0,3).map(esc).join(' / ')+'</strong></div>');
+  var ctLabel = contractLabel(j.contract_type||'');
+  if(ctLabel) metas.push('<div class="pn-modal-meta-item">📋 <strong>'+ctLabel+'</strong></div>');
+  var age = timeAgo(j.created_at);
+  if(age) metas.push('<div class="pn-modal-meta-item">🕐 '+age+'</div>');
+  if(metas.length) body += '<div class="pn-modal-meta">'+metas.join('')+'</div>';
+
+  // Deadline
+  if(j.deadline) {
+    var dl = daysUntil(j.deadline);
+    if(dl !== null && dl >= 0) {
+      var dlClass = dl <= 3 ? 'urgent' : dl <= 10 ? 'warning' : 'ok';
+      var dlIcon  = dl <= 3 ? '🔥' : dl <= 10 ? '⚠️' : '📅';
+      var dlText  = dl === 0 ? 'Closes today!' : dl === 1 ? 'Closes tomorrow' : 'Closes in '+dl+' days — '+j.deadline;
+      body += '<div class="pn-modal-deadline '+dlClass+'">'+dlIcon+' '+dlText+'</div>';
+    }
+  }
+
+  // Requisitos
+  var reqs    = j.requirements || [];
+  var reqs_es = (j.requirements_es&&j.requirements_es.length) ? j.requirements_es : reqs;
+  var reqList = lang === 'es' ? reqs_es : reqs;
+  if(reqList.length) {
+    body += '<div class="pn-modal-section"><p class="pn-modal-section-title">Requirements</p>';
+    body += '<ul class="pn-modal-list">'+reqList.map(function(r){ return '<li>'+esc(r)+'</li>'; }).join('')+'</ul></div>';
+  }
+
+  // Beneficios
+  var offers    = j.offer || [];
+  var offers_es = (j.offer_es&&j.offer_es.length) ? j.offer_es : offers;
+  var offerList = lang === 'es' ? offers_es : offers;
+  if(offerList.length) {
+    body += '<div class="pn-modal-section"><p class="pn-modal-section-title">Benefits</p>';
+    body += '<ul class="pn-modal-list benefits">'+offerList.map(function(o){ return '<li>'+esc(o)+'</li>'; }).join('')+'</ul></div>';
+  }
+
+  document.getElementById('pnModalBody').innerHTML = body;
+
+  // ── Actions ──
+  var webUrl = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job='+j.id;
+  var actions = '';
+  if(j.apply_url) {
+    actions += '<a class="pn-modal-apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener">';
+    actions += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+    actions += '<span class="lang-es">Aplicar ahora</span><span class="lang-en">Apply now</span></a>';
+  }
+  actions += '<a class="pn-modal-web" href="'+webUrl+'" target="_blank" rel="noopener">';
+  actions += '🔗 <span class="lang-es">Ver en web</span><span class="lang-en">View on web</span></a>';
+  document.getElementById('pnModalActions').innerHTML = actions;
+
+  // ── Abrir ──
+  var overlay = document.getElementById('pnModalOverlay');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  applyLang();
+}
+
+function pnCloseModal() {
+  var overlay = document.getElementById('pnModalOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  _modalJob = null;
+}
+
+function pnModalClose(e) {
+  // Cerrar al hacer click en el overlay (fuera del drawer)
+  if(e.target === document.getElementById('pnModalOverlay')) pnCloseModal();
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', function(e) {
+  if(e.key === 'Escape') {
+    if(document.getElementById('pnModalOverlay').classList.contains('open')) {
+      pnCloseModal();
+    } else {
+      // Esc también limpia el buscador si hay texto
+      var s = document.getElementById('pnSearch');
+      if(s && s.value) { s.value=''; pnRender(); }
+    }
+  }
+  // '/' abre el buscador
+  if(e.key === '/' && document.activeElement !== document.getElementById('pnSearch')) {
+    e.preventDefault();
+    var s = document.getElementById('pnSearch');
+    if(s) { s.focus(); s.select(); }
+  }
+});
+
 function fetchJobs() {
   fetch(SB_URL + '/rest/v1/job_offers?select=*&order=id.desc', {
     headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }, cache: 'no-store'
@@ -684,14 +946,41 @@ function fetchJobsNow() {
 }
 
 function updateCounts() {
-  var c = {commercial:0,executive:0,ga:0};
-  allJobs.forEach(function(j){ if(c[j.category]!==undefined) c[j.category]++; });
+  var c    = {commercial:0, executive:0, ga:0};
+  var newC = {commercial:0, executive:0, ga:0};
+  var weekAgo = Date.now() - 7*24*3600*1000;
+
+  allJobs.forEach(function(j){
+    if(c[j.category] !== undefined) {
+      c[j.category]++;
+      if(j.created_at && new Date(j.created_at).getTime() > weekAgo)
+        newC[j.category]++;
+    }
+  });
+
   Object.keys(c).forEach(function(k){
     var el = document.getElementById('count-'+k);
     if(el) el.textContent = '('+c[k]+')';
+    var newEl = document.getElementById('new-'+k);
+    if(newEl) {
+      if(newC[k] > 0) {
+        newEl.textContent = '+'+newC[k];
+        newEl.style.display = 'inline-flex';
+      } else {
+        newEl.style.display = 'none';
+      }
+    }
   });
+
   var totalEl = document.getElementById('pnTotalCount');
   if(totalEl) totalEl.textContent = allJobs.length;
+
+  // Actualizar label del sort si hay urgentes
+  var urgentes = allJobs.filter(function(j){
+    return j.deadline && daysUntil(j.deadline) !== null && daysUntil(j.deadline) <= 5;
+  }).length;
+  var urgEl = document.getElementById('pnUrgentCount');
+  if(urgEl) { urgEl.textContent = urgentes > 0 ? '🔥 '+urgentes+' closing soon' : ''; }
 }
 
 function buildAcChips() {
@@ -740,10 +1029,22 @@ function matchRole(j, roleFilter) {
 function sortJobs(jobs) {
   var sv = _ddSortVal || 'newest';
   var arr = jobs.slice();
-  if(sv==='newest')       arr.sort(function(a,b){ return b.id - a.id; });
-  else if(sv==='hours_asc')  arr.sort(function(a,b){ return (a.min_hours||0)-(b.min_hours||0); });
-  else if(sv==='hours_desc') arr.sort(function(a,b){ return (b.min_hours||0)-(a.min_hours||0); });
-  else if(sv==='company')    arr.sort(function(a,b){ return (a.company||'').localeCompare(b.company||''); });
+  if(sv==='newest') {
+    arr.sort(function(a,b){ return b.id - a.id; });
+  } else if(sv==='deadline') {
+    // Ofertas con deadline próximo primero; sin deadline al final
+    arr.sort(function(a,b){
+      var da = a.deadline ? new Date(a.deadline).getTime() : 9e15;
+      var db = b.deadline ? new Date(b.deadline).getTime() : 9e15;
+      return da - db;
+    });
+  } else if(sv==='hours_asc') {
+    arr.sort(function(a,b){ return (a.min_hours||0)-(b.min_hours||0); });
+  } else if(sv==='hours_desc') {
+    arr.sort(function(a,b){ return (b.min_hours||0)-(a.min_hours||0); });
+  } else if(sv==='company') {
+    arr.sort(function(a,b){ return (a.company||'').localeCompare(b.company||''); });
+  }
   return arr;
 }
 
@@ -937,11 +1238,11 @@ function buildCard(j) {
 
   // ── Botones ──
   var applyBtn = j.apply_url
-    ? '<a class="btn apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span><\/a>' : '';
+    ? '<a class="btn apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span><\/a>' : '';
   var coBtn = (j.company_url && j.company_url !== j.apply_url)
-    ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
+    ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
 
-  return '<div class="job-card" id="job-'+j.id+'">'
+  return '<div class="job-card" id="job-'+j.id+'" onclick="pnOpenModal('+j.id+')" role="button" tabindex="0" aria-label="'+esc(j.company)+' — '+esc(j.title_en||'')+'">''
 
     // Badges row
     +'<div class="badges">'+badges+hoursBadge+newBadge+ctBadge+countryBadge+(dlHtml?'&nbsp;'+dlHtml:'')+'<\/div>'
@@ -958,12 +1259,12 @@ function buildCard(j) {
     +metaHtml
 
     // Requisitos completos (collapsible)
-    +(reqCount ? '<details><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
+    +(reqCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Requisitos<\/span><span class="lang-en">Requirements<\/span>'
       +'<span class="reqs-count">'+reqCount+'<\/span><\/summary>'
       +'<ul class="reqs reqs-lang-es">'+reqsEsFull+'<\/ul><ul class="reqs reqs-lang-en">'+reqsEnFull+'<\/ul><\/details>' : '')
 
     // Oferta completa (collapsible)
-    +(offerCount ? '<details><summary><span class="lang-es">Qué ofrece<\/span><span class="lang-en">Benefits<\/span>'
+    +(offerCount ? '<details onclick="event.stopPropagation()"><summary><span class="lang-es">Qué ofrece<\/span><span class="lang-en">Benefits<\/span>'
       +'<span class="reqs-count">'+offerCount+'<\/span><\/summary>'
       +'<ul class="reqs reqs-lang-es">'+offerEs+'<\/ul><ul class="reqs reqs-lang-en">'+offerEn+'<\/ul><\/details>' : '')
 
@@ -1020,10 +1321,11 @@ var _ddSortVal = 'newest';
 var _ddOpen = null;  // 'sort' | 'country' | null
 
 var SORT_OPTS = [
-  {val:'newest',  icon:'⏰', label:'Newest first'},
-  {val:'hours_asc', icon:'⬆', label:'Min. hours'},
-  {val:'hours_desc',icon:'⬇', label:'Max. hours'},
-  {val:'company', icon:'🔤', label:'Company A-Z'},
+  {val:'newest',   icon:'🕐', label:'Newest first'},
+  {val:'deadline', icon:'🔥', label:'Deadline soonest'},
+  {val:'hours_asc',icon:'⬆', label:'Min. hours'},
+  {val:'hours_desc',icon:'⬇',label:'Max. hours'},
+  {val:'company',  icon:'🔤', label:'Company A-Z'},
 ];
 
 function pnToggleDd(which) {
