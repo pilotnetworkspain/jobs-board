@@ -1243,9 +1243,9 @@ function buildCard(j) {
   var coBtn = (j.company_url && j.company_url !== j.apply_url)
     ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
 
-  return '<div class="job-card" id="job-'+j.id+'" onclick="pnOpenModal('+j.id+')" role="button" tabindex="0" aria-label="'+esc(j.company)+' — '+esc(j.title_en||'')+'">''
+    return '<div class="job-card" id="job-'+j.id+'" onclick="pnOpenModal('+j.id+')" role="button" tabindex="0" aria-label="'+esc(j.company)+' \u2014 '+esc(j.title_en||'')+'">'
 
-    // Badges row
+    // Badges row// Badges row
     +'<div class="badges">'+badges+hoursBadge+newBadge+ctBadge+countryBadge+(dlHtml?'&nbsp;'+dlHtml:'')+'<\/div>'
 
     // Brand (logo + empresa + subtítulo)
