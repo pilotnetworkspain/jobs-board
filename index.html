@@ -921,7 +921,7 @@ function pnOpenModal(jobId) {
   document.getElementById('pnModalBody').innerHTML = body;
 
   // ── Actions ──
-  var webUrl = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job='+j.id;
+  var webUrl = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job='+j.id+'&utm_source=jobsboard&utm_medium=modal&utm_campaign=viewoffer';
   var actions = '';
   if(j.apply_url) {
     actions += '<a class="pn-modal-apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener">';
@@ -989,7 +989,7 @@ document.addEventListener('keydown', function(e) {
 function buildShareText(j) {
   var lang = document.documentElement.getAttribute('data-lang') || 'en';
   var title = lang === 'es' ? (j.title_es||j.title_en||'') : (j.title_en||j.title_es||'');
-  var url   = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id;
+  var url   = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id + '&utm_source=whatsapp&utm_medium=share&utm_campaign=jobshare';
   var ac    = (j.aircraft_types||[]).slice(0,2).join(' / ');
   var loc   = j.base_country || '';
   var hours = j.min_hours && j.min_hours > 0 ? ' · ' + j.min_hours + 'h+' : '';
@@ -1024,7 +1024,7 @@ function shareJobTG(jobId, event) {
   if(event) event.stopPropagation();
   var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
   if(!j) return;
-  var url  = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id;
+  var url  = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job=' + j.id + '&utm_source=telegram&utm_medium=share&utm_campaign=jobshare';
   var lang = document.documentElement.getAttribute('data-lang') || 'en';
   var title = lang === 'es' ? (j.title_es||j.title_en||'') : (j.title_en||j.title_es||'');
   var text = (j.category === 'executive' ? '🛩' : '✈️') + ' ' + title + ' — ' + j.company;
