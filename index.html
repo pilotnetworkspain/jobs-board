@@ -111,13 +111,19 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .job-card.cat-event details[open] summary::after { background: rgba(255,200,80,.2); border-color: rgba(255,200,80,.4); }
 .reqs { padding: 2px 14px 12px 28px; margin: 0; color: var(--jobs-soft); font-size: 13px; line-height: 1.58; }
 .reqs li { margin-bottom: 5px; word-break: break-word; }
-/* ── CATEGORY COLORS ── */
-.job-card.cat-executive { border-color: rgba(180,120,255,.28); background: linear-gradient(180deg, rgba(180,120,255,.07), rgba(180,120,255,.02)), rgba(12,6,22,.75); }
-.job-card.cat-executive:hover { border-color: rgba(180,120,255,.6); box-shadow: 0 14px 42px rgba(180,120,255,.12); }
-.job-card.cat-ga { border-color: rgba(80,220,140,.25); background: linear-gradient(180deg, rgba(80,220,140,.06), rgba(80,220,140,.01)), rgba(4,18,10,.75); }
-.job-card.cat-ga:hover { border-color: rgba(80,220,140,.55); box-shadow: 0 14px 42px rgba(80,220,140,.1); }
-.job-card.cat-event { border-color: rgba(255,200,80,.35); background: linear-gradient(180deg, rgba(255,200,80,.08), rgba(255,200,80,.02)), rgba(14,12,4,.75); }
-.job-card.cat-event:hover { border-color: rgba(255,200,80,.65); box-shadow: 0 14px 42px rgba(255,200,80,.12); }
+/* ── CATEGORY COLORS — alta especificidad para ganar al hover ── */
+.job-card.cat-executive { border-color: rgba(180,120,255,.35) !important; background: linear-gradient(180deg, rgba(180,120,255,.09), rgba(180,120,255,.03)), rgba(12,6,22,.78) !important; }
+.job-card.cat-executive::before { background: radial-gradient(circle at 22% 0%, rgba(180,120,255,.22), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-executive:hover { border-color: rgba(180,120,255,.7) !important; background: linear-gradient(180deg, rgba(180,120,255,.14), rgba(180,120,255,.05)), rgba(14,8,26,.88) !important; box-shadow: 0 14px 42px rgba(180,120,255,.18) !important; }
+
+.job-card.cat-ga { border-color: rgba(80,220,140,.3) !important; background: linear-gradient(180deg, rgba(80,220,140,.08), rgba(80,220,140,.02)), rgba(4,18,10,.78) !important; }
+.job-card.cat-ga::before { background: radial-gradient(circle at 22% 0%, rgba(80,220,140,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-ga:hover { border-color: rgba(80,220,140,.65) !important; background: linear-gradient(180deg, rgba(80,220,140,.13), rgba(80,220,140,.04)), rgba(4,22,12,.88) !important; box-shadow: 0 14px 42px rgba(80,220,140,.14) !important; }
+
+.job-card.cat-event { border-color: rgba(255,200,80,.38) !important; background: linear-gradient(180deg, rgba(255,200,80,.10), rgba(255,200,80,.03)), rgba(14,12,4,.78) !important; }
+.job-card.cat-event::before { background: radial-gradient(circle at 22% 0%, rgba(255,200,80,.20), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-event:hover { border-color: rgba(255,200,80,.72) !important; background: linear-gradient(180deg, rgba(255,200,80,.15), rgba(255,200,80,.05)), rgba(18,15,4,.88) !important; box-shadow: 0 14px 42px rgba(255,200,80,.16) !important; }
+
 .badge.cat-executive { color: #c8a0ff !important; background: rgba(180,120,255,.14) !important; border-color: rgba(180,120,255,.35) !important; }
 .badge.cat-ga { color: #7dffc0 !important; background: rgba(80,220,140,.14) !important; border-color: rgba(80,220,140,.35) !important; }
 /* ── EVENT TAB & CARD ── */
