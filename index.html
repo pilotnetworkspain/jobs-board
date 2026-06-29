@@ -148,6 +148,7 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .badge.event-tag      { color: #fed7aa !important; background: rgba(251,146,60,.15) !important; border-color: rgba(251,146,60,.42) !important; }
 
 /* ── TAB COLORS ── */
+.pn-tab.active { background: linear-gradient(180deg,#fff,#e2e8f0) !important; color: #0f172a !important; border-color: rgba(255,255,255,.8) !important; box-shadow: 0 12px 26px rgba(255,255,255,.12) !important; }
 .pn-tab-commercial.active { background: linear-gradient(180deg,#fff,#fce7f3) !important; color: #831843 !important; border-color: rgba(236,72,153,.8) !important; box-shadow: 0 12px 26px rgba(236,72,153,.25) !important; }
 .pn-tab-executive.active  { background: linear-gradient(180deg,#fff,#e9d5ff) !important; color: #4c1d95 !important; border-color: rgba(168,85,247,.8) !important; box-shadow: 0 12px 26px rgba(168,85,247,.22) !important; }
 .pn-tab-ga.active         { background: linear-gradient(180deg,#fff,#a7f3d0) !important; color: #064e3b !important; border-color: rgba(52,211,153,.8) !important; box-shadow: 0 12px 26px rgba(52,211,153,.22) !important; }
@@ -167,18 +168,7 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .pn-legend-dot.ga         { background: #34d399; color: #34d399; }
 .pn-legend-dot.event      { background: #fb923c; color: #fb923c; }
 
-/* ── SECTION DIVIDERS ── */
-.pn-section-header { display: flex; align-items: center; gap: 14px; margin: 32px 0 18px; width: 100%; }
-.pn-section-header-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
-.pn-section-header-line { flex: 1; height: 1px; opacity: .25; }
-.pn-section-header.commercial .pn-section-header-label { color: #fbcfe8; background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.35); }
-.pn-section-header.commercial .pn-section-header-line  { background: #ec4899; }
-.pn-section-header.executive  .pn-section-header-label { color: #d8b4fe; background: rgba(168,85,247,.12); border-color: rgba(168,85,247,.35); }
-.pn-section-header.executive  .pn-section-header-line  { background: #a855f7; }
-.pn-section-header.ga         .pn-section-header-label { color: #6ee7b7; background: rgba(52,211,153,.10); border-color: rgba(52,211,153,.32); }
-.pn-section-header.ga         .pn-section-header-line  { background: #34d399; }
-.pn-section-header.event      .pn-section-header-label { color: #fed7aa; background: rgba(251,146,60,.12); border-color: rgba(251,146,60,.35); }
-.pn-section-header.event      .pn-section-header-line  { background: #fb923c; }
+/* ── EVENT META ── */
 .event-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .event-meta-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #ffd060; background: rgba(255,200,80,.1); border: 1px solid rgba(255,200,80,.25); border-radius: 8px; padding: 4px 10px; }
 .badge.event-tag { color: #ffd060 !important; background: rgba(255,200,80,.14) !important; border-color: rgba(255,200,80,.4) !important; }
@@ -1318,31 +1308,7 @@ function pnRender() {
       +'<button onclick="pnClearAll()" class="pn-clear-all" style="font-size:13px;padding:8px 20px">'
       +'<span class="lang-es">Limpiar filtros<\/span><span class="lang-en">Clear filters<\/span><\/button><\/div>';
   } else {
-    if(tab === 'all') {
-      // En tab ALL: agrupar por categoría con section headers
-      var catOrder = ['commercial','executive','ga','event'];
-      var catLabels = {
-        commercial: {es:'✈ Aviación Comercial', en:'✈ Commercial Aviation'},
-        executive:  {es:'💼 Aviación Ejecutiva', en:'💼 Executive Aviation'},
-        ga:         {es:'🛩 Aviación General',   en:'🛩 General Aviation'},
-        event:      {es:'🗓 Eventos / Roadshows', en:'🗓 Events / Roadshows'},
-      };
-      var html = '';
-      catOrder.forEach(function(cat) {
-        var group = filtered.filter(function(j){ return j.category === cat; });
-        if(!group.length) return;
-        var lbl = catLabels[cat];
-        html += '<div class="pn-section-header '+cat+'" style="grid-column:1/-1">'
-          +'<div class="pn-section-header-line"><\/div>'
-          +'<div class="pn-section-header-label"><span class="lang-es">'+lbl.es+'<\/span><span class="lang-en">'+lbl.en+'<\/span><\/div>'
-          +'<div class="pn-section-header-line"><\/div>'
-          +'<\/div>';
-        html += group.map(buildCard).join('');
-      });
-      grid.innerHTML = html;
-    } else {
-      grid.innerHTML = filtered.map(buildCard).join('');
-    }
+    grid.innerHTML = filtered.map(buildCard).join('');
   }
   applyLang();
   updateActiveFilters(q, maxHrs);
