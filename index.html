@@ -111,24 +111,48 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .job-card.cat-event details[open] summary::after { background: rgba(255,200,80,.2); border-color: rgba(255,200,80,.4); }
 .reqs { padding: 2px 14px 12px 28px; margin: 0; color: var(--jobs-soft); font-size: 13px; line-height: 1.58; }
 .reqs li { margin-bottom: 5px; word-break: break-word; }
-/* ── CATEGORY COLORS — alta especificidad para ganar al hover ── */
-.job-card.cat-executive { border-color: rgba(180,120,255,.35) !important; background: linear-gradient(180deg, rgba(180,120,255,.09), rgba(180,120,255,.03)), rgba(12,6,22,.78) !important; }
-.job-card.cat-executive::before { background: radial-gradient(circle at 22% 0%, rgba(180,120,255,.22), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
-.job-card.cat-executive:hover { border-color: rgba(180,120,255,.7) !important; background: linear-gradient(180deg, rgba(180,120,255,.14), rgba(180,120,255,.05)), rgba(14,8,26,.88) !important; box-shadow: 0 14px 42px rgba(180,120,255,.18) !important; }
+/* ── CATEGORY COLORS — colores vivos con !important ── */
 
-.job-card.cat-ga { border-color: rgba(80,220,140,.3) !important; background: linear-gradient(180deg, rgba(80,220,140,.08), rgba(80,220,140,.02)), rgba(4,18,10,.78) !important; }
-.job-card.cat-ga::before { background: radial-gradient(circle at 22% 0%, rgba(80,220,140,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
-.job-card.cat-ga:hover { border-color: rgba(80,220,140,.65) !important; background: linear-gradient(180deg, rgba(80,220,140,.13), rgba(80,220,140,.04)), rgba(4,22,12,.88) !important; box-shadow: 0 14px 42px rgba(80,220,140,.14) !important; }
+/* Commercial — cyan eléctrico */
+.job-card.cat-commercial { border-color: rgba(56,189,248,.32) !important; background: linear-gradient(180deg, rgba(56,189,248,.07), rgba(56,189,248,.02)), rgba(2,10,20,.82) !important; }
+.job-card.cat-commercial::before { background: radial-gradient(circle at 22% 0%, rgba(56,189,248,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-commercial:hover { border-color: rgba(56,189,248,.7) !important; background: linear-gradient(180deg, rgba(56,189,248,.12), rgba(56,189,248,.04)), rgba(2,12,24,.9) !important; box-shadow: 0 14px 42px rgba(56,189,248,.15) !important; }
 
-.job-card.cat-event { border-color: rgba(255,200,80,.38) !important; background: linear-gradient(180deg, rgba(255,200,80,.10), rgba(255,200,80,.03)), rgba(14,12,4,.78) !important; }
-.job-card.cat-event::before { background: radial-gradient(circle at 22% 0%, rgba(255,200,80,.20), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
-.job-card.cat-event:hover { border-color: rgba(255,200,80,.72) !important; background: linear-gradient(180deg, rgba(255,200,80,.15), rgba(255,200,80,.05)), rgba(18,15,4,.88) !important; box-shadow: 0 14px 42px rgba(255,200,80,.16) !important; }
+/* Executive — violeta intenso */
+.job-card.cat-executive { border-color: rgba(168,85,247,.38) !important; background: linear-gradient(180deg, rgba(168,85,247,.10), rgba(168,85,247,.03)), rgba(10,4,22,.82) !important; }
+.job-card.cat-executive::before { background: radial-gradient(circle at 22% 0%, rgba(168,85,247,.22), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-executive:hover { border-color: rgba(168,85,247,.75) !important; background: linear-gradient(180deg, rgba(168,85,247,.16), rgba(168,85,247,.05)), rgba(12,4,26,.9) !important; box-shadow: 0 14px 42px rgba(168,85,247,.2) !important; }
+.job-card.cat-executive details[open] { border-color: rgba(168,85,247,.35) !important; background: rgba(168,85,247,.06) !important; }
+.job-card.cat-executive details[open] summary::after { background: rgba(168,85,247,.25) !important; border-color: rgba(168,85,247,.5) !important; }
 
-.badge.cat-executive { color: #c8a0ff !important; background: rgba(180,120,255,.14) !important; border-color: rgba(180,120,255,.35) !important; }
-.badge.cat-ga { color: #7dffc0 !important; background: rgba(80,220,140,.14) !important; border-color: rgba(80,220,140,.35) !important; }
-/* ── EVENT TAB & CARD ── */
-.pn-tab-event.active { background: linear-gradient(180deg, #fff, #ffeab0) !important; color: #02040a !important; border-color: rgba(255,255,255,.75) !important; box-shadow: 0 12px 26px rgba(255,200,80,.2) !important; }
-.pn-tab-event:not(.active):hover { background: rgba(255,200,80,.12); }
+/* General Aviation — esmeralda */
+.job-card.cat-ga { border-color: rgba(52,211,153,.32) !important; background: linear-gradient(180deg, rgba(52,211,153,.08), rgba(52,211,153,.02)), rgba(2,16,10,.82) !important; }
+.job-card.cat-ga::before { background: radial-gradient(circle at 22% 0%, rgba(52,211,153,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-ga:hover { border-color: rgba(52,211,153,.68) !important; background: linear-gradient(180deg, rgba(52,211,153,.13), rgba(52,211,153,.04)), rgba(2,20,12,.9) !important; box-shadow: 0 14px 42px rgba(52,211,153,.16) !important; }
+.job-card.cat-ga details[open] { border-color: rgba(52,211,153,.32) !important; background: rgba(52,211,153,.05) !important; }
+.job-card.cat-ga details[open] summary::after { background: rgba(52,211,153,.22) !important; border-color: rgba(52,211,153,.48) !important; }
+
+/* Event / Roadshow — naranja fuego */
+.job-card.cat-event { border-color: rgba(251,146,60,.38) !important; background: linear-gradient(180deg, rgba(251,146,60,.10), rgba(251,146,60,.03)), rgba(18,8,2,.82) !important; }
+.job-card.cat-event::before { background: radial-gradient(circle at 22% 0%, rgba(251,146,60,.22), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-event:hover { border-color: rgba(251,146,60,.75) !important; background: linear-gradient(180deg, rgba(251,146,60,.16), rgba(251,146,60,.05)), rgba(20,10,2,.9) !important; box-shadow: 0 14px 42px rgba(251,146,60,.2) !important; }
+.job-card.cat-event details[open] { border-color: rgba(251,146,60,.32) !important; background: rgba(251,146,60,.06) !important; }
+.job-card.cat-event details[open] summary::after { background: rgba(251,146,60,.22) !important; border-color: rgba(251,146,60,.5) !important; }
+
+/* Badges */
+.badge.cat-executive { color: #d8b4fe !important; background: rgba(168,85,247,.16) !important; border-color: rgba(168,85,247,.4) !important; }
+.badge.cat-ga        { color: #6ee7b7 !important; background: rgba(52,211,153,.14) !important; border-color: rgba(52,211,153,.38) !important; }
+.badge.event-tag     { color: #fed7aa !important; background: rgba(251,146,60,.15) !important; border-color: rgba(251,146,60,.42) !important; }
+
+/* ── TAB COLORS ── */
+.pn-tab-commercial.active { background: linear-gradient(180deg,#fff,#bae6fd) !important; color: #0c4a6e !important; border-color: rgba(56,189,248,.8) !important; box-shadow: 0 12px 26px rgba(56,189,248,.22) !important; }
+.pn-tab-executive.active  { background: linear-gradient(180deg,#fff,#e9d5ff) !important; color: #4c1d95 !important; border-color: rgba(168,85,247,.8) !important; box-shadow: 0 12px 26px rgba(168,85,247,.22) !important; }
+.pn-tab-ga.active         { background: linear-gradient(180deg,#fff,#a7f3d0) !important; color: #064e3b !important; border-color: rgba(52,211,153,.8) !important; box-shadow: 0 12px 26px rgba(52,211,153,.22) !important; }
+.pn-tab-event.active      { background: linear-gradient(180deg,#fff,#fed7aa) !important; color: #7c2d12 !important; border-color: rgba(251,146,60,.8) !important; box-shadow: 0 12px 26px rgba(251,146,60,.22) !important; }
+.pn-tab-commercial:not(.active):hover { border-color: rgba(56,189,248,.4); background: rgba(56,189,248,.08); }
+.pn-tab-executive:not(.active):hover  { border-color: rgba(168,85,247,.4); background: rgba(168,85,247,.08); }
+.pn-tab-ga:not(.active):hover         { border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.08); }
+.pn-tab-event:not(.active):hover      { border-color: rgba(251,146,60,.4); background: rgba(251,146,60,.08); }
 .event-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .event-meta-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #ffd060; background: rgba(255,200,80,.1); border: 1px solid rgba(255,200,80,.25); border-radius: 8px; padding: 4px 10px; }
 .badge.event-tag { color: #ffd060 !important; background: rgba(255,200,80,.14) !important; border-color: rgba(255,200,80,.4) !important; }
@@ -720,18 +744,22 @@ details summary .reqs-count {
     <div class="pn-controls">
 
       <div class="pn-tabs">
-        <button class="pn-tab active" data-tab="commercial" onclick="pnSetTab('commercial')">
-          <span class="lang-es">Aviación Comercial</span><span class="lang-en">Commercial Aviation</span>
+        <button class="pn-tab active" data-tab="all" onclick="pnSetTab('all')">
+          <span class="lang-es">Todas</span><span class="lang-en">All</span>
+          <span class="pn-tab-count" id="count-all">(0)</span>
+        </button>
+        <button class="pn-tab pn-tab-commercial" data-tab="commercial" onclick="pnSetTab('commercial')">
+          <span class="lang-es">Comercial</span><span class="lang-en">Commercial</span>
           <span class="pn-tab-count" id="count-commercial">(0)</span>
           <span class="pn-tab-new" id="new-commercial"></span>
         </button>
-        <button class="pn-tab" data-tab="executive" onclick="pnSetTab('executive')">
-          <span class="lang-es">Aviación Ejecutiva</span><span class="lang-en">Executive Aviation</span>
+        <button class="pn-tab pn-tab-executive" data-tab="executive" onclick="pnSetTab('executive')">
+          <span class="lang-es">Ejecutiva</span><span class="lang-en">Executive</span>
           <span class="pn-tab-count" id="count-executive">(0)</span>
           <span class="pn-tab-new" id="new-executive"></span>
         </button>
-        <button class="pn-tab" data-tab="ga" onclick="pnSetTab('ga')">
-          <span class="lang-es">Aviación General</span><span class="lang-en">General Aviation</span>
+        <button class="pn-tab pn-tab-ga" data-tab="ga" onclick="pnSetTab('ga')">
+          <span class="lang-es">General</span><span class="lang-en">General</span>
           <span class="pn-tab-count" id="count-ga">(0)</span>
           <span class="pn-tab-new" id="new-ga"></span>
         </button>
@@ -858,7 +886,7 @@ var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 
 var allJobs = [];
 var lang    = 'en';
-var tab     = 'commercial';
+var tab     = 'all';
 var role    = 'all';
 var acFilter = null;
 var countryFilter = '';
@@ -1109,11 +1137,12 @@ function fetchJobsNow() {
 }
 
 function updateCounts() {
-  var c    = {commercial:0, executive:0, ga:0, event:0};
+  var c    = {all:0, commercial:0, executive:0, ga:0, event:0};
   var newC = {commercial:0, executive:0, ga:0, event:0};
   var weekAgo = Date.now() - 7*24*3600*1000;
 
   allJobs.forEach(function(j){
+    c.all++;
     if(c[j.category] !== undefined) {
       c[j.category]++;
       if(j.created_at && new Date(j.created_at).getTime() > weekAgo)
@@ -1138,7 +1167,6 @@ function updateCounts() {
   var totalEl = document.getElementById('pnTotalCount');
   if(totalEl) totalEl.textContent = allJobs.length;
 
-  // Actualizar label del sort si hay urgentes
   var urgentes = allJobs.filter(function(j){
     return j.deadline && daysUntil(j.deadline) !== null && daysUntil(j.deadline) <= 5;
   }).length;
@@ -1221,8 +1249,16 @@ function pnRender() {
   if(hv) hv.textContent = maxHrs >= 5500 ? '5500+' : maxHrs;
 
   var filtered = allJobs.filter(function(j){
-    return j.category === tab
-      && matchRole(j, role)
+    // Tab filter
+    if(tab === 'all') {
+      // All: show everything except events (events go in their own tab)
+      // Actually show everything, user can switch to events tab for those
+    } else if(tab === 'event') {
+      if(j.category !== 'event') return false;
+    } else {
+      if(j.category !== tab) return false;
+    }
+    return matchRole(j, role)
       && (maxHrs >= 5500 || (j.min_hours||0) <= maxHrs)
       && _mq(_corpus(j), q)
       && (!acFilter || (j.aircraft_types||[]).indexOf(acFilter) !== -1)
