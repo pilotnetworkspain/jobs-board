@@ -113,10 +113,12 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .reqs li { margin-bottom: 5px; word-break: break-word; }
 /* ── CATEGORY COLORS — colores vivos con !important ── */
 
-/* Commercial — cyan eléctrico */
-.job-card.cat-commercial { border-color: rgba(56,189,248,.32) !important; background: linear-gradient(180deg, rgba(56,189,248,.07), rgba(56,189,248,.02)), rgba(2,10,20,.82) !important; }
-.job-card.cat-commercial::before { background: radial-gradient(circle at 22% 0%, rgba(56,189,248,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
-.job-card.cat-commercial:hover { border-color: rgba(56,189,248,.7) !important; background: linear-gradient(180deg, rgba(56,189,248,.12), rgba(56,189,248,.04)), rgba(2,12,24,.9) !important; box-shadow: 0 14px 42px rgba(56,189,248,.15) !important; }
+/* Commercial — magenta eléctrico */
+.job-card.cat-commercial { border-color: rgba(236,72,153,.32) !important; background: linear-gradient(180deg, rgba(236,72,153,.07), rgba(236,72,153,.02)), rgba(20,2,12,.82) !important; }
+.job-card.cat-commercial::before { background: radial-gradient(circle at 22% 0%, rgba(236,72,153,.18), transparent 34%), linear-gradient(180deg, rgba(255,255,255,.10), transparent 32%); }
+.job-card.cat-commercial:hover { border-color: rgba(236,72,153,.7) !important; background: linear-gradient(180deg, rgba(236,72,153,.12), rgba(236,72,153,.04)), rgba(24,2,14,.9) !important; box-shadow: 0 14px 42px rgba(236,72,153,.18) !important; }
+.job-card.cat-commercial details[open] { border-color: rgba(236,72,153,.32) !important; background: rgba(236,72,153,.06) !important; }
+.job-card.cat-commercial details[open] summary::after { background: rgba(236,72,153,.22) !important; border-color: rgba(236,72,153,.5) !important; }
 
 /* Executive — violeta intenso */
 .job-card.cat-executive { border-color: rgba(168,85,247,.38) !important; background: linear-gradient(180deg, rgba(168,85,247,.10), rgba(168,85,247,.03)), rgba(10,4,22,.82) !important; }
@@ -140,19 +142,43 @@ details[open] summary::after { content: "×"; background: rgba(110,168,255,.2); 
 .job-card.cat-event details[open] summary::after { background: rgba(251,146,60,.22) !important; border-color: rgba(251,146,60,.5) !important; }
 
 /* Badges */
-.badge.cat-executive { color: #d8b4fe !important; background: rgba(168,85,247,.16) !important; border-color: rgba(168,85,247,.4) !important; }
-.badge.cat-ga        { color: #6ee7b7 !important; background: rgba(52,211,153,.14) !important; border-color: rgba(52,211,153,.38) !important; }
-.badge.event-tag     { color: #fed7aa !important; background: rgba(251,146,60,.15) !important; border-color: rgba(251,146,60,.42) !important; }
+.badge.cat-commercial { color: #fbcfe8 !important; background: rgba(236,72,153,.16) !important; border-color: rgba(236,72,153,.4) !important; }
+.badge.cat-executive  { color: #d8b4fe !important; background: rgba(168,85,247,.16) !important; border-color: rgba(168,85,247,.4) !important; }
+.badge.cat-ga         { color: #6ee7b7 !important; background: rgba(52,211,153,.14) !important; border-color: rgba(52,211,153,.38) !important; }
+.badge.event-tag      { color: #fed7aa !important; background: rgba(251,146,60,.15) !important; border-color: rgba(251,146,60,.42) !important; }
 
 /* ── TAB COLORS ── */
-.pn-tab-commercial.active { background: linear-gradient(180deg,#fff,#bae6fd) !important; color: #0c4a6e !important; border-color: rgba(56,189,248,.8) !important; box-shadow: 0 12px 26px rgba(56,189,248,.22) !important; }
+.pn-tab-commercial.active { background: linear-gradient(180deg,#fff,#fce7f3) !important; color: #831843 !important; border-color: rgba(236,72,153,.8) !important; box-shadow: 0 12px 26px rgba(236,72,153,.25) !important; }
 .pn-tab-executive.active  { background: linear-gradient(180deg,#fff,#e9d5ff) !important; color: #4c1d95 !important; border-color: rgba(168,85,247,.8) !important; box-shadow: 0 12px 26px rgba(168,85,247,.22) !important; }
 .pn-tab-ga.active         { background: linear-gradient(180deg,#fff,#a7f3d0) !important; color: #064e3b !important; border-color: rgba(52,211,153,.8) !important; box-shadow: 0 12px 26px rgba(52,211,153,.22) !important; }
 .pn-tab-event.active      { background: linear-gradient(180deg,#fff,#fed7aa) !important; color: #7c2d12 !important; border-color: rgba(251,146,60,.8) !important; box-shadow: 0 12px 26px rgba(251,146,60,.22) !important; }
-.pn-tab-commercial:not(.active):hover { border-color: rgba(56,189,248,.4); background: rgba(56,189,248,.08); }
+.pn-tab-commercial:not(.active):hover { border-color: rgba(236,72,153,.4); background: rgba(236,72,153,.08); }
 .pn-tab-executive:not(.active):hover  { border-color: rgba(168,85,247,.4); background: rgba(168,85,247,.08); }
 .pn-tab-ga:not(.active):hover         { border-color: rgba(52,211,153,.4); background: rgba(52,211,153,.08); }
 .pn-tab-event:not(.active):hover      { border-color: rgba(251,146,60,.4); background: rgba(251,146,60,.08); }
+
+/* ── LEYENDA DE COLORES ── */
+.pn-legend { display: flex; flex-direction: column; gap: 8px; padding: 18px 22px; border: 1px solid rgba(255,255,255,.08); border-radius: 16px; background: rgba(255,255,255,.03); backdrop-filter: blur(10px); min-width: 180px; }
+.pn-legend-title { font-size: 10px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; color: var(--jobs-muted); margin-bottom: 4px; }
+.pn-legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 700; color: var(--jobs-soft); }
+.pn-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 8px currentColor; }
+.pn-legend-dot.commercial { background: #ec4899; color: #ec4899; }
+.pn-legend-dot.executive  { background: #a855f7; color: #a855f7; }
+.pn-legend-dot.ga         { background: #34d399; color: #34d399; }
+.pn-legend-dot.event      { background: #fb923c; color: #fb923c; }
+
+/* ── SECTION DIVIDERS ── */
+.pn-section-header { display: flex; align-items: center; gap: 14px; margin: 32px 0 18px; width: 100%; }
+.pn-section-header-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; padding: 6px 14px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+.pn-section-header-line { flex: 1; height: 1px; opacity: .25; }
+.pn-section-header.commercial .pn-section-header-label { color: #fbcfe8; background: rgba(236,72,153,.12); border-color: rgba(236,72,153,.35); }
+.pn-section-header.commercial .pn-section-header-line  { background: #ec4899; }
+.pn-section-header.executive  .pn-section-header-label { color: #d8b4fe; background: rgba(168,85,247,.12); border-color: rgba(168,85,247,.35); }
+.pn-section-header.executive  .pn-section-header-line  { background: #a855f7; }
+.pn-section-header.ga         .pn-section-header-label { color: #6ee7b7; background: rgba(52,211,153,.10); border-color: rgba(52,211,153,.32); }
+.pn-section-header.ga         .pn-section-header-line  { background: #34d399; }
+.pn-section-header.event      .pn-section-header-label { color: #fed7aa; background: rgba(251,146,60,.12); border-color: rgba(251,146,60,.35); }
+.pn-section-header.event      .pn-section-header-line  { background: #fb923c; }
 .event-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
 .event-meta-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #ffd060; background: rgba(255,200,80,.1); border: 1px solid rgba(255,200,80,.25); border-radius: 8px; padding: 4px 10px; }
 .badge.event-tag { color: #ffd060 !important; background: rgba(255,200,80,.14) !important; border-color: rgba(255,200,80,.4) !important; }
@@ -841,6 +867,17 @@ details summary .reqs-count {
       <div class="pn-results-info" id="pnResultsInfo"></div>
     </div></div>
 
+    <!-- LEYENDA DE COLORES -->
+    <div id="pnLegend" style="display:flex;justify-content:flex-end;margin-bottom:18px;padding:0 4px;">
+      <div class="pn-legend">
+        <div class="pn-legend-title"><span class="lang-es">Tipo de oferta</span><span class="lang-en">Offer type</span></div>
+        <div class="pn-legend-item"><span class="pn-legend-dot commercial"></span><span class="lang-es">Comercial</span><span class="lang-en">Commercial</span></div>
+        <div class="pn-legend-item"><span class="pn-legend-dot executive"></span><span class="lang-es">Ejecutiva</span><span class="lang-en">Executive</span></div>
+        <div class="pn-legend-item"><span class="pn-legend-dot ga"></span><span class="lang-es">General</span><span class="lang-en">General Aviation</span></div>
+        <div class="pn-legend-item"><span class="pn-legend-dot event"></span><span class="lang-es">Evento / Roadshow</span><span class="lang-en">Event / Roadshow</span></div>
+      </div>
+    </div>
+
     <div class="jobs-grid" id="pnGrid">
       <div class="pn-skeleton-grid">
         <div class="pn-skeleton-card">
@@ -1281,7 +1318,31 @@ function pnRender() {
       +'<button onclick="pnClearAll()" class="pn-clear-all" style="font-size:13px;padding:8px 20px">'
       +'<span class="lang-es">Limpiar filtros<\/span><span class="lang-en">Clear filters<\/span><\/button><\/div>';
   } else {
-    grid.innerHTML = filtered.map(buildCard).join('');
+    if(tab === 'all') {
+      // En tab ALL: agrupar por categoría con section headers
+      var catOrder = ['commercial','executive','ga','event'];
+      var catLabels = {
+        commercial: {es:'✈ Aviación Comercial', en:'✈ Commercial Aviation'},
+        executive:  {es:'💼 Aviación Ejecutiva', en:'💼 Executive Aviation'},
+        ga:         {es:'🛩 Aviación General',   en:'🛩 General Aviation'},
+        event:      {es:'🗓 Eventos / Roadshows', en:'🗓 Events / Roadshows'},
+      };
+      var html = '';
+      catOrder.forEach(function(cat) {
+        var group = filtered.filter(function(j){ return j.category === cat; });
+        if(!group.length) return;
+        var lbl = catLabels[cat];
+        html += '<div class="pn-section-header '+cat+'" style="grid-column:1/-1">'
+          +'<div class="pn-section-header-line"><\/div>'
+          +'<div class="pn-section-header-label"><span class="lang-es">'+lbl.es+'<\/span><span class="lang-en">'+lbl.en+'<\/span><\/div>'
+          +'<div class="pn-section-header-line"><\/div>'
+          +'<\/div>';
+        html += group.map(buildCard).join('');
+      });
+      grid.innerHTML = html;
+    } else {
+      grid.innerHTML = filtered.map(buildCard).join('');
+    }
   }
   applyLang();
   updateActiveFilters(q, maxHrs);
