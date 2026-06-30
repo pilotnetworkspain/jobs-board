@@ -111,6 +111,48 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .pn-chip[data-role-filter="captain"]:not(.active):hover { border-color: rgba(217,185,127,.4); background: rgba(217,185,127,.08); }
 .pn-chip[data-role-filter="cadet"]:not(.active):hover   { border-color: rgba(163,217,127,.4); background: rgba(163,217,127,.08); }
 .pn-chip[data-role-filter="fi"]:not(.active):hover      { border-color: rgba(201,143,217,.4); background: rgba(201,143,217,.08); }
+
+/* ── ROLE TABS ROW — segunda fila de pestañas estilo categoría ── */
+.pn-role-tabs-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 2px; }
+.pn-role-tabs-label { font-size: 10px; font-weight: 900; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.32); flex-shrink: 0; }
+.pn-role-tabs { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; }
+.pn-role-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.75); border-radius: 999px;
+  min-height: 36px; padding: 7px 16px;
+  font-size: 11.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase;
+  cursor: pointer; transition: .2s ease; font-family: inherit;
+}
+.pn-role-tab:hover { background: rgba(255,255,255,.08); }
+.pn-role-tab-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; background: currentColor; opacity: .85; }
+.pn-role-tab.active { color: #0f172a; border-color: rgba(255,255,255,.7); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.pn-role-tab:not(.active).is-hidden { display: none !important; }
+
+/* Estado activo con color propio por rol — paleta pastel, distinta de categorías */
+.pn-role-tab[data-role-filter="all"].active      { background: linear-gradient(180deg, #fff, #e2e8f0); }
+.pn-role-tab[data-role-filter="fo"].active       { background: linear-gradient(180deg, #fff, #d9eef7); color: #16404f; border-color: rgba(127,196,221,.75); box-shadow: 0 6px 16px rgba(127,196,221,.18); }
+.pn-role-tab[data-role-filter="captain"].active  { background: linear-gradient(180deg, #fff, #f5e8d2); color: #5c4318; border-color: rgba(217,185,127,.75); box-shadow: 0 6px 16px rgba(217,185,127,.18); }
+.pn-role-tab[data-role-filter="cadet"].active    { background: linear-gradient(180deg, #fff, #e3f5d2); color: #2f4f18; border-color: rgba(163,217,127,.75); box-shadow: 0 6px 16px rgba(163,217,127,.18); }
+.pn-role-tab[data-role-filter="fi"].active       { background: linear-gradient(180deg, #fff, #f0dcf5); color: #4f1f5c; border-color: rgba(201,143,217,.75); box-shadow: 0 6px 16px rgba(201,143,217,.18); }
+
+/* Hover con color propio cuando no está activo */
+.pn-role-tab.role-fo:not(.active):hover       { border-color: rgba(127,196,221,.4); background: rgba(127,196,221,.1); color: #b4d9e8; }
+.pn-role-tab.role-captain:not(.active):hover  { border-color: rgba(217,185,127,.4); background: rgba(217,185,127,.1); color: #e8d3b4; }
+.pn-role-tab.role-cadet:not(.active):hover    { border-color: rgba(163,217,127,.4); background: rgba(163,217,127,.1); color: #c7e8b4; }
+.pn-role-tab.role-fi:not(.active):hover       { border-color: rgba(201,143,217,.4); background: rgba(201,143,217,.1); color: #e0c2e8; }
+
+/* Punto de color visible siempre, también en estado inactivo */
+.pn-role-tab.role-fo       .pn-role-tab-dot { background: #7fc4dd; }
+.pn-role-tab.role-captain  .pn-role-tab-dot { background: #d9b97f; }
+.pn-role-tab.role-cadet    .pn-role-tab-dot { background: #a3d97f; }
+.pn-role-tab.role-fi       .pn-role-tab-dot { background: #c98fd9; }
+.pn-role-tab[data-role-filter="all"] .pn-role-tab-dot { display: none; }
+
+@media (max-width: 640px) {
+  .pn-role-tabs-wrap { flex-direction: column; gap: 8px; }
+  .pn-role-tab { font-size: 10.5px; padding: 6px 12px; min-height: 32px; }
+}
 .badge.low-hours { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
 .badge.type-rated { color: #eadbff; background: rgba(181,108,255,.13); border-color: rgba(181,108,255,.32); }
 .badge.ntr { color: #d8fbff; background: rgba(125,227,255,.12); border-color: rgba(125,227,255,.30); }
@@ -810,6 +852,28 @@ details summary .reqs-count {
         </button>
       </div>
 
+      <!-- ROLE TABS — segunda fila de pestañas, mismo lenguaje visual que categorías -->
+      <div class="pn-role-tabs-wrap">
+        <span class="pn-role-tabs-label"><span class="lang-es">Puesto</span><span class="lang-en">Role</span></span>
+        <div class="pn-role-tabs">
+          <button class="pn-role-tab active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')">
+            <span class="lang-es">Todos</span><span class="lang-en">All</span>
+          </button>
+          <button class="pn-role-tab role-fo" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnToggleRole('fo')">
+            <span class="pn-role-tab-dot"></span>First Officer
+          </button>
+          <button class="pn-role-tab role-captain" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnToggleRole('captain')">
+            <span class="pn-role-tab-dot"></span><span class="lang-es">Comandante</span><span class="lang-en">Captain</span>
+          </button>
+          <button class="pn-role-tab role-cadet" data-role-filter="cadet" data-tab-show="commercial" onclick="pnToggleRole('cadet')">
+            <span class="pn-role-tab-dot"></span><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span>
+          </button>
+          <button class="pn-role-tab role-fi" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')">
+            <span class="pn-role-tab-dot"></span><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span>
+          </button>
+        </div>
+      </div>
+
       <div class="pn-search-row">
         <div class="pn-search-box">
           <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
@@ -830,13 +894,6 @@ details summary .reqs-count {
       </div>
 
       <div class="pn-search-row">
-        <div class="pn-filters-row">
-          <button class="pn-chip active" data-role-filter="all" data-tab-show="commercial executive ga" onclick="pnSetRole('all')"><span class="lang-es">Todos</span><span class="lang-en">All</span></button>
-          <button class="pn-chip" data-role-filter="fo" data-tab-show="commercial executive" onclick="pnToggleRole('fo')">First Officer</button>
-          <button class="pn-chip" data-role-filter="captain" data-tab-show="commercial executive" onclick="pnToggleRole('captain')"><span class="lang-es">Comandante</span><span class="lang-en">Captain</span></button>
-          <button class="pn-chip" data-role-filter="cadet" data-tab-show="commercial" onclick="pnToggleRole('cadet')"><span class="lang-es">Cadete</span><span class="lang-en">Cadet</span></button>
-          <button class="pn-chip" data-role-filter="fi" data-tab-show="ga" onclick="pnSetRole('fi')"><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span></button>
-        </div>
         <div class="pn-hours-box">
           <span class="pn-hours-label"><span class="lang-es">Horas máx.</span><span class="lang-en">Max hours</span></span>
           <input type="range" class="pn-hours-slider" id="pnHours" min="0" max="5500" step="100" value="5500" oninput="pnRender()">
