@@ -87,6 +87,30 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .badge.captain { color: #ffe7c2; background: rgba(255,177,82,.13); border-color: rgba(255,177,82,.34); }
 .badge.cadet { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
 .badge.fi { color: #ffe9d6; background: rgba(255,177,82,.10); border-color: rgba(255,177,82,.28); }
+
+/* ── ROLE PILL — indicador de puesto, paleta pastel distinta a categorías ── */
+.pn-role-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 7px; }
+.pn-role-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pn-role-pill.role-fo       { color: #b4d9e8; }
+.pn-role-pill.role-fo       .pn-role-dot { background: #7fc4dd; box-shadow: 0 0 6px rgba(127,196,221,.6); }
+.pn-role-pill.role-captain  { color: #e8d3b4; }
+.pn-role-pill.role-captain  .pn-role-dot { background: #d9b97f; box-shadow: 0 0 6px rgba(217,185,127,.6); }
+.pn-role-pill.role-cadet    { color: #c7e8b4; }
+.pn-role-pill.role-cadet    .pn-role-dot { background: #a3d97f; box-shadow: 0 0 6px rgba(163,217,127,.6); }
+.pn-role-pill.role-fi       { color: #e0c2e8; }
+.pn-role-pill.role-fi       .pn-role-dot { background: #c98fd9; box-shadow: 0 0 6px rgba(201,143,217,.6); }
+.pn-role-pill.role-other    { color: #c9ccd6; }
+.pn-role-pill.role-other    .pn-role-dot { background: #9ea3b3; }
+
+/* Colores en los chips de filtro de rol — mismo código de color */
+.pn-chip[data-role-filter="fo"].active      { background: linear-gradient(180deg, #fff, #d9eef7) !important; color: #16404f !important; border-color: rgba(127,196,221,.7) !important; }
+.pn-chip[data-role-filter="captain"].active { background: linear-gradient(180deg, #fff, #f5e8d2) !important; color: #5c4318 !important; border-color: rgba(217,185,127,.7) !important; }
+.pn-chip[data-role-filter="cadet"].active   { background: linear-gradient(180deg, #fff, #e3f5d2) !important; color: #2f4f18 !important; border-color: rgba(163,217,127,.7) !important; }
+.pn-chip[data-role-filter="fi"].active      { background: linear-gradient(180deg, #fff, #f0dcf5) !important; color: #4f1f5c !important; border-color: rgba(201,143,217,.7) !important; }
+.pn-chip[data-role-filter="fo"]:not(.active):hover      { border-color: rgba(127,196,221,.4); background: rgba(127,196,221,.08); }
+.pn-chip[data-role-filter="captain"]:not(.active):hover { border-color: rgba(217,185,127,.4); background: rgba(217,185,127,.08); }
+.pn-chip[data-role-filter="cadet"]:not(.active):hover   { border-color: rgba(163,217,127,.4); background: rgba(163,217,127,.08); }
+.pn-chip[data-role-filter="fi"]:not(.active):hover      { border-color: rgba(201,143,217,.4); background: rgba(201,143,217,.08); }
 .badge.low-hours { color: #dcfff0; background: rgba(125,255,186,.12); border-color: rgba(125,255,186,.30); }
 .badge.type-rated { color: #eadbff; background: rgba(181,108,255,.13); border-color: rgba(181,108,255,.32); }
 .badge.ntr { color: #d8fbff; background: rgba(125,227,255,.12); border-color: rgba(125,227,255,.30); }
@@ -1414,6 +1438,20 @@ function buildCard(j) {
   var titleHtml = titleEs===titleEn ? esc(titleEs)
     : '<span class="lang-es">'+esc(titleEs)+'<\/span><span class="lang-en">'+esc(titleEn)+'<\/span>';
 
+  // ── Role pill — indicador de puesto con color propio ──
+  var roleMap = {
+    fo:      {cls:'role-fo',      es:'First Officer', en:'First Officer'},
+    captain: {cls:'role-captain', es:'Comandante',     en:'Captain'},
+    cadet:   {cls:'role-cadet',   es:'Cadete',         en:'Cadet'},
+    fi:      {cls:'role-fi',      es:'Instructor',     en:'Flight Instructor'},
+  };
+  var roleKey = (j.role||'').toLowerCase();
+  var rm = roleMap[roleKey];
+  var rolePillHtml = rm
+    ? '<div class="pn-role-pill '+rm.cls+'"><span class="pn-role-dot"><\/span>'
+      +'<span class="lang-es">'+rm.es+'<\/span><span class="lang-en">'+rm.en+'<\/span><\/div>'
+    : '';
+
   // ── Badges extra ──
   var hoursBadge = (j.min_hours&&j.min_hours>0)
     ? '<span class="badge pn-hours-badge">⏱ '+j.min_hours+'h+<\/span>' : '';
@@ -1512,6 +1550,7 @@ function buildCard(j) {
     +'<div class="brand">'+logo
     +'<div><p class="company">'+esc(j.company)+'<\/p>'
     +'<p class="subtitle">'+esc(j.subtitle||'')+'<\/p><\/div><\/div>'
+    +rolePillHtml
     +'<div class="title">'+titleHtml+'<\/div>'
     +eventMetaHtml
     +(isEventCard ? '' : metaHtml)
