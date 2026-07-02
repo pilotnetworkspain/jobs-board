@@ -418,48 +418,28 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .pn-results-info.pop { animation: countPop .25s ease; }
 @keyframes hlPulse { 0%,100%{box-shadow:var(--jobs-shadow-soft)} 50%{box-shadow:0 0 0 3px rgba(110,168,255,.6),var(--jobs-shadow)} }
 
-/* ── DEEP LINK SPOTLIGHT — efecto cuando llegas desde Telegram ── */
+/* ── DEEP LINK SPOTLIGHT — sin overlay, solo glow limpio ── */
 @keyframes pnSpotIn {
-  0%   { transform: scale(.94) translateY(16px); opacity: 0; box-shadow: none; }
-  40%  { transform: scale(1.025) translateY(-4px); opacity: 1;
-         box-shadow: 0 0 0 3px rgba(91,157,255,.9), 0 0 60px 20px rgba(91,157,255,.35), 0 24px 64px rgba(0,0,0,.6); }
-  70%  { transform: scale(1.01) translateY(-1px);
-         box-shadow: 0 0 0 2px rgba(91,157,255,.7), 0 0 40px 12px rgba(91,157,255,.2), 0 16px 48px rgba(0,0,0,.5); }
-  100% { transform: scale(1) translateY(0);
-         box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12), 0 8px 32px rgba(0,0,0,.4); }
+  0%   { box-shadow: 0 0 0 0 rgba(91,157,255,0); }
+  25%  { box-shadow: 0 0 0 4px rgba(91,157,255,1), 0 0 40px 12px rgba(91,157,255,.45); }
+  60%  { box-shadow: 0 0 0 3px rgba(91,157,255,.8), 0 0 28px 8px rgba(91,157,255,.3); }
+  100% { box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 16px 4px rgba(91,157,255,.15); }
+}
+@keyframes pnSpotHold {
+  0%,100% { box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 16px 4px rgba(91,157,255,.15); }
+  50%     { box-shadow: 0 0 0 3px rgba(91,157,255,.75), 0 0 28px 8px rgba(91,157,255,.28); }
 }
 @keyframes pnSpotOut {
-  from { box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12); }
+  from { box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 16px 4px rgba(91,157,255,.15); }
   to   { box-shadow: var(--jobs-shadow-soft); }
 }
-@keyframes pnOverlayIn  { from { opacity: 0; } to { opacity: 1; } }
-@keyframes pnOverlayOut { from { opacity: 1; } to { opacity: 0; } }
+.job-card.pn-highlight      { animation: pnSpotIn .4s ease forwards !important; }
+.job-card.pn-highlight-hold { animation: pnSpotHold 1.8s ease-in-out 2 forwards !important; }
+.job-card.pn-highlight-out  { animation: pnSpotOut .6s ease forwards !important; }
 
-.job-card.pn-highlight {
-  animation: pnSpotIn .55s cubic-bezier(.22,1,.36,1) forwards !important;
-  position: relative; z-index: 10;
-}
-.job-card.pn-highlight-hold {
-  box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12), 0 8px 32px rgba(0,0,0,.4) !important;
-  position: relative; z-index: 10;
-}
-.job-card.pn-highlight-out {
-  animation: pnSpotOut .8s ease forwards !important;
-}
-#pn-spotlight-overlay {
-  position: fixed; inset: 0; z-index: 9;
-  background: rgba(6,10,20,.72);
-  backdrop-filter: blur(2px);
-  pointer-events: none;
-  animation: pnOverlayIn .35s ease forwards;
-}
-#pn-spotlight-overlay.out {
-  animation: pnOverlayOut .6s ease forwards;
-}
-/* Badge "Desde Telegram" que aparece en la card destacada */
 .pn-tg-badge {
   display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(91,157,255,.18); border: 1px solid rgba(91,157,255,.4);
+  background: rgba(91,157,255,.12); border: 1px solid rgba(91,157,255,.3);
   color: #7fb8ff; border-radius: 20px; font-size: 10px; font-weight: 800;
   letter-spacing: .5px; padding: 3px 9px; margin-bottom: 8px;
   text-transform: uppercase;
@@ -1953,7 +1933,7 @@ function pnOpenDeepLinkJob(jobId) {
   var job = allJobs.find(function(j){ return String(j.id)===String(jobId); });
   if(!job) return;
 
-  // 1. Cambiar tab a la categoría correcta para que la card renderice
+  // Cambiar al tab correcto
   tab = job.category||'commercial'; role = 'all'; acFilter = null;
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===tab);
@@ -1965,61 +1945,38 @@ function pnOpenDeepLinkJob(jobId) {
   });
   buildAcChips(); pnRender();
 
-  // 2. Spotlight effect — esperar a que el DOM renderice
   setTimeout(function(){
     var el = document.getElementById('job-'+jobId);
     if(!el) return;
 
-    // Añadir badge "Desde Telegram" al principio de la card
-    var fromTg = window._deepLinkSource === 'telegram';
-    if(fromTg && !el.querySelector('.pn-tg-badge')){
+    // Badge Telegram si viene del bot
+    if(window._deepLinkSource==='telegram' && !el.querySelector('.pn-tg-badge')){
       var badge = document.createElement('div');
       badge.className = 'pn-tg-badge';
       badge.innerHTML = '✈ Desde Telegram';
       el.insertBefore(badge, el.firstChild);
     }
 
-    // Overlay oscuro detrás de todas las cards
-    var overlay = document.createElement('div');
-    overlay.id = 'pn-spotlight-overlay';
-    document.body.appendChild(overlay);
-
-    // Scroll suave al centro
+    // Scroll limpio — usar scrollIntoView con block:start y luego ajustar offset
     el.scrollIntoView({behavior:'smooth', block:'center'});
 
-    // Animación de entrada
-    el.classList.add('pn-highlight');
-
-    // Abrir collapsibles de requisitos y beneficios automáticamente
+    // Auto-expand detalles
     el.querySelectorAll('details').forEach(function(d){ d.open = true; });
 
-    // Mantener el glow después de la animación de entrada
+    // Glow entrada
+    el.classList.add('pn-highlight');
     setTimeout(function(){
       el.classList.remove('pn-highlight');
       el.classList.add('pn-highlight-hold');
-    }, 600);
+      // Quitar glow tras 3.6s (2 pulsos de 1.8s)
+      setTimeout(function(){
+        el.classList.remove('pn-highlight-hold');
+        el.classList.add('pn-highlight-out');
+        setTimeout(function(){ el.classList.remove('pn-highlight-out'); }, 650);
+      }, 3600);
+    }, 420);
 
-    // Quitar spotlight tras 4.5 segundos
-    setTimeout(function(){
-      // Overlay fade out
-      overlay.classList.add('out');
-      setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 650);
-      // Card fade out del glow
-      el.classList.remove('pn-highlight-hold');
-      el.classList.add('pn-highlight-out');
-      setTimeout(function(){ el.classList.remove('pn-highlight-out'); }, 850);
-    }, 4500);
-
-    // click en overlay → quita el spotlight
-    overlay.addEventListener('click', function(){
-      overlay.classList.add('out');
-      setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 650);
-      el.classList.remove('pn-highlight-hold');
-      el.classList.add('pn-highlight-out');
-      setTimeout(function(){ el.classList.remove('pn-highlight-out'); }, 850);
-    });
-
-  }, 160);
+  }, 180);
 }
 
 function resizeParent() {
