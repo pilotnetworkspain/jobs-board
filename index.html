@@ -417,7 +417,53 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 @keyframes countPop { 0%{transform:scale(1.3);opacity:.5} 100%{transform:scale(1);opacity:1} }
 .pn-results-info.pop { animation: countPop .25s ease; }
 @keyframes hlPulse { 0%,100%{box-shadow:var(--jobs-shadow-soft)} 50%{box-shadow:0 0 0 3px rgba(110,168,255,.6),var(--jobs-shadow)} }
-.job-card.pn-highlight { animation: hlPulse 1s ease 3 !important; }
+
+/* ── DEEP LINK SPOTLIGHT — efecto cuando llegas desde Telegram ── */
+@keyframes pnSpotIn {
+  0%   { transform: scale(.94) translateY(16px); opacity: 0; box-shadow: none; }
+  40%  { transform: scale(1.025) translateY(-4px); opacity: 1;
+         box-shadow: 0 0 0 3px rgba(91,157,255,.9), 0 0 60px 20px rgba(91,157,255,.35), 0 24px 64px rgba(0,0,0,.6); }
+  70%  { transform: scale(1.01) translateY(-1px);
+         box-shadow: 0 0 0 2px rgba(91,157,255,.7), 0 0 40px 12px rgba(91,157,255,.2), 0 16px 48px rgba(0,0,0,.5); }
+  100% { transform: scale(1) translateY(0);
+         box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12), 0 8px 32px rgba(0,0,0,.4); }
+}
+@keyframes pnSpotOut {
+  from { box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12); }
+  to   { box-shadow: var(--jobs-shadow-soft); }
+}
+@keyframes pnOverlayIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pnOverlayOut { from { opacity: 1; } to { opacity: 0; } }
+
+.job-card.pn-highlight {
+  animation: pnSpotIn .55s cubic-bezier(.22,1,.36,1) forwards !important;
+  position: relative; z-index: 10;
+}
+.job-card.pn-highlight-hold {
+  box-shadow: 0 0 0 2px rgba(91,157,255,.5), 0 0 24px 6px rgba(91,157,255,.12), 0 8px 32px rgba(0,0,0,.4) !important;
+  position: relative; z-index: 10;
+}
+.job-card.pn-highlight-out {
+  animation: pnSpotOut .8s ease forwards !important;
+}
+#pn-spotlight-overlay {
+  position: fixed; inset: 0; z-index: 9;
+  background: rgba(6,10,20,.72);
+  backdrop-filter: blur(2px);
+  pointer-events: none;
+  animation: pnOverlayIn .35s ease forwards;
+}
+#pn-spotlight-overlay.out {
+  animation: pnOverlayOut .6s ease forwards;
+}
+/* Badge "Desde Telegram" que aparece en la card destacada */
+.pn-tg-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(91,157,255,.18); border: 1px solid rgba(91,157,255,.4);
+  color: #7fb8ff; border-radius: 20px; font-size: 10px; font-weight: 800;
+  letter-spacing: .5px; padding: 3px 9px; margin-bottom: 8px;
+  text-transform: uppercase;
+}
 .pn-hours-badge { background:rgba(125,227,255,.1); border-color:rgba(125,227,255,.3); color:#7de3ff; }
 
 
@@ -1906,6 +1952,8 @@ function pnToggleRole(r) {
 function pnOpenDeepLinkJob(jobId) {
   var job = allJobs.find(function(j){ return String(j.id)===String(jobId); });
   if(!job) return;
+
+  // 1. Cambiar tab a la categoría correcta para que la card renderice
   tab = job.category||'commercial'; role = 'all'; acFilter = null;
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===tab);
@@ -1916,15 +1964,62 @@ function pnOpenDeepLinkJob(jobId) {
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
   });
   buildAcChips(); pnRender();
+
+  // 2. Spotlight effect — esperar a que el DOM renderice
   setTimeout(function(){
     var el = document.getElementById('job-'+jobId);
     if(!el) return;
-    el.scrollIntoView({behavior:'smooth',block:'center'});
+
+    // Añadir badge "Desde Telegram" al principio de la card
+    var fromTg = window._deepLinkSource === 'telegram';
+    if(fromTg && !el.querySelector('.pn-tg-badge')){
+      var badge = document.createElement('div');
+      badge.className = 'pn-tg-badge';
+      badge.innerHTML = '✈ Desde Telegram';
+      el.insertBefore(badge, el.firstChild);
+    }
+
+    // Overlay oscuro detrás de todas las cards
+    var overlay = document.createElement('div');
+    overlay.id = 'pn-spotlight-overlay';
+    document.body.appendChild(overlay);
+
+    // Scroll suave al centro
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+
+    // Animación de entrada
     el.classList.add('pn-highlight');
-    setTimeout(function(){ el.classList.remove('pn-highlight'); }, 3000);
-  }, 120);
-  // Abrir modal con la oferta
-  setTimeout(function(){ pnOpenModal(jobId); }, 100);
+
+    // Abrir collapsibles de requisitos y beneficios automáticamente
+    el.querySelectorAll('details').forEach(function(d){ d.open = true; });
+
+    // Mantener el glow después de la animación de entrada
+    setTimeout(function(){
+      el.classList.remove('pn-highlight');
+      el.classList.add('pn-highlight-hold');
+    }, 600);
+
+    // Quitar spotlight tras 4.5 segundos
+    setTimeout(function(){
+      // Overlay fade out
+      overlay.classList.add('out');
+      setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 650);
+      // Card fade out del glow
+      el.classList.remove('pn-highlight-hold');
+      el.classList.add('pn-highlight-out');
+      setTimeout(function(){ el.classList.remove('pn-highlight-out'); }, 850);
+    }, 4500);
+
+    // click en overlay → quita el spotlight
+    overlay.addEventListener('click', function(){
+      overlay.classList.add('out');
+      setTimeout(function(){ if(overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 650);
+      el.classList.remove('pn-highlight-hold');
+      el.classList.add('pn-highlight-out');
+      setTimeout(function(){ el.classList.remove('pn-highlight-out'); }, 850);
+    });
+
+  }, 160);
 }
 
 function resizeParent() {
@@ -1948,6 +2043,9 @@ document.addEventListener('toggle', function(e){
   if(p.get('sort'))   { _ddSortVal = p.get('sort'); }
   if(p.get('ct'))   contractFilter = p.get('ct');
   if(p.get('q'))    { document.getElementById('pnSearch') && (document.getElementById('pnSearch').value = p.get('q')); }
+  // Detectar si viene desde Telegram (bot o share)
+  var utm_src = p.get('utm_source')||''; var utm_med = p.get('utm_medium')||'';
+  window._deepLinkSource = (utm_med==='bot'||utm_src==='telegram'||utm_med==='share') ? 'telegram' : '';
   window.addEventListener('message', function(ev){
     if(!ev.data||ev.data.type!=='pn-params') return;
     var pp = new URLSearchParams(ev.data.search||'');
