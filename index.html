@@ -1345,8 +1345,11 @@ function _mq(corpus, q) {
 function matchRole(j, roleFilter) {
   if(roleFilter === 'all') return true;
   var jRole = (j.role||'').toLowerCase();
+  // Cadet es también FO — aparece en ambos filtros
+  if(roleFilter === 'fo' && jRole === 'cadet') return true;
   if(roleFilter instanceof Set) {
     var parts = jRole.split(/[\s]+/);
+    if(roleFilter.has('fo') && jRole==='cadet') return true;
     return Array.from(roleFilter).some(function(r){ return parts.indexOf(r) !== -1; });
   }
   return jRole.split(/[\s]+/).indexOf(roleFilter) !== -1;
