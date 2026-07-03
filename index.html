@@ -1905,7 +1905,9 @@ function pnSetTab(t) {
   });
   document.querySelectorAll('[data-role-filter]').forEach(function(b){
     var shows = (b.getAttribute('data-tab-show')||'').split(' ');
-    b.classList.toggle('is-hidden', shows.indexOf(t)===-1);
+    // En tab 'all' mostrar todos los roles; en otros tabs solo los relevantes
+    var hidden = t !== 'all' && shows.indexOf(t)===-1;
+    b.classList.toggle('is-hidden', hidden);
     b.classList.toggle('active', b.getAttribute('data-role-filter')==='all');
   });
   buildAcChips(); pnRender();
