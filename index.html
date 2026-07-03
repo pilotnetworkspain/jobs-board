@@ -90,7 +90,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .badge.fi { color: #ffe9d6; background: rgba(255,177,82,.10); border-color: rgba(255,177,82,.28); }
 
 /* ── ROLE PILL — indicador de puesto, paleta pastel distinta a categorías ── */
-.pn-role-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 7px; }
+.pn-role-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 900; letter-spacing: .6px; text-transform: uppercase; margin-bottom: 7px; margin-right: 2px; }
 .pn-role-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .pn-role-pill.role-fo       { color: #b4d9e8; }
 .pn-role-pill.role-fo       .pn-role-dot { background: #7fc4dd; box-shadow: 0 0 6px rgba(127,196,221,.6); }
@@ -1534,10 +1534,21 @@ function buildCard(j) {
   };
   var roleKey = (j.role||'').toLowerCase();
   var rm = roleMap[roleKey];
-  var rolePillHtml = rm
-    ? '<div class="pn-role-pill '+rm.cls+'"><span class="pn-role-dot"><\/span>'
-      +'<span class="lang-es">'+rm.es+'<\/span><span class="lang-en">'+rm.en+'<\/span><\/div>'
-    : '';
+  var rolePillHtml = '';
+  if(rm) {
+    // Cadet siempre muestra también el pill de FO (un cadete es FO en formación)
+    if(roleKey === 'cadet') {
+      rolePillHtml =
+        '<div class="pn-role-pill role-fo"><span class="pn-role-dot"><\/span>'
+        +'<span class="lang-es">First Officer<\/span><span class="lang-en">First Officer<\/span><\/div>'
+        +'<div class="pn-role-pill '+rm.cls+'" style="margin-left:6px"><span class="pn-role-dot"><\/span>'
+        +'<span class="lang-es">'+rm.es+'<\/span><span class="lang-en">'+rm.en+'<\/span><\/div>';
+    } else {
+      rolePillHtml =
+        '<div class="pn-role-pill '+rm.cls+'"><span class="pn-role-dot"><\/span>'
+        +'<span class="lang-es">'+rm.es+'<\/span><span class="lang-en">'+rm.en+'<\/span><\/div>';
+    }
+  }
 
   // ── Badges extra ──
   var hoursBadge = (j.min_hours&&j.min_hours>0)
