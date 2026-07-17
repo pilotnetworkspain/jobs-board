@@ -2055,5 +2055,35 @@ fetchJobs();
     </div>
   </div>
 
+
+<script>
+/* PN 2026-07-17: ocultar selector local de idioma cuando la app va embebida
+   y controlada por el selector global de pilotnetwork.es. Abierta directamente,
+   el selector local se conserva como fallback. */
+(function () {
+  'use strict';
+  var ALLOWED = ['https://www.pilotnetwork.es', 'https://pilotnetwork.es'];
+  function isEmbedded() { try { return window.self !== window.top; } catch (e) { return true; } }
+  function markManaged() { document.documentElement.classList.add('pn-lang-managed'); }
+  var params = null;
+  try { params = new URLSearchParams(window.location.search); } catch (e) {}
+  var q = params && params.get('lang');
+  if (isEmbedded() && (q === 'es' || q === 'en')) markManaged();
+  window.addEventListener('message', function (ev) {
+    if (ALLOWED.indexOf(ev.origin) === -1) return;
+    var d = ev.data;
+    if (!d || d.type !== 'pn-language' || (d.lang !== 'es' && d.lang !== 'en')) return;
+    (function apply(tries) {
+      if (typeof window.pnSetLang === 'function') { try { window.pnSetLang(d.lang); } catch (e) {} }
+      else if (tries > 0) { setTimeout(function () { apply(tries - 1); }, 100); }
+    })(20);
+    if (isEmbedded()) markManaged();
+  });
+})();
+</script>
+<style>
+  html.pn-lang-managed .pn-island-anchor,
+  html.pn-lang-managed .pn-island { display: none !important; }
+</style>
 </body>
 </html>
