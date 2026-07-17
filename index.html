@@ -2074,7 +2074,7 @@ fetchJobs();
     var d = ev.data;
     if (!d || d.type !== 'pn-language' || (d.lang !== 'es' && d.lang !== 'en')) return;
     (function apply(tries) {
-      if (typeof window.pnSetLang === 'function') { try { window.pnSetLang(d.lang); } catch (e) {} }
+      if (typeof window.pnSetLang === 'function') { if (document.body && document.body.classList.contains('pn-lang-' + d.lang)) return; try { window.pnSetLang(d.lang); } catch (e) {} }
       else if (tries > 0) { setTimeout(function () { apply(tries - 1); }, 100); }
     })(20);
     if (isEmbedded()) markManaged();
