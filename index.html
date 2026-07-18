@@ -1901,6 +1901,7 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 
 function applyLang() {
   document.body.classList.toggle('pn-lang-en', lang==='en');
+  document.body.classList.toggle('pn-lang-es', lang==='es');
 }
 function pnSetLang(l) {
   lang = l; applyLang();
