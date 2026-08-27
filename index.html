@@ -1037,6 +1037,14 @@ function pnModalLogoFallback(img) {
   if(img && img.parentNode) img.parentNode.innerHTML = fallback;
 }
 
+function pnCardLogoFallback(img) {
+  if (!img || !img.parentNode) return;
+  var html = img.getAttribute('data-fallback');
+  var span = document.createElement('span');
+  span.innerHTML = html || '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">?</div>';
+  img.parentNode.replaceChild(span.firstChild, img);
+}
+
 function pnOpenModal(jobId) {
   var j = allJobs.find(function(x){ return String(x.id) === String(jobId); });
   if(!j) return;
@@ -1514,9 +1522,10 @@ function buildCard(j) {
   }).join('');
 
   // ── Logo ──
+  var logoFallbackHtml = '<div class="brand-logo-fallback" style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'+esc((j.company||'').charAt(0))+'<\/div>';
   var logo = j.logo_url
-    ? '<img src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" loading="lazy" onerror="this.style.display=&quot;none&quot;">'
-    : '<div style="width:48px;height:48px;border-radius:14px;background:rgba(110,168,255,.15);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:var(--jobs-blue);">'+esc((j.company||'').charAt(0))+'<\/div>';
+    ? '<img src="'+esc(j.logo_url)+'" alt="'+esc(j.company)+'" loading="lazy" onerror="pnCardLogoFallback(this)" data-fallback="'+esc(logoFallbackHtml)+'">'
+    : logoFallbackHtml;
 
   // ── Título bilingüe ──
   var titleEs = j.title_es||j.title_en||'';
