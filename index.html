@@ -709,6 +709,8 @@ details summary .reqs-count {
   opacity: 0; cursor: pointer; max-width: 90vw; text-align: center;
 }
 .pn-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.pn-aviso-nodisp { background: rgba(210,120,60,.92); color: #fff; cursor: pointer; }
+.btn.apply-mail { gap: 6px; }
 
 
 /* ── JOB DETAIL MODAL ──────────────────────────────────────────────────────── */
@@ -1283,7 +1285,9 @@ function pnOpenModal(jobId) {
   var webUrl = 'https://www.pilotnetwork.es/first-officer-captain-jobs?job='+j.id+'&utm_source=jobsboard&utm_medium=modal&utm_campaign=viewoffer';
   var actions = '';
   if(j.apply_url) {
-    actions += '<a class="pn-modal-apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener">';
+    var _mail = /^mailto:/i.test(j.apply_url || '');
+    actions += '<a class="pn-modal-apply" href="'+esc(j.apply_url)+'"'
+             + (_mail ? '' : ' target="_blank" rel="noopener"') + '>';
     actions += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
     actions += '<span class="lang-es">Aplicar ahora</span><span class="lang-en">Apply now</span></a>';
   }
@@ -1842,8 +1846,21 @@ function buildCard(j) {
   var offerCount = (j.offer||[]).length;
 
   // ── Botones ──
+  // 16 ofertas se aplican mandando un correo, no abriendo una web. El boton
+  // decia "Aplicar" igual que el resto y al pulsarlo saltaba el cliente de
+  // correo sin previo aviso. Se distingue, y ademas sin target="_blank", que
+  // en un mailto deja una pestana en blanco abierta.
+  var _esCorreo = /^mailto:/i.test(j.apply_url || '');
   var applyBtn = j.apply_url
-    ? '<a class="btn apply" href="'+esc(j.apply_url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span><\/a>' : '';
+    ? '<a class="btn apply'+(_esCorreo?' apply-mail':'')+'" href="'+esc(j.apply_url)+'"'
+      + (_esCorreo ? '' : ' target="_blank" rel="noopener noreferrer"')
+      + ' onclick="event.stopPropagation()"'
+      + (_esCorreo ? ' title="Se aplica por correo electrónico"' : '')
+      + '>'
+      + (_esCorreo
+          ? '✉ <span class="lang-es">Aplicar por email<\/span><span class="lang-en">Apply by email<\/span>'
+          : '<span class="lang-es">Aplicar<\/span><span class="lang-en">Apply<\/span>')
+      + '<\/a>' : '';
   var coBtn = (j.company_url && j.company_url !== j.apply_url)
     ? '<a class="btn company-btn" href="'+esc(j.company_url)+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()"><span class="lang-es">Compañía<\/span><span class="lang-en">Company<\/span><\/a>' : '';
 
@@ -2246,9 +2263,32 @@ function pnToggleRole(r) {
   pnRender();
 }
 
+function pnAvisoOfertaNoDisponible() {
+  var vieja = document.getElementById('pnAvisoNoDisp');
+  if (vieja) vieja.remove();
+  var d = document.createElement('div');
+  d.className = 'pn-toast pn-aviso-nodisp';
+  d.id = 'pnAvisoNoDisp';
+  var es = (document.documentElement.getAttribute('data-lang') ||
+            (document.body.classList.contains('pn-lang-es') ? 'es' : 'en')) === 'es';
+  d.innerHTML = es
+    ? 'Esa oferta ya no está disponible.<br><span style="font-size:11px;opacity:.75">Se cubrió o caducó. Abajo tienes el resto.</span>'
+    : 'That job is no longer available.<br><span style="font-size:11px;opacity:.75">It was filled or expired. The rest are below.</span>';
+  d.onclick = function(){ d.remove(); };
+  document.body.appendChild(d);
+  requestAnimationFrame(function(){ d.classList.add('show'); });
+  setTimeout(function(){ if(d.parentNode){ d.classList.remove('show'); setTimeout(function(){ d.remove(); }, 400); } }, 7000);
+}
+
 function pnOpenDeepLinkJob(jobId) {
   var job = allJobs.find(function(j){ return String(j.id)===String(jobId); });
-  if(!job) return;
+  if(!job) {
+    // La oferta ya no esta: caducada, cubierta o retirada. Antes esto era un
+    // return mudo, asi que quien pinchaba un enlace viejo de Telegram llegaba
+    // a un tablero normal sin ninguna explicacion y creia que la web fallaba.
+    pnAvisoOfertaNoDisponible();
+    return;
+  }
 
   // Cambiar al tab correcto
   tab = job.category||'commercial'; role = 'all'; acFilter = null;
