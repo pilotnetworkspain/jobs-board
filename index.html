@@ -1495,12 +1495,16 @@ function pnRender() {
     var target = filtered.length;
     var current = parseInt(inf.dataset.count || '0', 10);
     inf.dataset.count = target;
+    // Cancelar una animacion anterior que siguiera viva: si no, al cambiar de
+    // filtro deprisa quedan varios setInterval peleandose y el contador se
+    // queda en un numero que no corresponde a las tarjetas mostradas.
+    if(window._pnCountTimer) { clearInterval(window._pnCountTimer); window._pnCountTimer = null; }
     if(Math.abs(target - current) > 3) {
       var step = target > current ? 1 : -1;
-      var interval = setInterval(function(){
+      window._pnCountTimer = setInterval(function(){
         current += step;
         inf.textContent = current + ' ' + word;
-        if(current === target) clearInterval(interval);
+        if(current === target) { clearInterval(window._pnCountTimer); window._pnCountTimer = null; }
       }, 16);
     } else {
       inf.textContent = target + ' ' + word;
