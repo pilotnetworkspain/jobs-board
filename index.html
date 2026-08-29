@@ -139,6 +139,18 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   border: 1px solid rgba(255,255,255,.5);
 }
 .pn-lic-tab.active { color: #0f172a; border-color: rgba(255,255,255,.75); box-shadow: 0 6px 16px rgba(0,0,0,.2); }
+.pn-nivel-wrap { margin-top: 4px; }
+.pn-niv-tab {
+  padding: 6px 14px; border-radius: 999px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.045);
+  color: var(--jobs-soft); font-size: 12px; font-weight: 800; letter-spacing: .2px;
+  transition: .18s ease; font-family: inherit; line-height: 1;
+}
+.pn-niv-tab:hover { background: rgba(255,255,255,.085); border-color: rgba(255,255,255,.28); }
+.pn-niv-tab.active { background: linear-gradient(180deg, #fff, #e4ecf7); color: #0f172a; border-color: rgba(255,255,255,.75); }
+/* Avisos de permiso de trabajo */
+.badge.visa-si { color: #d8f5e4; background: rgba(80,200,140,.15); border-color: rgba(80,200,140,.35); }
+.badge.visa-no { color: #ffe0cc; background: rgba(230,150,90,.14); border-color: rgba(230,150,90,.32); }
 .pn-lic-tab[data-lic="all"].active    { background: linear-gradient(180deg, #fff, #e8edf5); border-color: rgba(255,255,255,.8); box-shadow: 0 6px 16px rgba(255,255,255,.12); }
 .pn-lic-all { font-size: 13px !important; color: #0f172a !important; }
 .pn-lic-hint {
@@ -973,6 +985,21 @@ details summary .reqs-count {
         </span>
       </div>
 
+      <div class="pn-lic-wrap pn-nivel-wrap">
+        <span class="pn-lic-label"><span class="lang-es">Nivel</span><span class="lang-en">Level</span></span>
+        <div class="pn-lic-tabs">
+          <button class="pn-niv-tab active" data-niv="all" onclick="pnSetNiv('all')" type="button">
+            <span class="lang-es">Todos</span><span class="lang-en">All</span>
+          </button>
+          <button class="pn-niv-tab" data-niv="atpl" onclick="pnSetNiv('atpl')" type="button" title="Licencia de transporte de linea aerea sin restricciones">ATPL</button>
+          <button class="pn-niv-tab" data-niv="fatpl" onclick="pnSetNiv('fatpl')" type="button" title="ATPL congelado: CPL con los teoricos de ATPL aprobados">
+            <span class="lang-es">ATPL congelado</span><span class="lang-en">Frozen ATPL</span>
+          </button>
+          <button class="pn-niv-tab" data-niv="cpl" onclick="pnSetNiv('cpl')" type="button" title="Licencia de piloto comercial">CPL</button>
+          <button class="pn-niv-tab" data-niv="mpl" onclick="pnSetNiv('mpl')" type="button" title="Licencia de piloto de tripulacion multiple">MPL</button>
+        </div>
+      </div>
+
       <div class="pn-search-row">
         <div class="pn-search-box">
           <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
@@ -1099,6 +1126,8 @@ var role    = 'all';
 // 'icao' significa que la oferta acepta cualquier licencia.
 var licence = 'all';
 var LICENCIAS = ['all','easa','faa','uk_caa','icao'];
+var nivel = 'all';   // nivel de licencia: all | atpl | fatpl | cpl | mpl
+var NIVELES = ['all','atpl','fatpl','cpl','mpl'];
 var acFilter = null;
 var countryFilter = '';
 var contractFilter = '';
@@ -1491,6 +1520,13 @@ function pnRender() {
       ? j.licence_accepts.map(function(x){ return String(x).toLowerCase(); })
       : [ (j.licence || 'easa').toLowerCase() ];
 
+    // Nivel de licencia (ATPL, congelado, CPL, MPL). Las ofertas que no lo
+    // dicen no se ocultan: no decirlo no significa que no valga.
+    if (nivel !== 'all') {
+      var niv = j.licence_level || [];
+      if (niv.length && niv.indexOf(nivel) === -1) return false;
+    }
+
     if (licence === 'all') { /* sin filtrar */ }
     else if (licence === 'icao') {
       // El boton ICAO ensenia solo las que valen con cualquier licencia.
@@ -1703,6 +1739,15 @@ function buildCard(j) {
     licBadge = '<span class="badge lic-uk_caa" title="Requiere licencia UK CAA">UK CAA<\/span>';
   }
 
+  // Permiso de trabajo. El aviso util no es solo quien patrocina (pocos), sino
+  // sobre todo quien EXIGE tener ya el derecho a trabajar: eso descarta al
+  // piloto de fuera antes de que pierda el tiempo aplicando.
+  var visaBadge = j.visa_sponsor
+    ? '<span class="badge visa-si" title="La empresa tramita el visado o el permiso de trabajo">🛂 <span class="lang-es">Patrocina visado<\/span><span class="lang-en">Visa sponsored<\/span><\/span>'
+    : (j.work_rights_required
+        ? '<span class="badge visa-no" title="Debes tener ya derecho a trabajar en ese pais: no tramitan visado">🛂 <span class="lang-es">Requiere permiso<\/span><span class="lang-en">Work rights needed<\/span><\/span>'
+        : '');
+
   var countryBadge = j.base_country && !['Europe','International','Worldwide','Multiple bases'].includes(j.base_country)
     ? '<span class="badge" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--jobs-muted)">'+cFlag+' '+esc(j.base_country)+'<\/span>' : '';
 
@@ -1787,7 +1832,7 @@ function buildCard(j) {
     +(isEventCard?'<span class="badge event-tag">🗓 <span class="lang-es">Evento<\/span><span class="lang-en">Roadshow<\/span><\/span>':'')
     +(j.category==='executive'?'<span class="badge cat-executive">VIP / Executive<\/span>':'')
     +(j.category==='ga'?'<span class="badge cat-ga">General Aviation<\/span>':'')
-    +badges+licBadge+hoursBadge+newBadge+ctBadge+countryBadge+(dlHtml?'&nbsp;'+dlHtml:'')
+    +badges+licBadge+visaBadge+hoursBadge+newBadge+ctBadge+countryBadge+(dlHtml?'&nbsp;'+dlHtml:'')
     +'<\/div>'
 
     +'<div class="brand">'+logo
@@ -2080,6 +2125,14 @@ function pnLicLogoFallback(img, txt) {
   d.className = 'pn-lic-logo-fb';
   d.textContent = txt;
   img.parentNode.replaceChild(d, img);
+}
+
+function pnSetNiv(n) {
+  nivel = n;
+  document.querySelectorAll('[data-niv]').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-niv') === n);
+  });
+  pnRender();
 }
 
 function pnSetLic(l, persist) {
