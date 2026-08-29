@@ -139,6 +139,14 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   border: 1px solid rgba(255,255,255,.5);
 }
 .pn-lic-tab.active { color: #0f172a; border-color: rgba(255,255,255,.75); box-shadow: 0 6px 16px rgba(0,0,0,.2); }
+.pn-lic-tab[data-lic="all"].active    { background: linear-gradient(180deg, #fff, #e8edf5); border-color: rgba(255,255,255,.8); box-shadow: 0 6px 16px rgba(255,255,255,.12); }
+.pn-lic-all { font-size: 13px !important; color: #0f172a !important; }
+.pn-lic-hint {
+  flex-basis: 100%; text-align: center; margin-top: 2px;
+  font-size: 11.5px; font-weight: 600; color: rgba(255,255,255,.42);
+  line-height: 1.45;
+}
+.pn-lic-hint strong { color: rgba(200,170,255,.85); font-weight: 800; }
 .pn-lic-tab[data-lic="easa"].active   { background: linear-gradient(180deg, #fff, #dbe7fb); border-color: rgba(120,160,224,.8); box-shadow: 0 6px 16px rgba(120,160,224,.22); }
 .pn-lic-tab[data-lic="faa"].active    { background: linear-gradient(180deg, #fff, #fbdcdc); border-color: rgba(224,130,130,.8); box-shadow: 0 6px 16px rgba(224,130,130,.22); }
 .pn-lic-tab[data-lic="uk_caa"].active { background: linear-gradient(180deg, #fff, #dcf3e4); border-color: rgba(110,200,150,.8); box-shadow: 0 6px 16px rgba(110,200,150,.22); }
@@ -938,7 +946,11 @@ details summary .reqs-count {
       <div class="pn-lic-wrap">
         <span class="pn-lic-label"><span class="lang-es">Licencia</span><span class="lang-en">Licence</span></span>
         <div class="pn-lic-tabs">
-          <button class="pn-lic-tab active" data-lic="easa" onclick="pnSetLic('easa')" type="button" title="Licencia EASA (Europa)">
+          <button class="pn-lic-tab active" data-lic="all" onclick="pnSetLic('all')" type="button" title="Ver todas las ofertas, sin filtrar por licencia">
+            <span class="pn-lic-logo-fb pn-lic-all">✈</span>
+            <span class="lang-es">Todas</span><span class="lang-en">All</span>
+          </button>
+          <button class="pn-lic-tab" data-lic="easa" onclick="pnSetLic('easa')" type="button" title="Licencia EASA (Europa)">
             <img class="pn-lic-logo" src="https://www.google.com/s2/favicons?domain=easa.europa.eu&sz=64" alt="EASA" loading="lazy" onerror="pnLicLogoFallback(this,'EASA')">
             EASA
           </button>
@@ -955,6 +967,10 @@ details summary .reqs-count {
             ICAO
           </button>
         </div>
+        <span class="pn-lic-hint">
+          <span class="lang-es">👉 Elige tu licencia y verás solo las ofertas a las que puedes optar. Las <strong>ICAO</strong> aceptan cualquiera.</span>
+          <span class="lang-en">👉 Pick your licence to see only the jobs you can apply for. <strong>ICAO</strong> ones accept any licence.</span>
+        </span>
       </div>
 
       <div class="pn-search-row">
@@ -1079,7 +1095,10 @@ var allJobs = [];
 var lang    = 'en';
 var tab     = 'all';
 var role    = 'all';
-var licence = 'easa';   // EASA por defecto. 'icao' cuenta en ambos filtros.
+// 'all' por defecto: nadie se pierde ofertas por no haber tocado el filtro.
+// 'icao' significa que la oferta acepta cualquier licencia.
+var licence = 'all';
+var LICENCIAS = ['all','easa','faa','uk_caa','icao'];
 var acFilter = null;
 var countryFilter = '';
 var contractFilter = '';
@@ -1466,7 +1485,8 @@ function pnRender() {
     // boton ICAO, en cambio, muestra solo las que aceptan cualquiera.
     // Las ofertas historicas sin el campo se tratan como EASA.
     var jl = (j.licence || 'easa').toLowerCase();
-    if (licence === 'icao') { if (jl !== 'icao') return false; }
+    if (licence === 'all') { /* sin filtrar */ }
+    else if (licence === 'icao') { if (jl !== 'icao') return false; }
     else if (jl !== 'icao' && jl !== licence) return false;
 
     return matchRole(j, role)
@@ -1791,7 +1811,7 @@ function pnToggleCt(ct) {
 function pnShareURL() {
   var params = new URLSearchParams();
   params.set('tab', tab);
-  if(licence && licence !== 'easa') params.set('licence', licence);
+  if(licence && licence !== 'all') params.set('licence', licence);
   if(_ddSortVal && _ddSortVal !== 'newest') params.set('sort', _ddSortVal);
   if(role !== 'all' && !(role instanceof Set)) params.set('role', role);
   var q = document.getElementById('pnSearch').value;
@@ -2146,7 +2166,7 @@ document.addEventListener('toggle', function(e){
   // 'role' y 'licence' los escribia pnShareURL pero no se leian nunca al
   // cargar, asi que compartir una vista filtrada perdia esos dos filtros.
   if(p.get('role'))    role = p.get('role');
-  if(['easa','faa','uk_caa','icao'].indexOf(p.get('licence')) !== -1) {
+  if(LICENCIAS.indexOf(p.get('licence')) !== -1) {
     licence = p.get('licence');
     window._licFromUrl = true;   // la URL manda sobre la preferencia guardada
   }
@@ -2172,13 +2192,13 @@ document.addEventListener('toggle', function(e){
 applyLang();
 pnSetLang(lang);
 pnSetTab(tab);
-// Orden de precedencia: parametro de la URL > preferencia guardada > EASA.
+// Orden de precedencia: parametro de la URL > preferencia guardada > 'all'.
 // Un enlace compartido tiene que verse igual para quien lo abre, aunque esa
 // persona tuviera otra licencia elegida de una visita anterior.
 try {
   if (!window._licFromUrl) {
     var _savedLic = localStorage.getItem('pnLicence');
-    if (['easa','faa','uk_caa','icao'].indexOf(_savedLic) !== -1) licence = _savedLic;
+    if (LICENCIAS.indexOf(_savedLic) !== -1) licence = _savedLic;
   }
 } catch(e) {}
 // Sincronizar los botones con el valor final, venga de donde venga.
