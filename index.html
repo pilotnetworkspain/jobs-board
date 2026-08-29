@@ -139,12 +139,14 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   border: 1px solid rgba(255,255,255,.5);
 }
 .pn-lic-tab.active { color: #0f172a; border-color: rgba(255,255,255,.75); box-shadow: 0 6px 16px rgba(0,0,0,.2); }
-.pn-lic-tab[data-lic="easa"].active { background: linear-gradient(180deg, #fff, #dbe7fb); border-color: rgba(120,160,224,.8); box-shadow: 0 6px 16px rgba(120,160,224,.22); }
-.pn-lic-tab[data-lic="faa"].active  { background: linear-gradient(180deg, #fff, #fbdcdc); border-color: rgba(224,130,130,.8); box-shadow: 0 6px 16px rgba(224,130,130,.22); }
-.pn-lic-hint { font-size: 10.5px; color: rgba(255,255,255,.34); font-weight: 600; flex-basis: 100%; text-align: center; margin-top: -2px; }
-/* Sello ICAO en la tarjeta: avisa de que vale para las dos licencias */
-.badge.lic-icao { color: #eadcff; background: rgba(168,120,255,.14); border-color: rgba(168,120,255,.34); }
-.badge.lic-faa  { color: #ffdcdc; background: rgba(224,130,130,.14); border-color: rgba(224,130,130,.34); }
+.pn-lic-tab[data-lic="easa"].active   { background: linear-gradient(180deg, #fff, #dbe7fb); border-color: rgba(120,160,224,.8); box-shadow: 0 6px 16px rgba(120,160,224,.22); }
+.pn-lic-tab[data-lic="faa"].active    { background: linear-gradient(180deg, #fff, #fbdcdc); border-color: rgba(224,130,130,.8); box-shadow: 0 6px 16px rgba(224,130,130,.22); }
+.pn-lic-tab[data-lic="uk_caa"].active { background: linear-gradient(180deg, #fff, #dcf3e4); border-color: rgba(110,200,150,.8); box-shadow: 0 6px 16px rgba(110,200,150,.22); }
+.pn-lic-tab[data-lic="icao"].active   { background: linear-gradient(180deg, #fff, #ece0fb); border-color: rgba(168,120,255,.8); box-shadow: 0 6px 16px rgba(168,120,255,.22); }
+/* Sello de licencia en la tarjeta */
+.badge.lic-icao   { color: #eadcff; background: rgba(168,120,255,.14); border-color: rgba(168,120,255,.34); }
+.badge.lic-faa    { color: #ffdcdc; background: rgba(224,130,130,.14); border-color: rgba(224,130,130,.34); }
+.badge.lic-uk_caa { color: #d8f5e4; background: rgba(110,200,150,.14); border-color: rgba(110,200,150,.34); }
 @media (max-width: 640px) { .pn-lic-wrap { flex-direction: column; gap: 8px; } }
 
 .pn-role-tabs-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 2px; }
@@ -936,19 +938,23 @@ details summary .reqs-count {
       <div class="pn-lic-wrap">
         <span class="pn-lic-label"><span class="lang-es">Licencia</span><span class="lang-en">Licence</span></span>
         <div class="pn-lic-tabs">
-          <button class="pn-lic-tab active" data-lic="easa" onclick="pnSetLic('easa')" type="button">
+          <button class="pn-lic-tab active" data-lic="easa" onclick="pnSetLic('easa')" type="button" title="Licencia EASA (Europa)">
             <img class="pn-lic-logo" src="https://www.google.com/s2/favicons?domain=easa.europa.eu&sz=64" alt="EASA" loading="lazy" onerror="pnLicLogoFallback(this,'EASA')">
             EASA
           </button>
-          <button class="pn-lic-tab" data-lic="faa" onclick="pnSetLic('faa')" type="button">
+          <button class="pn-lic-tab" data-lic="faa" onclick="pnSetLic('faa')" type="button" title="Licencia FAA (Estados Unidos)">
             <img class="pn-lic-logo" src="https://www.google.com/s2/favicons?domain=faa.gov&sz=64" alt="FAA" loading="lazy" onerror="pnLicLogoFallback(this,'FAA')">
             FAA
           </button>
+          <button class="pn-lic-tab" data-lic="uk_caa" onclick="pnSetLic('uk_caa')" type="button" title="Licencia UK CAA (Reino Unido)">
+            <img class="pn-lic-logo" src="https://www.google.com/s2/favicons?domain=caa.co.uk&sz=64" alt="UK CAA" loading="lazy" onerror="pnLicLogoFallback(this,'CAA')">
+            UK CAA
+          </button>
+          <button class="pn-lic-tab" data-lic="icao" onclick="pnSetLic('icao')" type="button" title="Ofertas que aceptan cualquier licencia ICAO">
+            <img class="pn-lic-logo" src="https://www.google.com/s2/favicons?domain=icao.int&sz=64" alt="ICAO" loading="lazy" onerror="pnLicLogoFallback(this,'ICAO')">
+            ICAO
+          </button>
         </div>
-        <span class="pn-lic-hint">
-          <span class="lang-es">Las ofertas ICAO aceptan las dos licencias y aparecen siempre.</span>
-          <span class="lang-en">ICAO offers accept both licences and always show up.</span>
-        </span>
       </div>
 
       <div class="pn-search-row">
@@ -1455,10 +1461,13 @@ function pnRender() {
     } else {
       if(j.category !== tab) return false;
     }
-    // Licencia: 'icao' acepta EASA y FAA, asi que sale con cualquiera de los dos
-    // botones. Las ofertas sin campo 'licence' (historicas) se tratan como EASA.
+    // Licencia. Una oferta 'icao' acepta cualquier licencia, asi que aparece
+    // tambien al filtrar por una autoridad concreta (EASA, FAA, UK CAA). El
+    // boton ICAO, en cambio, muestra solo las que aceptan cualquiera.
+    // Las ofertas historicas sin el campo se tratan como EASA.
     var jl = (j.licence || 'easa').toLowerCase();
-    if (jl !== 'icao' && jl !== licence) return false;
+    if (licence === 'icao') { if (jl !== 'icao') return false; }
+    else if (jl !== 'icao' && jl !== licence) return false;
 
     return matchRole(j, role)
       && (maxHrs >= 5500 || (j.min_hours||0) <= maxHrs)
@@ -1647,8 +1656,9 @@ function buildCard(j) {
   // Sello de licencia: solo se muestra cuando aporta informacion (ICAO/FAA).
   // Las EASA no llevan sello porque son el caso por defecto y ensuciarian.
   var jlic = (j.licence||'easa').toLowerCase();
-  var licBadge = jlic === 'icao' ? '<span class="badge lic-icao" title="Acepta licencia EASA y FAA">ICAO<\/span>'
-               : jlic === 'faa'  ? '<span class="badge lic-faa" title="Requiere licencia FAA">FAA<\/span>'
+  var licBadge = jlic === 'icao'   ? '<span class="badge lic-icao" title="Acepta cualquier licencia ICAO">ICAO<\/span>'
+               : jlic === 'faa'    ? '<span class="badge lic-faa" title="Requiere licencia FAA">FAA<\/span>'
+               : jlic === 'uk_caa' ? '<span class="badge lic-uk_caa" title="Requiere licencia UK CAA">UK CAA<\/span>'
                : '';
 
   var countryBadge = j.base_country && !['Europe','International','Worldwide','Multiple bases'].includes(j.base_country)
@@ -2148,7 +2158,7 @@ pnSetTab(tab);
 // Recuperar la licencia elegida en visitas anteriores (por defecto EASA)
 try {
   var _savedLic = localStorage.getItem('pnLicence');
-  if (_savedLic === 'easa' || _savedLic === 'faa') pnSetLic(_savedLic);
+  if (['easa','faa','uk_caa','icao'].indexOf(_savedLic) !== -1) pnSetLic(_savedLic);
 } catch(e) {}
 fetchJobs();
 </script>
