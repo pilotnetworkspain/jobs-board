@@ -1484,10 +1484,20 @@ function pnRender() {
     // tambien al filtrar por una autoridad concreta (EASA, FAA, UK CAA). El
     // boton ICAO, en cambio, muestra solo las que aceptan cualquiera.
     // Las ofertas historicas sin el campo se tratan como EASA.
-    var jl = (j.licence || 'easa').toLowerCase();
+    // Una oferta puede aceptar VARIAS autoridades ("Valid EASA or UK CAA
+    // issued Part FCL"): licence_accepts es el conjunto real. Las ofertas
+    // antiguas sin ese campo caen a 'licence', que es un valor unico.
+    var acepta = (j.licence_accepts && j.licence_accepts.length)
+      ? j.licence_accepts.map(function(x){ return String(x).toLowerCase(); })
+      : [ (j.licence || 'easa').toLowerCase() ];
+
     if (licence === 'all') { /* sin filtrar */ }
-    else if (licence === 'icao') { if (jl !== 'icao') return false; }
-    else if (jl !== 'icao' && jl !== licence) return false;
+    else if (licence === 'icao') {
+      // El boton ICAO ensenia solo las que valen con cualquier licencia.
+      if (acepta.indexOf('icao') === -1) return false;
+    } else if (acepta.indexOf('icao') === -1 && acepta.indexOf(licence) === -1) {
+      return false;
+    }
 
     return matchRole(j, role)
       && (maxHrs >= 5500 || (j.min_hours||0) <= maxHrs)
@@ -1675,11 +1685,23 @@ function buildCard(j) {
   var cFlag = countryFlag(j.base_country||'');
   // Sello de licencia: solo se muestra cuando aporta informacion (ICAO/FAA).
   // Las EASA no llevan sello porque son el caso por defecto y ensuciarian.
-  var jlic = (j.licence||'easa').toLowerCase();
-  var licBadge = jlic === 'icao'   ? '<span class="badge lic-icao" title="Acepta cualquier licencia ICAO">ICAO<\/span>'
-               : jlic === 'faa'    ? '<span class="badge lic-faa" title="Requiere licencia FAA">FAA<\/span>'
-               : jlic === 'uk_caa' ? '<span class="badge lic-uk_caa" title="Requiere licencia UK CAA">UK CAA<\/span>'
-               : '';
+  var jAcepta = (j.licence_accepts && j.licence_accepts.length)
+    ? j.licence_accepts.map(function(x){ return String(x).toLowerCase(); })
+    : [ (j.licence||'easa').toLowerCase() ];
+  var _ETIQ = { easa:'EASA', faa:'FAA', uk_caa:'UK CAA', icao:'ICAO' };
+  var licBadge = '';
+  if (jAcepta.indexOf('icao') !== -1) {
+    licBadge = '<span class="badge lic-icao" title="Acepta cualquier licencia ICAO">ICAO<\/span>';
+  } else if (jAcepta.length > 1) {
+    // Acepta varias: se enseña el conjunto, que es justo lo que el piloto
+    // necesita saber para decidir si puede optar.
+    var txt = jAcepta.map(function(x){ return _ETIQ[x]||x; }).join(' / ');
+    licBadge = '<span class="badge lic-uk_caa" title="Acepta cualquiera de estas licencias">'+esc(txt)+'<\/span>';
+  } else if (jAcepta[0] === 'faa') {
+    licBadge = '<span class="badge lic-faa" title="Requiere licencia FAA">FAA<\/span>';
+  } else if (jAcepta[0] === 'uk_caa') {
+    licBadge = '<span class="badge lic-uk_caa" title="Requiere licencia UK CAA">UK CAA<\/span>';
+  }
 
   var countryBadge = j.base_country && !['Europe','International','Worldwide','Multiple bases'].includes(j.base_country)
     ? '<span class="badge" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:var(--jobs-muted)">'+cFlag+' '+esc(j.base_country)+'<\/span>' : '';
@@ -2101,8 +2123,12 @@ function pnOpenDeepLinkJob(jobId) {
   // ...y a la licencia de ESA oferta. Si no, una oferta uk_caa o faa abierta
   // por un enlace de Telegram no se renderiza (el filtro por defecto es EASA)
   // y el deep link se queda en nada.
-  var jobLic = (job.licence || 'easa').toLowerCase();
-  if (jobLic !== 'icao') pnSetLic(jobLic, false);
+  var jobAcepta = (job.licence_accepts && job.licence_accepts.length)
+    ? job.licence_accepts.map(function(x){ return String(x).toLowerCase(); })
+    : [ (job.licence || 'easa').toLowerCase() ];
+  if (jobAcepta.indexOf('icao') === -1 && jobAcepta.indexOf(licence) === -1) {
+    pnSetLic(jobAcepta[0], false);
+  }
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===tab);
   });
