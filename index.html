@@ -881,7 +881,7 @@ details summary .reqs-count {
         <span class="lang-es">Explora vacantes seleccionadas para First Officers, comandantes, cadetes, aviación ejecutiva e instructores. Busca, filtra y encuentra tu próximo destino.</span>
         <span class="lang-en">Explore curated vacancies for First Officers, Captains, Cadets, executive aviation and flight instructors. Search, filter and find your next destination.</span>
       
-        <br><span style="color:var(--jobs-blue);font-size:14px;font-weight:700;margin-top:8px;display:inline-block"><span id="pnTotalCount">77</span> <span class="lang-es">ofertas activas ahora mismo</span><span class="lang-en">active opportunities right now</span></span></p>
+        <br><span style="color:var(--jobs-blue);font-size:14px;font-weight:700;margin-top:8px;display:inline-block"><span id="pnTotalCount">—</span> <span class="lang-es">ofertas activas ahora mismo</span><span class="lang-en">active opportunities right now</span></span></p>
     </div>
 
     <div class="pn-controls">
@@ -1791,6 +1791,7 @@ function pnToggleCt(ct) {
 function pnShareURL() {
   var params = new URLSearchParams();
   params.set('tab', tab);
+  if(licence && licence !== 'easa') params.set('licence', licence);
   if(_ddSortVal && _ddSortVal !== 'newest') params.set('sort', _ddSortVal);
   if(role !== 'all' && !(role instanceof Set)) params.set('role', role);
   var q = document.getElementById('pnSearch').value;
@@ -2039,12 +2040,15 @@ function pnLicLogoFallback(img, txt) {
   img.parentNode.replaceChild(d, img);
 }
 
-function pnSetLic(l) {
+function pnSetLic(l, persist) {
   licence = l;
   document.querySelectorAll('[data-lic]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-lic') === l);
   });
-  try { localStorage.setItem('pnLicence', l); } catch(e) {}
+  // Solo se recuerda cuando lo elige la persona pulsando el boton. Si el
+  // cambio viene de un enlace compartido o de un deep link, no debe
+  // sobrescribir la preferencia que esa persona tuviera guardada.
+  if (persist !== false) { try { localStorage.setItem('pnLicence', l); } catch(e) {} }
   pnRender();
 }
 
@@ -2073,6 +2077,12 @@ function pnOpenDeepLinkJob(jobId) {
 
   // Cambiar al tab correcto
   tab = job.category||'commercial'; role = 'all'; acFilter = null;
+
+  // ...y a la licencia de ESA oferta. Si no, una oferta uk_caa o faa abierta
+  // por un enlace de Telegram no se renderiza (el filtro por defecto es EASA)
+  // y el deep link se queda en nada.
+  var jobLic = (job.licence || 'easa').toLowerCase();
+  if (jobLic !== 'icao') pnSetLic(jobLic, false);
   document.querySelectorAll('.pn-tab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-tab')===tab);
   });
@@ -2133,6 +2143,13 @@ document.addEventListener('toggle', function(e){
   if(p.get('lang')) lang = p.get('lang');
   if(p.get('tab'))  tab  = p.get('tab');
   if(p.get('job'))  window._pendingJobId = p.get('job');
+  // 'role' y 'licence' los escribia pnShareURL pero no se leian nunca al
+  // cargar, asi que compartir una vista filtrada perdia esos dos filtros.
+  if(p.get('role'))    role = p.get('role');
+  if(['easa','faa','uk_caa','icao'].indexOf(p.get('licence')) !== -1) {
+    licence = p.get('licence');
+    window._licFromUrl = true;   // la URL manda sobre la preferencia guardada
+  }
   if(p.get('ac'))   acFilter = p.get('ac');
   if(p.get('country')) { countryFilter = p.get('country'); }
   if(p.get('sort'))   { _ddSortVal = p.get('sort'); }
@@ -2155,11 +2172,17 @@ document.addEventListener('toggle', function(e){
 applyLang();
 pnSetLang(lang);
 pnSetTab(tab);
-// Recuperar la licencia elegida en visitas anteriores (por defecto EASA)
+// Orden de precedencia: parametro de la URL > preferencia guardada > EASA.
+// Un enlace compartido tiene que verse igual para quien lo abre, aunque esa
+// persona tuviera otra licencia elegida de una visita anterior.
 try {
-  var _savedLic = localStorage.getItem('pnLicence');
-  if (['easa','faa','uk_caa','icao'].indexOf(_savedLic) !== -1) pnSetLic(_savedLic);
+  if (!window._licFromUrl) {
+    var _savedLic = localStorage.getItem('pnLicence');
+    if (['easa','faa','uk_caa','icao'].indexOf(_savedLic) !== -1) licence = _savedLic;
+  }
 } catch(e) {}
+// Sincronizar los botones con el valor final, venga de donde venga.
+pnSetLic(licence, false);
 fetchJobs();
 </script>
 
