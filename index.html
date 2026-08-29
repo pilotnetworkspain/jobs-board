@@ -1491,21 +1491,33 @@ function pnRender() {
   var word = lang==='es' ? (filtered.length===1?'oferta':'ofertas') : (filtered.length===1?'job':'jobs');
   var inf = document.getElementById('pnResultsInfo');
   if(inf){
-    // Animación countUp
+    // Animacion countUp de duracion fija.
+    //
+    // La version anterior avanzaba de 1 en 1 con setInterval(16ms) y arrancaba
+    // desde inf.dataset.count (el objetivo ANTERIOR, no el numero que se veia
+    // en pantalla). Eso daba dos problemas: al cambiar de filtro deprisa
+    // quedaban varios intervalos vivos peleandose por el mismo elemento, y en
+    // una pestana en segundo plano Chrome estrangula los timers a ~1/s, con lo
+    // que 200 pasos tardaban minutos y el numero mostrado no correspondia a
+    // las tarjetas. Ahora se interpola por tiempo en 380 ms: siempre termina
+    // en el valor correcto, dure lo que dure cada frame.
     var target = filtered.length;
-    var current = parseInt(inf.dataset.count || '0', 10);
+    var from = parseInt((inf.textContent || '').replace(/\D/g, ''), 10);
+    if (!isFinite(from)) from = 0;
     inf.dataset.count = target;
-    // Cancelar una animacion anterior que siguiera viva: si no, al cambiar de
-    // filtro deprisa quedan varios setInterval peleandose y el contador se
-    // queda en un numero que no corresponde a las tarjetas mostradas.
-    if(window._pnCountTimer) { clearInterval(window._pnCountTimer); window._pnCountTimer = null; }
-    if(Math.abs(target - current) > 3) {
-      var step = target > current ? 1 : -1;
-      window._pnCountTimer = setInterval(function(){
-        current += step;
-        inf.textContent = current + ' ' + word;
-        if(current === target) { clearInterval(window._pnCountTimer); window._pnCountTimer = null; }
-      }, 16);
+
+    if (window._pnCountRaf) { cancelAnimationFrame(window._pnCountRaf); window._pnCountRaf = null; }
+
+    if (Math.abs(target - from) > 3) {
+      var DUR = 380, t0 = performance.now();
+      var tick = function(now){
+        var p = Math.min(1, (now - t0) / DUR);
+        var eased = 1 - Math.pow(1 - p, 3);
+        inf.textContent = Math.round(from + (target - from) * eased) + ' ' + word;
+        if (p < 1) { window._pnCountRaf = requestAnimationFrame(tick); }
+        else { window._pnCountRaf = null; inf.textContent = target + ' ' + word; }
+      };
+      window._pnCountRaf = requestAnimationFrame(tick);
     } else {
       inf.textContent = target + ' ' + word;
     }
