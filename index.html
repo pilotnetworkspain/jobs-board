@@ -139,6 +139,37 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
   border: 1px solid rgba(255,255,255,.5);
 }
 .pn-lic-tab.active { color: #0f172a; border-color: rgba(255,255,255,.75); box-shadow: 0 6px 16px rgba(0,0,0,.2); }
+/* ── Filtros plegables en movil ────────────────────────────────────────
+   Con las tres filas de filtros (puesto, licencia, nivel) mas busqueda,
+   horas, pais y compartir, el bloque medía 864px de alto en una pantalla
+   de 390px: mas de una pantalla entera sin ver una sola oferta. En movil
+   se pliegan detras de un boton; en escritorio no cambia nada. */
+.pn-filtros-toggle { display: none; }
+@media (max-width: 760px) {
+  .pn-filtros-toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin: 2px auto 4px; padding: 10px 18px; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.07);
+    color: var(--jobs-soft); font-size: 13px; font-weight: 800;
+    font-family: inherit; cursor: pointer; transition: .18s ease;
+  }
+  .pn-filtros-toggle:hover { background: rgba(255,255,255,.11); }
+  .pn-filtros-toggle[aria-expanded="true"] .pn-filtros-flecha { transform: rotate(180deg); }
+  .pn-filtros-flecha { transition: transform .2s ease; display: inline-block; font-size: 11px; }
+  .pn-filtros-cuenta {
+    background: var(--jobs-blue); color: #06101f; border-radius: 999px;
+    font-size: 10.5px; font-weight: 900; padding: 1px 7px; display: none;
+  }
+  .pn-filtros-cuenta.tiene { display: inline-block; }
+
+  /* Plegado por defecto. max-height en vez de display:none para que la
+     transicion se vea y para no romper el calculo de anchos de los chips. */
+  .pn-filtros-plegables {
+    max-height: 0; overflow: hidden; opacity: 0;
+    transition: max-height .28s ease, opacity .2s ease;
+  }
+  .pn-filtros-plegables.abierto { max-height: 1200px; opacity: 1; }
+}
 .pn-nivel-wrap { margin-top: 4px; }
 .pn-niv-tab {
   padding: 6px 14px; border-radius: 999px; cursor: pointer;
@@ -933,6 +964,17 @@ details summary .reqs-count {
         </button>
       </div>
 
+      <!-- Boton que despliega los filtros. Solo se ve en movil: en escritorio
+           sobra el espacio y los filtros van siempre abiertos. -->
+      <button class="pn-filtros-toggle" id="pnFiltrosToggle" onclick="pnToggleFiltros()" type="button" aria-expanded="false" aria-controls="pnFiltrosPlegables pnFiltrosPlegables2">
+        <span class="pn-filtros-icono">☰</span>
+        <span class="lang-es">Filtros</span><span class="lang-en">Filters</span>
+        <span class="pn-filtros-cuenta" id="pnFiltrosCuenta"></span>
+        <span class="pn-filtros-flecha">▾</span>
+      </button>
+
+      <div class="pn-filtros-plegables" id="pnFiltrosPlegables">
+
       <!-- ROLE TABS — segunda fila de pestañas, mismo lenguaje visual que categorías -->
       <div class="pn-role-tabs-wrap">
         <span class="pn-role-tabs-label"><span class="lang-es">Puesto</span><span class="lang-en">Role</span></span>
@@ -1000,6 +1042,10 @@ details summary .reqs-count {
         </div>
       </div>
 
+      </div><!-- /pn-filtros-plegables (1) -->
+
+      <!-- La busqueda queda SIEMPRE visible: es el filtro que mas se usa y
+           esconderla detras de un boton seria un paso de mas para nada. -->
       <div class="pn-search-row">
         <div class="pn-search-box">
           <svg viewBox="0 0 24 24"><path d="M21.71 20.29l-3.4-3.39A9 9 0 1 0 17 18.31l3.39 3.4a1 1 0 0 0 1.41 0 1 1 0 0 0-.09-1.42zM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7z"/></svg>
@@ -1018,6 +1064,8 @@ details summary .reqs-count {
           </div>
         </div>
       </div>
+
+      <div class="pn-filtros-plegables" id="pnFiltrosPlegables2">
 
       <div class="pn-search-row">
         <div class="pn-hours-box">
@@ -1052,6 +1100,8 @@ details summary .reqs-count {
           🔗 <span class="lang-es">Compartir</span><span class="lang-en">Share</span>
         </button>
       </div>
+
+      </div><!-- /pn-filtros-plegables (2) -->
 
       <div class="pn-active-filters" id="pnActiveFilters"></div>
 
@@ -1562,6 +1612,7 @@ function pnRender() {
   }
   applyLang();
   updateActiveFilters(q, maxHrs);
+  pnActualizarCuentaFiltros();
 
   var word = lang==='es' ? (filtered.length===1?'oferta':'ofertas') : (filtered.length===1?'job':'jobs');
   var inf = document.getElementById('pnResultsInfo');
@@ -2125,6 +2176,35 @@ function pnLicLogoFallback(img, txt) {
   d.className = 'pn-lic-logo-fb';
   d.textContent = txt;
   img.parentNode.replaceChild(d, img);
+}
+
+function pnToggleFiltros() {
+  var btn = document.getElementById('pnFiltrosToggle');
+  if (!btn) return;
+  // Son dos cajas porque la busqueda va en medio y esa no se pliega.
+  var cajas = document.querySelectorAll('.pn-filtros-plegables');
+  var abierto = !cajas[0].classList.contains('abierto');
+  cajas.forEach(function(c){ c.classList.toggle('abierto', abierto); });
+  btn.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+}
+
+// Cuantos filtros hay puestos. Se enseña en el boton para que, con los
+// filtros plegados, se vea que hay algo activo y no parezca que el tablero
+// esta vacio por error.
+function pnActualizarCuentaFiltros() {
+  var n = 0;
+  if (licence !== 'all') n++;
+  if (nivel !== 'all') n++;
+  if (role !== 'all') n++;
+  if (acFilter) n++;
+  if (countryFilter) n++;
+  if (contractFilter) n++;
+  var q = document.getElementById('pnSearch');
+  if (q && q.value.trim()) n++;
+  var maxH = document.getElementById('pnHours');
+  if (maxH && parseInt(maxH.value, 10) < 5500) n++;
+  var el = document.getElementById('pnFiltrosCuenta');
+  if (el) { el.textContent = n || ''; el.classList.toggle('tiene', n > 0); }
 }
 
 function pnSetNiv(n) {
