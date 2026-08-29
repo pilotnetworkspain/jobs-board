@@ -1508,7 +1508,14 @@ function pnRender() {
 
     if (window._pnCountRaf) { cancelAnimationFrame(window._pnCountRaf); window._pnCountRaf = null; }
 
-    if (Math.abs(target - from) > 3) {
+    // El valor correcto se escribe SIEMPRE y primero. La animacion es solo un
+    // adorno que se superpone despues: requestAnimationFrame no se ejecuta en
+    // pestanas ocultas, asi que si dependieramos de ella para pintar el numero
+    // el contador se quedaria en blanco al volver a una pestana en segundo
+    // plano. Asi el dato es correcto pase lo que pase.
+    inf.textContent = target + ' ' + word;
+
+    if (!document.hidden && Math.abs(target - from) > 3) {
       var DUR = 380, t0 = performance.now();
       var tick = function(now){
         var p = Math.min(1, (now - t0) / DUR);
@@ -1518,8 +1525,6 @@ function pnRender() {
         else { window._pnCountRaf = null; inf.textContent = target + ' ' + word; }
       };
       window._pnCountRaf = requestAnimationFrame(tick);
-    } else {
-      inf.textContent = target + ' ' + word;
     }
     inf.classList.remove('pop'); void inf.offsetWidth; inf.classList.add('pop');
   }
