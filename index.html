@@ -145,6 +145,28 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
    de 390px: mas de una pantalla entera sin ver una sola oferta. En movil
    se pliegan detras de un boton; en escritorio no cambia nada. */
 .pn-filtros-toggle { display: none; }
+/* ── Licencia compacta en movil ────────────────────────────────────────
+   La fila de licencia se queda SIEMPRE visible, tambien en el movil, porque
+   es el filtro que decide a que puede optar cada piloto. Para que no vuelva
+   a comerse la pantalla se compacta: chips mas pequenios, logos mas
+   pequenios y, si no caben, scroll horizontal en vez de romper a varias
+   lineas. */
+@media (max-width: 760px) {
+  .pn-lic-wrap:not(.pn-nivel-wrap) { gap: 6px; margin: 2px 0; }
+  .pn-lic-wrap:not(.pn-nivel-wrap) .pn-lic-tabs {
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+    gap: 6px; padding: 2px 2px 6px; max-width: 100%;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  }
+  .pn-lic-wrap:not(.pn-nivel-wrap) .pn-lic-tabs::-webkit-scrollbar { display: none; }
+  .pn-lic-wrap:not(.pn-nivel-wrap) .pn-lic-tab {
+    flex: 0 0 auto; padding: 6px 12px 6px 7px; font-size: 11.5px; gap: 6px;
+  }
+  .pn-lic-wrap:not(.pn-nivel-wrap) .pn-lic-logo,
+  .pn-lic-wrap:not(.pn-nivel-wrap) .pn-lic-logo-fb { width: 20px; height: 20px; border-radius: 6px; }
+  .pn-lic-hint { font-size: 10.5px; line-height: 1.35; }
+}
+
 @media (max-width: 760px) {
   .pn-filtros-toggle {
     display: inline-flex; align-items: center; gap: 8px;
@@ -198,7 +220,7 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 .badge.lic-icao   { color: #eadcff; background: rgba(168,120,255,.14); border-color: rgba(168,120,255,.34); }
 .badge.lic-faa    { color: #ffdcdc; background: rgba(224,130,130,.14); border-color: rgba(224,130,130,.34); }
 .badge.lic-uk_caa { color: #d8f5e4; background: rgba(110,200,150,.14); border-color: rgba(110,200,150,.34); }
-@media (max-width: 640px) { .pn-lic-wrap { flex-direction: column; gap: 8px; } }
+@media (max-width: 640px) { .pn-lic-wrap.pn-nivel-wrap { flex-direction: column; gap: 8px; } }
 
 .pn-role-tabs-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 2px; }
 .pn-role-tabs-label { font-size: 10px; font-weight: 900; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,.32); flex-shrink: 0; }
@@ -966,8 +988,44 @@ details summary .reqs-count {
         </button>
       </div>
 
-      <!-- Boton que despliega los filtros. Solo se ve en movil: en escritorio
-           sobra el espacio y los filtros van siempre abiertos. -->
+      <!-- LICENCIA: fuera del plegable a proposito. Es el filtro principal
+           —determina a que puede optar cada piloto— y esconderlo detras de un
+           boton en movil hacia que la gente ni supiera que existia. En movil
+           se compacta (chips mas pequenios, scroll horizontal si hace falta)
+           pero SIEMPRE se ve. -->
+      <div class="pn-lic-wrap">
+        <span class="pn-lic-label"><span class="lang-es">Licencia</span><span class="lang-en">Licence</span></span>
+        <div class="pn-lic-tabs">
+          <button class="pn-lic-tab active" data-lic="all" onclick="pnSetLic('all')" type="button" title="Ver todas las ofertas, sin filtrar por licencia">
+            <span class="pn-lic-logo-fb pn-lic-all">✈</span>
+            <span class="lang-es">Todas</span><span class="lang-en">All</span>
+          </button>
+          <button class="pn-lic-tab" data-lic="easa" onclick="pnSetLic('easa')" type="button" title="Licencia EASA (Europa)">
+            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=easa.europa.eu&sz=64" alt="EASA" onerror="pnLicLogoFallback(this,'EASA')">
+            EASA
+          </button>
+          <button class="pn-lic-tab" data-lic="faa" onclick="pnSetLic('faa')" type="button" title="Licencia FAA (Estados Unidos)">
+            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=faa.gov&sz=64" alt="FAA" onerror="pnLicLogoFallback(this,'FAA')">
+            FAA
+          </button>
+          <button class="pn-lic-tab" data-lic="uk_caa" onclick="pnSetLic('uk_caa')" type="button" title="Licencia UK CAA (Reino Unido)">
+            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=caa.co.uk&sz=64" alt="UK CAA" onerror="pnLicLogoFallback(this,'CAA')">
+            UK CAA
+          </button>
+          <button class="pn-lic-tab" data-lic="icao" onclick="pnSetLic('icao')" type="button" title="Ofertas que aceptan cualquier licencia ICAO">
+            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=icao.int&sz=64" alt="ICAO" onerror="pnLicLogoFallback(this,'ICAO')">
+            ICAO
+          </button>
+        </div>
+        <span class="pn-lic-hint">
+          <span class="lang-es">👉 Elige tu licencia y verás solo las ofertas a las que puedes optar. Las <strong>ICAO</strong> aceptan cualquiera.</span>
+          <span class="lang-en">👉 Pick your licence to see only the jobs you can apply for. <strong>ICAO</strong> ones accept any licence.</span>
+        </span>
+      </div>
+
+
+      <!-- Boton que despliega el RESTO de filtros (puesto, nivel, horas,
+           pais). Solo se ve en movil: en escritorio sobra el espacio. -->
       <button class="pn-filtros-toggle" id="pnFiltrosToggle" onclick="pnToggleFiltros()" type="button" aria-expanded="false" aria-controls="pnFiltrosPlegables pnFiltrosPlegables2">
         <span class="pn-filtros-icono">☰</span>
         <span class="lang-es">Filtros</span><span class="lang-en">Filters</span>
@@ -997,36 +1055,6 @@ details summary .reqs-count {
             <span class="pn-role-tab-dot"></span><span class="lang-es">Instructor</span><span class="lang-en">Instructor</span>
           </button>
         </div>
-      </div>
-
-      <div class="pn-lic-wrap">
-        <span class="pn-lic-label"><span class="lang-es">Licencia</span><span class="lang-en">Licence</span></span>
-        <div class="pn-lic-tabs">
-          <button class="pn-lic-tab active" data-lic="all" onclick="pnSetLic('all')" type="button" title="Ver todas las ofertas, sin filtrar por licencia">
-            <span class="pn-lic-logo-fb pn-lic-all">✈</span>
-            <span class="lang-es">Todas</span><span class="lang-en">All</span>
-          </button>
-          <button class="pn-lic-tab" data-lic="easa" onclick="pnSetLic('easa')" type="button" title="Licencia EASA (Europa)">
-            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=easa.europa.eu&sz=64" alt="EASA" onerror="pnLicLogoFallback(this,'EASA')">
-            EASA
-          </button>
-          <button class="pn-lic-tab" data-lic="faa" onclick="pnSetLic('faa')" type="button" title="Licencia FAA (Estados Unidos)">
-            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=faa.gov&sz=64" alt="FAA" onerror="pnLicLogoFallback(this,'FAA')">
-            FAA
-          </button>
-          <button class="pn-lic-tab" data-lic="uk_caa" onclick="pnSetLic('uk_caa')" type="button" title="Licencia UK CAA (Reino Unido)">
-            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=caa.co.uk&sz=64" alt="UK CAA" onerror="pnLicLogoFallback(this,'CAA')">
-            UK CAA
-          </button>
-          <button class="pn-lic-tab" data-lic="icao" onclick="pnSetLic('icao')" type="button" title="Ofertas que aceptan cualquier licencia ICAO">
-            <img class="pn-lic-logo" fetchpriority="high" src="https://www.google.com/s2/favicons?domain=icao.int&sz=64" alt="ICAO" onerror="pnLicLogoFallback(this,'ICAO')">
-            ICAO
-          </button>
-        </div>
-        <span class="pn-lic-hint">
-          <span class="lang-es">👉 Elige tu licencia y verás solo las ofertas a las que puedes optar. Las <strong>ICAO</strong> aceptan cualquiera.</span>
-          <span class="lang-en">👉 Pick your licence to see only the jobs you can apply for. <strong>ICAO</strong> ones accept any licence.</span>
-        </span>
       </div>
 
       <div class="pn-lic-wrap pn-nivel-wrap">
