@@ -624,6 +624,12 @@ section { margin: 0 !important; padding: 0 !important; } .jobs-section {
 /* HIDE native selects */
 .pn-country-wrap { display: none !important; }
 
+/* SIN FILTRO DE LICENCIA NI DE NIVEL (10-sep-2026). Cesar: «quita lo de las
+   licencias… ahora solo filtre por paises si queremos, pero de
+   predeterminado worldwide». Las filas se esconden y los setters de abajo
+   fijan siempre 'all'. El pais sigue en su desplegable y en las tarjetas. */
+.pn-lic-wrap, .pn-nivel-wrap { display: none !important; }
+
 /* CONTRACT TYPE BADGE */
 .badge.permanent   { color: #dcfff0; background: rgba(125,255,186,.1); border-color: rgba(125,255,186,.28); }
 .badge.wet-lease   { color: #ffe9d6; background: rgba(255,177,82,.1); border-color: rgba(255,177,82,.28); }
@@ -2280,6 +2286,7 @@ function pnActualizarCuentaFiltros() {
 }
 
 function pnSetNiv(n) {
+  n = 'all';  // 10-sep-2026: sin filtro de nivel (ver CSS .pn-nivel-wrap)
   nivel = n;
   document.querySelectorAll('[data-niv]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-niv') === n);
@@ -2288,6 +2295,7 @@ function pnSetNiv(n) {
 }
 
 function pnSetLic(l, persist) {
+  l = 'all';  // 10-sep-2026: sin filtro de licencia; todo el mundo ve todas las ofertas (worldwide)
   licence = l;
   document.querySelectorAll('[data-lic]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-lic') === l);
